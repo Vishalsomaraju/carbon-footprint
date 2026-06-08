@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Activities collection rules
+    match /activities/{activityId} {
+      // Allow read and write only if the document's userId matches the authenticated user's uid
+      allow read, create, update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      
+      // On creation, ensure the user can only set their own userId
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
