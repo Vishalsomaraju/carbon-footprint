@@ -4,29 +4,29 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { geminiService } from './geminiService';
-import { env } from '../lib/env';
+import { geminiService } from '../../services/geminiService';
+import { env } from '../../lib/env';
 
-vi.mock('../lib/env', () => ({
+vi.mock('../../lib/env', (): Record<string, unknown> => ({
   env: { GEMINI_API_KEY: 'test_key' },
 }));
 
-describe('geminiService', () => {
-  beforeEach(() => {
+describe('geminiService', (): void => {
+  beforeEach((): void => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
     // Reset env before each test
-    (env as any).GEMINI_API_KEY = 'test_key';
+    (env as import('vitest').Mock).GEMINI_API_KEY = 'test_key';
   });
 
-  afterEach(() => {
+  afterEach((): void => {
     vi.clearAllMocks();
   });
 
-  it('should return mock insights if API key is missing', async () => {
-    (env as any).GEMINI_API_KEY = '';
+  it('should return mock insights if API key is missing', async (): Promise<void> => {
+    (env as import('vitest').Mock).GEMINI_API_KEY = '';
     
-    const activities: any[] = [];
+    const activities: unknown[] = [];
     const insights = await geminiService.generateWeeklyInsights(activities);
     
     expect(insights).toHaveLength(2);
@@ -35,8 +35,8 @@ describe('geminiService', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('should call Gemini API and return parsed insights', async () => {
-    const activities: any[] = [
+  it('should call Gemini API and return parsed insights', async (): Promise<void> => {
+    const activities: unknown[] = [
       { id: '1', category: 'transport', value: 10, carbonImpact: 2.1, date: '2023-10-27', userId: 'user1' }
     ];
 
@@ -54,7 +54,7 @@ describe('geminiService', () => {
       ]
     };
 
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as import('vitest').Mock).mockResolvedValue({
       ok: true,
       json: async () => mockApiResponse
     });
@@ -69,10 +69,10 @@ describe('geminiService', () => {
     expect(insights[0].type).toBe('tip');
   });
 
-  it('should handle API errors gracefully', async () => {
-    const activities: any[] = [];
+  it('should handle API errors gracefully', async (): Promise<void> => {
+    const activities: unknown[] = [];
     
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as import('vitest').Mock).mockResolvedValue({
       ok: false,
       statusText: 'Internal Server Error'
     });

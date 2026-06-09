@@ -56,7 +56,7 @@ Return ONLY the JSON array, no other text.`;
       const cleanJson = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
       const parsed = JSON.parse(cleanJson);
       
-      return parsed.map((item: any, i: number) => ({
+      return parsed.map((item: Record<string, unknown>, i: number) => ({
         id: `insight_${Date.now()}_${i}`,
         type: item.type || 'tip',
         title: item.title || 'Tip',

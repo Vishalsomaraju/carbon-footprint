@@ -1,15 +1,13 @@
 /**
- * @module pages/SettingsPage
+ * @module pages/ProfilePage
  */
-
-import React from 'react';
 
 import { Card, Button } from '../components/ui';
 
-export const SettingsPage: React.FC = () => {
+export const ProfilePage = (): React.ReactElement => {
   return (
     <div className="max-w-2xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+      <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
       
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">Preferences</h2>

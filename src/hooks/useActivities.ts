@@ -6,11 +6,11 @@ import { useState, useEffect, useCallback } from 'react';
 
 import { ActivityRecord } from '../types';
 import { activityService } from '../services';
-import { useAuthContext } from '../store/AuthContext';
+import { useAuthContext } from '../contexts/AuthContext';
 import { EMISSION_FACTORS } from '../constants';
 import { trackError } from '../utils/errorTracker';
 
-export const useActivities = () => {
+export const useActivities = (): UseActivitiesReturn => {
   const { user } = useAuthContext();
   const [activities, setActivities] = useState<ActivityRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ export const useActivities = () => {
     try {
       const data = await activityService.getUserActivities(user.uid);
       setActivities(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       trackError(err, 'fetchActivities');
       setError(err);
     } finally {
@@ -55,7 +55,7 @@ export const useActivities = () => {
       const activityWithId: ActivityRecord = { ...newActivity, id };
       setActivities(prev => [activityWithId, ...prev]);
       return id;
-    } catch (err: any) {
+    } catch (err: unknown) {
       trackError(err, 'addActivity');
       setError(err);
       throw err;

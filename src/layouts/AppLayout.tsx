@@ -14,12 +14,12 @@ export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     await logout();
     navigate('/login');
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string): boolean => location.pathname === path;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

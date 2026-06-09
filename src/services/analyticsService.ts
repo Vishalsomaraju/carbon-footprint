@@ -6,7 +6,7 @@ import { logEvent as firebaseLogEvent } from 'firebase/analytics';
 
 import { analytics } from '../config';
 
-export const trackEvent = (eventName: string, eventParams?: Record<string, any>): void => {
+export const trackEvent = (eventName: string, eventParams?: Record<string, unknown>): void => {
   if (analytics) {
     firebaseLogEvent(analytics, eventName, eventParams);
   } else {
@@ -14,7 +14,7 @@ export const trackEvent = (eventName: string, eventParams?: Record<string, any>)
   }
 };
 
-export const trackError = (error: Error, context?: Record<string, any>): void => {
+export const trackError = (error: Error, context?: Record<string, unknown>): void => {
   trackEvent('error', {
     message: error.message,
     name: error.name,

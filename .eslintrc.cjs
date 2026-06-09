@@ -17,8 +17,8 @@ module.exports = {
   ],
   settings: { react: { version: 'detect' }, 'import/resolver': { typescript: {} } },
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'warn',
-    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'import/order': ['error', { groups: ['builtin', 'external', 'internal'], 'newlines-between': 'always' }],
     'jsx-a11y/anchor-is-valid': 'error',

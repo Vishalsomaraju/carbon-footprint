@@ -5,30 +5,30 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { useGeminiInsights } from './useGeminiInsights';
-import { geminiService } from '../services';
+import { useGeminiInsights } from '../../hooks/useGeminiInsights';
+import { geminiService } from '../../services';
 
-vi.mock('../services', () => ({
+vi.mock('../../services', (): Record<string, unknown> => ({
   geminiService: {
     generateWeeklyInsights: vi.fn()
   }
 }));
 
-describe('useGeminiInsights', () => {
-  beforeEach(() => {
+describe('useGeminiInsights', (): void => {
+  beforeEach((): void => {
     vi.clearAllMocks();
   });
 
-  it('should initialize with empty insights', () => {
+  it('should initialize with empty insights', (): void => {
     const { result } = renderHook(() => useGeminiInsights());
     expect(result.current.insights).toEqual([]);
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
   });
 
-  it('should generate insights successfully', async () => {
+  it('should generate insights successfully', async (): Promise<void> => {
     const mockInsights = [{ id: '1', type: 'tip', title: 'Walk more', body: 'Walk more to reduce transport emissions', category: 'transport', generatedAt: Date.now() }];
-    (geminiService.generateWeeklyInsights as any).mockResolvedValue(mockInsights);
+    (geminiService.generateWeeklyInsights as import('vitest').Mock).mockResolvedValue(mockInsights);
     
     const { result } = renderHook(() => useGeminiInsights());
 
@@ -41,9 +41,9 @@ describe('useGeminiInsights', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('should handle errors when generating insights', async () => {
+  it('should handle errors when generating insights', async (): Promise<void> => {
     const error = new Error('Failed to generate');
-    (geminiService.generateWeeklyInsights as any).mockRejectedValue(error);
+    (geminiService.generateWeeklyInsights as import('vitest').Mock).mockRejectedValue(error);
     
     const { result } = renderHook(() => useGeminiInsights());
 

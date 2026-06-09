@@ -4,9 +4,9 @@
 
 import { useState, useCallback } from 'react';
 
-type AsyncFunction<T, Args extends any[]> = (...args: Args) => Promise<T>;
+type AsyncFunction<T, Args extends unknown[]> = (...args: Args) => Promise<T>;
 
-export function useAsync<T, Args extends any[]>(asyncFunction: AsyncFunction<T, Args>) {
+export function useAsync<T, Args extends unknown[]>(asyncFunction: AsyncFunction<T, Args>): { execute: (...args: Args) => Promise<T>; data: T | null; loading: boolean; error: Error | null; setData: React.Dispatch<React.SetStateAction<T | null>> } {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -19,7 +19,7 @@ export function useAsync<T, Args extends any[]>(asyncFunction: AsyncFunction<T, 
         const result = await asyncFunction(...args);
         setData(result);
         return result;
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError(err);
         throw err;
       } finally {

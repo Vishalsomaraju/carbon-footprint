@@ -2,18 +2,18 @@
  * @module pages/DashboardPage
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 import { useAuth, useActivities, useGeminiInsights } from '../hooks';
 import { ActivityForm, FootprintChart, InsightCard } from '../components/features';
 import { LoadingSpinner } from '../components/ui';
 
-export const DashboardPage: React.FC = () => {
+export const DashboardPage: React.FC = (): React.ReactElement => {
   const { user } = useAuth();
   const { activities, loading: activitiesLoading, addActivity } = useActivities();
   const { insights, loading: insightsLoading, generateInsights } = useGeminiInsights();
 
-  const handleSubmit = React.useCallback(async (activityData: { category: string; subCategory: string; value: number; description: string; date: string }): Promise<void> => {
+  const handleSubmit = useCallback(async (activityData: { category: string; subCategory: string; value: number; description: string; date: string }): Promise<void> => {
     await addActivity(activityData);
   }, [addActivity]);
 

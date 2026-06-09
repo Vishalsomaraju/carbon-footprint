@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks';
 import { Card, Button, LoadingSpinner, GoogleIcon } from '../components/ui';
 
-export const AuthPage: React.FC = () => {
+export const AuthPage: React.FC = (): React.ReactElement => {
   const { login, user, loading, error } = useAuth();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ export const AuthPage: React.FC = () => {
     }
   }, [user, navigate]);
 
-  const handleLogin = async () => {
+  const handleLogin = async (): Promise<void> => {
     try {
       await login();
       // user will navigate due to useEffect

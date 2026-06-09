@@ -8,7 +8,7 @@ import { useCommute } from '../hooks';
 import { Card } from '../components/ui';
 import { CommuteForm, CommuteSummary } from '../components/features';
 
-export const CommutePage: React.FC = () => {
+export const CommutePage: React.FC = (): React.ReactElement => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [mode, setMode] = useState<string>('driving');

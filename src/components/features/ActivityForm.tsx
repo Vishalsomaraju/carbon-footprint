@@ -2,7 +2,7 @@
  * @module features/ActivityForm
  */
 
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 
 import { Card, Button, Input, FormField } from '../ui';
 import { CategorySelect } from './CategorySelect';
@@ -13,7 +13,7 @@ interface ActivityFormProps {
   isLoading?: boolean;
 }
 
-export const ActivityForm: React.FC<ActivityFormProps> = React.memo(({ onSubmit, isLoading }) => {
+export const ActivityForm: React.FC<ActivityFormProps> = memo(({ onSubmit, isLoading }) => {
   const [category, setCategory] = useState('transport');
   const [subCategory, setSubCategory] = useState('car_petrol_per_km');
   const [value, setValue] = useState('');

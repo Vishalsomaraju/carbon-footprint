@@ -5,36 +5,36 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { useAuthContext } from '../store/AuthContext';
-import { useActivities } from './useActivities';
-import { activityService } from '../services';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useActivities } from '../../hooks/useActivities';
+import { activityService } from '../../services';
 
 // Mock contexts and services
 const mockUser = { uid: 'user123' };
 
-vi.mock('../store/AuthContext', () => ({
-  useAuthContext: vi.fn(() => ({ user: mockUser }))
+vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
+  useAuthContext: vi.fn((): import("react").ReactElement => ({ user: mockUser }))
 }));
 
-vi.mock('../services', () => ({
+vi.mock('../../services', (): Record<string, unknown> => ({
   activityService: {
     getUserActivities: vi.fn(),
     logActivity: vi.fn()
   }
 }));
 
-vi.mock('../utils/errorTracker', () => ({
+vi.mock('../utils/errorTracker', (): Record<string, unknown> => ({
   trackError: vi.fn()
 }));
 
-describe('useActivities', () => {
-  beforeEach(() => {
+describe('useActivities', (): void => {
+  beforeEach((): void => {
     vi.clearAllMocks();
   });
 
-  it('should fetch activities on mount if user is authenticated', async () => {
+  it('should fetch activities on mount if user is authenticated', async (): Promise<void> => {
     const mockActivities = [{ id: '1', category: 'transport', value: 10, carbonImpact: 2, date: '2023-01-01', userId: 'user123' }];
-    (activityService.getUserActivities as any).mockResolvedValue(mockActivities);
+    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue(mockActivities);
 
     const { result } = renderHook(() => useActivities());
 
@@ -49,8 +49,8 @@ describe('useActivities', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should not fetch activities if user is not authenticated', async () => {
-    (useAuthContext as any).mockReturnValue({ user: null });
+  it('should not fetch activities if user is not authenticated', async (): Promise<void> => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null });
     
     const { result } = renderHook(() => useActivities());
 
@@ -59,10 +59,10 @@ describe('useActivities', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('should add an activity and update state', async () => {
-    (useAuthContext as any).mockReturnValue({ user: mockUser });
-    (activityService.getUserActivities as any).mockResolvedValue([]);
-    (activityService.logActivity as any).mockResolvedValue('new-id');
+  it('should add an activity and update state', async (): Promise<void> => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: mockUser });
+    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue([]);
+    (activityService.logActivity as import('vitest').Mock).mockResolvedValue('new-id');
 
     const { result } = renderHook(() => useActivities());
 
@@ -95,11 +95,11 @@ describe('useActivities', () => {
     expect(result.current.activities[0].id).toBe('new-id');
   });
 
-  it('should handle add activity error', async () => {
-    (useAuthContext as any).mockReturnValue({ user: mockUser });
-    (activityService.getUserActivities as any).mockResolvedValue([]);
+  it('should handle add activity error', async (): Promise<void> => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: mockUser });
+    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue([]);
     const error = new Error('Failed to add');
-    (activityService.logActivity as any).mockRejectedValue(error);
+    (activityService.logActivity as import('vitest').Mock).mockRejectedValue(error);
 
     const { result } = renderHook(() => useActivities());
 
@@ -118,10 +118,10 @@ describe('useActivities', () => {
     expect(result.current.error).toEqual(error);
   });
 
-  it('should calculate correct carbon impact for all categories', async () => {
-    (useAuthContext as any).mockReturnValue({ user: mockUser });
-    (activityService.getUserActivities as any).mockResolvedValue([]);
-    (activityService.logActivity as any).mockResolvedValue('new-id');
+  it('should calculate correct carbon impact for all categories', async (): Promise<void> => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: mockUser });
+    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue([]);
+    (activityService.logActivity as import('vitest').Mock).mockResolvedValue('new-id');
 
     const { result } = renderHook(() => useActivities());
 
@@ -138,8 +138,8 @@ describe('useActivities', () => {
     expect(activityService.logActivity).toHaveBeenCalledWith(expect.objectContaining({ category: 'other', carbonImpact: 2 }));
   });
 
-  it('should throw error if adding activity without user', async () => {
-    (useAuthContext as any).mockReturnValue({ user: null });
+  it('should throw error if adding activity without user', async (): Promise<void> => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null });
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {

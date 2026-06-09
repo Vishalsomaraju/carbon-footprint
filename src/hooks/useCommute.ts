@@ -9,7 +9,7 @@ import { mapsService } from '../services';
 import { CommuteRoute } from '../types';
 import { trackError, trackEvent } from '../services/analyticsService';
 
-export const useCommute = () => {
+export const useCommute = (): UseCommuteReturn => {
   const { addActivity } = useActivities();
   const [route, setRoute] = useState<CommuteRoute | null>(null);
   const [loading, setLoading] = useState(false);

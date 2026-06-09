@@ -32,7 +32,7 @@ export const CommuteForm: React.FC<CommuteFormProps> = ({
     });
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     const actualOrigin = originRef.current?.value || origin;
     const actualDestination = destinationRef.current?.value || destination;

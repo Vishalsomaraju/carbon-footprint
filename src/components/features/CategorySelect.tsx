@@ -21,12 +21,12 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
   onChangeCategory,
   onChangeSubCategory,
   disabled
-}) => {
-  const subCategories = category in EMISSION_FACTORS 
+}): JSX.Element => {
+  const subCategories: string[] = category in EMISSION_FACTORS 
     ? Object.keys(EMISSION_FACTORS[category as keyof typeof EMISSION_FACTORS])
     : [];
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const newCat = e.target.value;
     onChangeCategory(newCat);
     const newSubs = newCat in EMISSION_FACTORS 

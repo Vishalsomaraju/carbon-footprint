@@ -5,21 +5,21 @@
 import { useState } from 'react';
 
 import { authService, analyticsService } from '../services';
-import { useAuthContext } from '../store/AuthContext';
+import { useAuthContext } from '../contexts/AuthContext';
 
-export const useAuth = () => {
+export const useAuth = (): { user: User | null; loading: boolean; error: Error | null; login: () => Promise<User>; logout: () => Promise<void> } => {
   const { user, loading } = useAuthContext();
   const [error, setError] = useState<Error | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const login = async () => {
+  const login = async (): Promise<void> => {
     setIsAuthenticating(true);
     setError(null);
     try {
       const loggedInUser = await authService.signInWithGoogle();
       analyticsService.logEvent('login', { method: 'google' });
       return loggedInUser;
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err);
       throw err;
     } finally {
@@ -27,12 +27,12 @@ export const useAuth = () => {
     }
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     setIsAuthenticating(true);
     try {
       await authService.logout();
       analyticsService.logEvent('logout');
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err);
       throw err;
     } finally {

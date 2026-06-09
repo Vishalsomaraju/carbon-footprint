@@ -5,27 +5,27 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
-import { Button } from './Button';
-import { Card , CardHeader, CardBody, CardFooter } from './Card';
-import { Input } from './Input';
-import { FormField } from './FormField';
-import { LoadingSpinner } from './LoadingSpinner';
+import { Button } from '../../components/ui/Button';
+import { Card , CardHeader, CardBody, CardFooter } from '../../components/ui/Card';
+import { Input } from '../../components/ui/Input';
+import { FormField } from '../../components/ui/FormField';
+import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 
-describe('UI Components', () => {
-  describe('Button', () => {
-    it('renders correctly', () => {
+describe('UI Components', (): void => {
+  describe('Button', (): void => {
+    it('renders correctly', (): void => {
       render(<Button>Click me</Button>);
       expect(screen.getByRole('button', { name: /Click me/i })).toBeInTheDocument();
     });
 
-    it('handles click events', () => {
+    it('handles click events', (): void => {
       const onClick = vi.fn();
       render(<Button onClick={onClick}>Click me</Button>);
       fireEvent.click(screen.getByRole('button', { name: /Click me/i }));
       expect(onClick).toHaveBeenCalledTimes(1);
     });
 
-    it('shows loading state', () => {
+    it('shows loading state', (): void => {
       render(<Button isLoading>Click me</Button>);
       expect(screen.getByRole('button')).toBeDisabled();
       // Wait text is usually not "Click me" but SVG
@@ -33,15 +33,15 @@ describe('UI Components', () => {
     });
   });
 
-  describe('Card', () => {
-    it('renders children', () => {
+  describe('Card', (): void => {
+    it('renders children', (): void => {
       render(<Card>Card Content</Card>);
       expect(screen.getByText(/Card Content/i)).toBeInTheDocument();
     });
   });
 
-  describe('Card subcomponents', () => {
-    it('renders Card components', () => {
+  describe('Card subcomponents', (): void => {
+    it('renders Card components', (): void => {
       render(
         <Card>
           <CardHeader>My Title</CardHeader>
@@ -55,23 +55,23 @@ describe('UI Components', () => {
     });
   });
 
-  describe('Input', () => {
-    it('renders and accepts input', () => {
+  describe('Input', (): void => {
+    it('renders and accepts input', (): void => {
       render(<Input aria-label="test-input" />);
       const input = screen.getByLabelText('test-input');
       fireEvent.change(input, { target: { value: 'test' } });
       expect((input as HTMLInputElement).value).toBe('test');
     });
 
-    it('shows error state', () => {
+    it('shows error state', (): void => {
       render(<Input aria-label="error-input" error="Invalid input" />);
       const input = screen.getByLabelText('error-input');
       expect(input.className).toMatch(/border-red-500/);
     });
   });
 
-  describe('FormField', () => {
-    it('renders label and children', () => {
+  describe('FormField', (): void => {
+    it('renders label and children', (): void => {
       render(
         <FormField label="Test Label" htmlFor="test-id" required helpText="Help text">
           <input id="test-id" />
@@ -84,8 +84,8 @@ describe('UI Components', () => {
   });
 });
 
-describe('LoadingSpinner', () => {
-  it('renders correctly with different sizes', () => {
+describe('LoadingSpinner', (): void => {
+  it('renders correctly with different sizes', (): void => {
     render(<LoadingSpinner size="sm" />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });

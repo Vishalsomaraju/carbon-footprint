@@ -1,5 +1,5 @@
 /**
- * @module store/AuthContext
+ * @module contexts/AuthContext
  */
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
@@ -19,11 +19,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser): void => {
       setUser(currentUser);
       setLoading(false);
     });
-    return () => unsubscribe();
+    return (): void => unsubscribe();
   }, []);
 
   return (
@@ -33,4 +33,4 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = (): AuthContextType => useContext(AuthContext);

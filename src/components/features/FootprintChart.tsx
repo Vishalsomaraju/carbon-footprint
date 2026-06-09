@@ -2,7 +2,7 @@
  * @module features/FootprintChart
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import {
   BarChart,
   Bar,
@@ -21,10 +21,10 @@ interface FootprintChartProps {
   activities: ActivityRecord[];
 }
 
-export const FootprintChart: React.FC<FootprintChartProps> = React.memo(({ activities }) => {
+export const FootprintChart: React.FC<FootprintChartProps> = memo(({ activities }): React.ReactElement => {
   const data = useMemo(() => {
     // Group by date
-    const grouped = activities.reduce((acc, curr) => {
+    const grouped = activities.reduce((acc: Record<string, unknown>, curr) => {
       const date = curr.date.split('T')[0];
       if (!acc[date]) {
         acc[date] = { date, transport: 0, home_energy: 0, food: 0, shopping: 0 };
@@ -39,9 +39,9 @@ export const FootprintChart: React.FC<FootprintChartProps> = React.memo(({ activ
       
       acc[date][curr.category as keyof typeof acc[string]] += footprint;
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, unknown>);
 
-    return Object.values(grouped).sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(-7); // last 7 days
+    return Object.values(grouped).sort((a: {date: string}, b: {date: string}) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(-7); // last 7 days
   }, [activities]);
 
   if (!activities.length) {

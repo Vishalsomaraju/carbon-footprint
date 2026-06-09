@@ -1,23 +1,24 @@
 /**
- * @module store/AuthContext.test
+ * @module contexts/AuthContext.test
  */
 
 import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import { AuthProvider, useAuthContext } from './AuthContext';
+import { AuthProvider, useAuthContext } from '../../contexts/AuthContext';
 
-vi.mock('firebase/auth', () => ({
+vi.mock('firebase/auth', (): Record<string, unknown> => ({
   onAuthStateChanged: vi.fn(),
-  getAuth: vi.fn()
+  getAuth: vi.fn(),
+  GoogleAuthProvider: class {}
 }));
 
-vi.mock('../config', () => ({
+vi.mock('../config', (): Record<string, unknown> => ({
   auth: {}
 }));
 
-const TestComponent = () => {
+const TestComponent = (): import('react').ReactElement => {
   const { user, loading } = useAuthContext();
   return (
     <div>
@@ -27,12 +28,12 @@ const TestComponent = () => {
   );
 };
 
-describe('AuthContext', () => {
-  it('should initialize with loading true and handle auth state change', () => {
-    let callback: any;
-    (onAuthStateChanged as any).mockImplementation((_auth: any, cb: any) => {
-      callback = cb;
-      return () => {}; // unsubscribe fn
+describe('AuthContext', (): void => {
+  it('should initialize with loading true and handle auth state change', (): void => {
+    let callback: (user: { uid: string } | null) => void;
+    (onAuthStateChanged as import('vitest').Mock).mockImplementation((_auth: unknown, cb: unknown) => {
+      callback = cb as (user: { uid: string } | null) => void;
+      return (): void => {}; // unsubscribe fn
     });
 
     render(
@@ -54,11 +55,11 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('user')).toHaveTextContent('123');
   });
 
-  it('should handle unauthenticated state', () => {
-    let callback: any;
-    (onAuthStateChanged as any).mockImplementation((_auth: any, cb: any) => {
-      callback = cb;
-      return () => {};
+  it('should handle unauthenticated state', (): void => {
+    let callback: (user: { uid: string } | null) => void;
+    (onAuthStateChanged as import('vitest').Mock).mockImplementation((_auth: unknown, cb: unknown) => {
+      callback = cb as (user: { uid: string } | null) => void;
+      return (): void => {};
     });
 
     render(

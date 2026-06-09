@@ -5,16 +5,16 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { useAuthContext } from '../store/AuthContext';
-import { useAuth } from './useAuth';
-import { authService, analyticsService } from '../services';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
+import { authService, analyticsService } from '../../services';
 
 // Mock contexts and services
-vi.mock('../store/AuthContext', () => ({
-  useAuthContext: vi.fn(() => ({ user: null, loading: false }))
+vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
+  useAuthContext: vi.fn((): import("react").ReactElement => ({ user: null, loading: false }))
 }));
 
-vi.mock('../services', () => ({
+vi.mock('../../services', (): Record<string, unknown> => ({
   authService: {
     signInWithGoogle: vi.fn(),
     logout: vi.fn()
@@ -23,12 +23,12 @@ vi.mock('../services', () => ({
     logEvent: vi.fn()
   }
 }));
-describe('useAuth', () => {
-  beforeEach(() => {
+describe('useAuth', (): void => {
+  beforeEach((): void => {
     vi.clearAllMocks();
   });
 
-  it('should return initial state', () => {
+  it('should return initial state', (): void => {
     const { result } = renderHook(() => useAuth());
     
     expect(result.current.user).toBeNull();
@@ -36,9 +36,9 @@ describe('useAuth', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should handle login successfully', async () => {
+  it('should handle login successfully', async (): Promise<void> => {
     const mockUser = { uid: '123', email: 'test@example.com' };
-    (authService.signInWithGoogle as any).mockResolvedValue(mockUser);
+    (authService.signInWithGoogle as import('vitest').Mock).mockResolvedValue(mockUser);
     
     const { result } = renderHook(() => useAuth());
 
@@ -52,9 +52,9 @@ describe('useAuth', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should handle login error', async () => {
+  it('should handle login error', async (): Promise<void> => {
     const error = new Error('Login failed');
-    (authService.signInWithGoogle as any).mockRejectedValue(error);
+    (authService.signInWithGoogle as import('vitest').Mock).mockRejectedValue(error);
     
     const { result } = renderHook(() => useAuth());
 
@@ -66,9 +66,9 @@ describe('useAuth', () => {
     expect(analyticsService.logEvent).not.toHaveBeenCalled();
   });
 
-  it('should handle logout successfully', async () => {
-    (useAuthContext as any).mockReturnValue({ user: { uid: '123' }, loading: false });
-    (authService.logout as any).mockResolvedValue(undefined);
+  it('should handle logout successfully', async (): Promise<void> => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: { uid: '123' }, loading: false });
+    (authService.logout as import('vitest').Mock).mockResolvedValue(undefined);
     
     const { result } = renderHook(() => useAuth());
 
@@ -80,9 +80,9 @@ describe('useAuth', () => {
     expect(analyticsService.logEvent).toHaveBeenCalledWith('logout');
   });
 
-  it('should handle logout error', async () => {
+  it('should handle logout error', async (): Promise<void> => {
     const error = new Error('Logout failed');
-    (authService.logout as any).mockRejectedValue(error);
+    (authService.logout as import('vitest').Mock).mockRejectedValue(error);
     
     const { result } = renderHook(() => useAuth());
 

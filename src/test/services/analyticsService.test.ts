@@ -5,24 +5,24 @@
 import { describe, it, expect, vi } from 'vitest';
 import { logEvent as firebaseLogEvent } from 'firebase/analytics';
 
-import { analyticsService } from './analyticsService';
-import * as config from '../config';
+import { analyticsService } from '../../services/analyticsService';
+import * as config from '../../config';
 
-vi.mock('firebase/analytics', () => ({
+vi.mock('firebase/analytics', (): Record<string, unknown> => ({
   logEvent: vi.fn()
 }));
 
-vi.mock('../config', () => ({
+vi.mock('../../config', (): Record<string, unknown> => ({
   analytics: {} // Mock analytics object
 }));
 
-describe('analyticsService', () => {
-  it('should call firebaseLogEvent when analytics is initialized', () => {
+describe('analyticsService', (): void => {
+  it('should call firebaseLogEvent when analytics is initialized', (): void => {
     analyticsService.logEvent('test_event', { param: 'value' });
     expect(firebaseLogEvent).toHaveBeenCalledWith(config.analytics, 'test_event', { param: 'value' });
   });
 
-  it('should log to console if analytics is null', () => {
+  it('should log to console if analytics is null', (): void => {
     // Override the mock for this specific test
     // To do this we can redefine the property
     const originalAnalytics = config.analytics;

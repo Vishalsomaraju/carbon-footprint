@@ -7,12 +7,12 @@ import { useState } from 'react';
 import { InsightMessage, ActivityRecord } from '../types';
 import { geminiService } from '../services';
 
-export const useGeminiInsights = () => {
+export const useGeminiInsights = (): UseGeminiInsightsReturn => {
   const [insights, setInsights] = useState<InsightMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const generateInsights = async (activities: ActivityRecord[]) => {
+  const generateInsights = async (activities: ActivityRecord[]): Promise<InsightMessage[]> => {
     setLoading(true);
     setError(null);
     try {
@@ -20,7 +20,7 @@ export const useGeminiInsights = () => {
       const newInsights = await geminiService.generateWeeklyInsights(recentActivities);
       setInsights(newInsights);
       return newInsights;
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err);
       throw err;
     } finally {

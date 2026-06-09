@@ -7,7 +7,7 @@ import { signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../config';
 
 export const authService = {
-  signInWithGoogle: async () => {
+  signInWithGoogle: async (): Promise<User> => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       return result.user;
@@ -17,7 +17,7 @@ export const authService = {
     }
   },
   
-  logout: async () => {
+  logout: async (): Promise<void> => {
     try {
       await signOut(auth);
     } catch (error) {

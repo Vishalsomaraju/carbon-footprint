@@ -5,10 +5,10 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
-import { ActivityForm } from './ActivityForm';
+import { ActivityForm } from '../../components/features/ActivityForm';
 
-describe('ActivityForm', () => {
-  it('renders correctly', () => {
+describe('ActivityForm', (): void => {
+  it('renders correctly', (): void => {
     render(<ActivityForm onSubmit={vi.fn()} />);
     expect(screen.getByRole('heading', { name: /Log Activity/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/Category/i)).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('ActivityForm', () => {
     expect(screen.getByLabelText(/Date/i)).toBeInTheDocument();
   });
 
-  it('shows error if value is missing', async () => {
+  it('shows error if value is missing', async (): Promise<void> => {
     const mockSubmit = vi.fn();
     render(<ActivityForm onSubmit={mockSubmit} />);
     
@@ -28,7 +28,7 @@ describe('ActivityForm', () => {
     expect(mockSubmit).not.toHaveBeenCalled();
   });
 
-  it('calls onSubmit with correct data', async () => {
+  it('calls onSubmit with correct data', async (): Promise<void> => {
     const mockSubmit = vi.fn().mockResolvedValue(undefined);
     render(<ActivityForm onSubmit={mockSubmit} />);
     
@@ -56,7 +56,7 @@ describe('ActivityForm', () => {
     expect((descInput as HTMLInputElement).value).toBe('');
   });
 
-  it('handles onSubmit error', async () => {
+  it('handles onSubmit error', async (): Promise<void> => {
     const mockSubmit = vi.fn().mockRejectedValue(new Error('Failed'));
     render(<ActivityForm onSubmit={mockSubmit} />);
     
