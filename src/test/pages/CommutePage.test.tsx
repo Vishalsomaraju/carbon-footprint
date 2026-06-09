@@ -37,7 +37,6 @@ const defaultCommuteState = {
   handleLog: mockHandleLog,
 };
 
-
 vi.mock('../../hooks', () => ({
   useCommute: vi.fn(),
   useActivities: vi.fn(),
@@ -53,49 +52,77 @@ describe('CommutePage', (): void => {
     render(
       <BrowserRouter>
         <CommutePage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText(/Commute Calculator/i)).toBeInTheDocument();
   });
 
   it('shows error if calculating without origin/destination', async (): Promise<void> => {
-    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, error: 'Please enter origin and destination' });
+    vi.mocked(useCommute).mockReturnValue({
+      ...defaultCommuteState,
+      error: 'Please enter origin and destination',
+    });
     render(
       <BrowserRouter>
         <CommutePage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText('Please enter origin and destination')).toBeInTheDocument();
   });
 
   it('calculates and displays results', async (): Promise<void> => {
-    const mockResult = { distanceKm: 15, durationMinutes: 30, dailyCo2Kg: 5, annualCo2Kg: 1000, origin: 'Home', destination: 'Work', transportMode: 'car_petrol_per_km' };
+    const mockResult = {
+      distanceKm: 15,
+      durationMinutes: 30,
+      dailyCo2Kg: 5,
+      annualCo2Kg: 1000,
+      origin: 'Home',
+      destination: 'Work',
+      transportMode: 'car_petrol_per_km',
+    };
     vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, result: mockResult });
     render(
       <BrowserRouter>
         <CommutePage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText('Annual Emissions by Mode')).toBeInTheDocument();
   });
 
   it('handles calculate error', async (): Promise<void> => {
-    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, error: 'Could not calculate commute. Please check the locations.' });
+    vi.mocked(useCommute).mockReturnValue({
+      ...defaultCommuteState,
+      error: 'Could not calculate commute. Please check the locations.',
+    });
     render(
       <BrowserRouter>
         <CommutePage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
-    expect(screen.getByText('Could not calculate commute. Please check the locations.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Could not calculate commute. Please check the locations.'),
+    ).toBeInTheDocument();
   });
 
   it('logs commute activity', async (): Promise<void> => {
-    const mockResult = { distanceKm: 15, durationMinutes: 30, dailyCo2Kg: 5, annualCo2Kg: 1000, origin: 'Home', destination: 'Work', transportMode: 'car_petrol_per_km' };
-    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, result: mockResult, toast: { msg: 'Commute logged successfully!', type: 'success' } });
+    const mockResult = {
+      distanceKm: 15,
+      durationMinutes: 30,
+      dailyCo2Kg: 5,
+      annualCo2Kg: 1000,
+      origin: 'Home',
+      destination: 'Work',
+      transportMode: 'car_petrol_per_km',
+    };
+    vi.mocked(useCommute).mockReturnValue({
+      ...defaultCommuteState,
+      result: mockResult,
+      toast: { msg: 'Commute logged successfully!', type: 'success' },
+    });
     render(
       <BrowserRouter>
         <CommutePage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText('Commute logged successfully!')).toBeInTheDocument();
   });

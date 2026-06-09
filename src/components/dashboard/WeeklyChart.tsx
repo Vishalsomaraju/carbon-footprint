@@ -4,7 +4,17 @@
  */
 
 import React, { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer, Cell } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 import { format, subDays } from 'date-fns';
 
 import { TARGET_KG_PER_DAY } from '../../constants';
@@ -22,8 +32,8 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
       return { date: format(d, 'yyyy-MM-dd'), label: format(d, 'EEE'), total: 0 };
     });
 
-    activities.forEach(act => {
-      const day = last7Days.find(d => d.date === act.date.split('T')[0]);
+    activities.forEach((act) => {
+      const day = last7Days.find((d) => d.date === act.date.split('T')[0]);
       if (day && act.carbonImpact) day.total += act.carbonImpact;
     });
 
@@ -44,10 +54,27 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-          <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+          <XAxis
+            dataKey="label"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: '#6b7280', fontSize: 12 }}
+          />
           <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-          <Tooltip cursor={{ fill: '#f9fafb' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-          <ReferenceLine y={TARGET_KG_PER_DAY} stroke="#9ca3af" strokeDasharray="4 4" label={{ position: 'top', value: 'Target', fill: '#9ca3af', fontSize: 12 }} />
+          <Tooltip
+            cursor={{ fill: '#f9fafb' }}
+            contentStyle={{
+              borderRadius: '8px',
+              border: 'none',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            }}
+          />
+          <ReferenceLine
+            y={TARGET_KG_PER_DAY}
+            stroke="#9ca3af"
+            strokeDasharray="4 4"
+            label={{ position: 'top', value: 'Target', fill: '#9ca3af', fontSize: 12 }}
+          />
           <Bar dataKey="total" radius={[4, 4, 0, 0]} maxBarSize={40}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={getColor(entry.total)} />

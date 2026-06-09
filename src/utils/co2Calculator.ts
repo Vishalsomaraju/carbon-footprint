@@ -5,7 +5,8 @@
 import { EMISSION_FACTORS } from '../constants';
 
 export const calculateTransportCo2 = (subCategory: string, value: number): number => {
-  const factor = (EMISSION_FACTORS.transport as Record<string, number>)[subCategory + '_per_km'] || 0;
+  const factor =
+    (EMISSION_FACTORS.transport as Record<string, number>)[subCategory + '_per_km'] || 0;
   return value * factor;
 };
 
@@ -15,7 +16,10 @@ export const calculateFoodCo2 = (subCategory: string, value: number): number => 
 };
 
 export const calculateEnergyCo2 = (subCategory: string, value: number): number => {
-  const factor = (EMISSION_FACTORS.energy as Record<string, number>)[subCategory + '_per_kwh'] || (EMISSION_FACTORS.energy as Record<string, number>)[subCategory + '_per_litre'] || 0;
+  const factor =
+    (EMISSION_FACTORS.energy as Record<string, number>)[subCategory + '_per_kwh'] ||
+    (EMISSION_FACTORS.energy as Record<string, number>)[subCategory + '_per_litre'] ||
+    0;
   return value * factor;
 };
 

@@ -6,7 +6,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 import { Button } from '../../components/ui/Button';
-import { Card , CardHeader, CardBody, CardFooter } from '../../components/ui/Card';
+import { Card, CardHeader, CardBody, CardFooter } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { FormField } from '../../components/ui/FormField';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
@@ -47,7 +47,7 @@ describe('UI Components', (): void => {
           <CardHeader>My Title</CardHeader>
           <CardBody>My Content</CardBody>
           <CardFooter>My Footer</CardFooter>
-        </Card>
+        </Card>,
       );
       expect(screen.getByText(/My Title/i)).toBeInTheDocument();
       expect(screen.getByText(/My Content/i)).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe('UI Components', (): void => {
       render(
         <FormField label="Test Label" htmlFor="test-id" required helpText="Help text">
           <input id="test-id" />
-        </FormField>
+        </FormField>,
       );
       expect(screen.getByText(/Test Label/i)).toBeInTheDocument();
       expect(screen.getByText(/Help text/i)).toBeInTheDocument();

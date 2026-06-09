@@ -36,20 +36,21 @@ export async function calculateCommuteEmissions(
   origin: string,
   destination: string,
   transportMode: keyof typeof EMISSION_FACTORS.transport,
-  workDaysPerWeek: number
+  workDaysPerWeek: number,
 ): Promise<CommuteResult> {
   try {
     const loader = getMapsLoader();
     await loader.load();
 
     const service = new window.google.maps.DistanceMatrixService();
-    const gmMode = transportMode.includes('car') || transportMode.includes('motorcycle')
-      ? window.google.maps.TravelMode.DRIVING
-      : transportMode.includes('train') || transportMode.includes('bus')
-      ? window.google.maps.TravelMode.TRANSIT
-      : transportMode.includes('cycling')
-      ? window.google.maps.TravelMode.BICYCLING
-      : window.google.maps.TravelMode.WALKING;
+    const gmMode =
+      transportMode.includes('car') || transportMode.includes('motorcycle')
+        ? window.google.maps.TravelMode.DRIVING
+        : transportMode.includes('train') || transportMode.includes('bus')
+          ? window.google.maps.TravelMode.TRANSIT
+          : transportMode.includes('cycling')
+            ? window.google.maps.TravelMode.BICYCLING
+            : window.google.maps.TravelMode.WALKING;
 
     const result = await service.getDistanceMatrix({
       origins: [origin],
@@ -65,13 +66,23 @@ export async function calculateCommuteEmissions(
 
     const distanceKm = (element.distance?.value ?? 0) / 1000;
     const durationMinutes = Math.round((element.duration?.value ?? 0) / 60);
-    const factor = EMISSION_FACTORS.transport[transportMode as keyof typeof EMISSION_FACTORS.transport] as number;
+    const factor = EMISSION_FACTORS.transport[
+      transportMode as keyof typeof EMISSION_FACTORS.transport
+    ] as number;
     const dailyCo2Kg = parseFloat((factor * distanceKm * 2).toFixed(3)); // round trip
     const annualCo2Kg = parseFloat((dailyCo2Kg * workDaysPerWeek * 52).toFixed(2));
 
     trackEvent('commute_calculated', { transport_mode: transportMode, distance_km: distanceKm });
 
-    return { distanceKm, durationMinutes, origin, destination, dailyCo2Kg, annualCo2Kg, transportMode };
+    return {
+      distanceKm,
+      durationMinutes,
+      origin,
+      destination,
+      dailyCo2Kg,
+      annualCo2Kg,
+      transportMode,
+    };
   } catch (error) {
     trackError(error as Error, 'calculateCommuteEmissions');
     throw error;

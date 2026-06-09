@@ -6,16 +6,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { calculateCommuteEmissions } from '../../services/mapsService';
 
-vi.mock('@googlemaps/js-api-loader', (): Record<string, unknown> => ({
-  Loader: class {
-    load(): Promise<boolean> { return Promise.resolve(true); }
-  }
-}));
+vi.mock(
+  '@googlemaps/js-api-loader',
+  (): Record<string, unknown> => ({
+    Loader: class {
+      load(): Promise<boolean> {
+        return Promise.resolve(true);
+      }
+    },
+  }),
+);
 
 class MockDistanceMatrixService {
   getDistanceMatrix(): Promise<unknown> {
     return Promise.resolve({
-      rows: [{ elements: [{ status: 'OK', distance: { value: 15000 }, duration: { value: 1800 } }] }]
+      rows: [
+        { elements: [{ status: 'OK', distance: { value: 15000 }, duration: { value: 1800 } }] },
+      ],
     });
   }
 }
@@ -27,11 +34,16 @@ describe('mapsService', (): void => {
         google: {
           maps: {
             DistanceMatrixService: MockDistanceMatrixService,
-            TravelMode: { DRIVING: 'DRIVING', TRANSIT: 'TRANSIT', BICYCLING: 'BICYCLING', WALKING: 'WALKING' },
-            UnitSystem: { METRIC: 'METRIC' }
-          }
-        }
-      }
+            TravelMode: {
+              DRIVING: 'DRIVING',
+              TRANSIT: 'TRANSIT',
+              BICYCLING: 'BICYCLING',
+              WALKING: 'WALKING',
+            },
+            UnitSystem: { METRIC: 'METRIC' },
+          },
+        },
+      },
     });
   });
 

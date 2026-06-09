@@ -9,20 +9,32 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { App } from '../../App';
 import { useAuthContext } from '../../contexts/AuthContext';
 
-vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
-  AuthProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  useAuthContext: vi.fn()
-}));
+vi.mock(
+  '../../contexts/AuthContext',
+  (): Record<string, unknown> => ({
+    AuthProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    useAuthContext: vi.fn(),
+  }),
+);
 
-vi.mock('../../config', (): Record<string, unknown> => ({ auth: {}, db: {}, app: {}, googleProvider: {} }));
+vi.mock(
+  '../../lib/firebase',
+  (): Record<string, unknown> => ({ auth: {}, db: {}, app: {}, googleProvider: {} }),
+);
 
-vi.mock('../../pages/LandingPage', (): Record<string, unknown> => ({
-  LandingPage: () => <div data-testid="landing-page">Landing Page</div>
-}));
+vi.mock(
+  '../../pages/LandingPage',
+  (): Record<string, unknown> => ({
+    LandingPage: () => <div data-testid="landing-page">Landing Page</div>,
+  }),
+);
 
-vi.mock('../../pages/DashboardPage', (): Record<string, unknown> => ({
-  DashboardPage: () => <div data-testid="dashboard-page">Dashboard Page</div>
-}));
+vi.mock(
+  '../../pages/DashboardPage',
+  (): Record<string, unknown> => ({
+    DashboardPage: () => <div data-testid="dashboard-page">Dashboard Page</div>,
+  }),
+);
 
 describe('App router', (): void => {
   beforeEach((): void => {
@@ -36,7 +48,10 @@ describe('App router', (): void => {
   });
 
   it('renders dashboard when authenticated', (): void => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: { uid: '123' }, loading: false });
+    (useAuthContext as import('vitest').Mock).mockReturnValue({
+      user: { uid: '123' },
+      loading: false,
+    });
     window.history.pushState({}, 'Test', '/dashboard');
     render(<App />);
     expect(screen.getByTestId('dashboard-page')).toBeInTheDocument();

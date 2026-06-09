@@ -4,7 +4,7 @@
 
 import { collection, addDoc, query, where, getDocs, orderBy, Timestamp } from 'firebase/firestore';
 
-import { db } from '../config';
+import { db } from '../lib/firebase';
 import { ActivityRecord } from '../types';
 import { trackError } from '../utils/errorTracker';
 
@@ -15,12 +15,12 @@ export const activityService = {
     try {
       const docRef = await addDoc(collection(db, COLLECTION_NAME), {
         ...activity,
-        createdAt: Timestamp.now()
+        createdAt: Timestamp.now(),
       });
       return docRef.id;
     } catch (error: unknown) {
       trackError(error);
-      console.error("Error logging activity: ", error);
+      console.error('Error logging activity: ', error);
       throw error;
     }
   },
@@ -28,20 +28,23 @@ export const activityService = {
   getUserActivities: async (userId: string): Promise<ActivityRecord[]> => {
     try {
       const q = query(
-        collection(db, COLLECTION_NAME), 
-        where("userId", "==", userId),
-        orderBy("date", "desc")
+        collection(db, COLLECTION_NAME),
+        where('userId', '==', userId),
+        orderBy('date', 'desc'),
       );
       const querySnapshot = await getDocs(q);
-      
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as ActivityRecord));
+
+      return querySnapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          }) as ActivityRecord,
+      );
     } catch (error: unknown) {
       trackError(error);
-      console.error("Error getting user activities: ", error);
+      console.error('Error getting user activities: ', error);
       throw error;
     }
-  }
+  },
 };

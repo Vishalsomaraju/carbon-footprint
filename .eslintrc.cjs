@@ -2,7 +2,12 @@ module.exports = {
   root: true,
   env: { browser: true, es2022: true, node: true },
   parser: '@typescript-eslint/parser',
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module', ecmaFeatures: { jsx: true }, project: './tsconfig.json' },
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: { jsx: true },
+    project: './tsconfig.json',
+  },
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y', 'import'],
   extends: [
     'eslint:recommended',
@@ -20,7 +25,10 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    'import/order': ['error', { groups: ['builtin', 'external', 'internal'], 'newlines-between': 'always' }],
+    'import/order': [
+      'error',
+      { groups: ['builtin', 'external', 'internal'], 'newlines-between': 'always' },
+    ],
     'jsx-a11y/anchor-is-valid': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'react/prop-types': 'off',

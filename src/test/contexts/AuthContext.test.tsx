@@ -7,17 +7,20 @@ import { render, screen } from '@testing-library/react';
 
 import { AuthProvider, useAuthContext } from '../../contexts/AuthContext';
 
-vi.mock('firebase/auth', (): Record<string, unknown> => ({
-  getAuth: vi.fn(() => ({})),
-  onAuthStateChanged: vi.fn((_auth, cb) => {
-    cb({ uid: '123' });
-    return () => {};
+vi.mock(
+  'firebase/auth',
+  (): Record<string, unknown> => ({
+    getAuth: vi.fn(() => ({})),
+    onAuthStateChanged: vi.fn((_auth, cb) => {
+      cb({ uid: '123' });
+      return () => {};
+    }),
+    signInWithPopup: vi.fn(),
+    signOut: vi.fn(),
+    GoogleAuthProvider: vi.fn(),
   }),
-  signInWithPopup: vi.fn(),
-  signOut: vi.fn(),
-  GoogleAuthProvider: vi.fn()
-}));
-vi.mock('../../config', (): Record<string, unknown> => ({ auth: {}, googleProvider: {} }));
+);
+vi.mock('../../lib/firebase', (): Record<string, unknown> => ({ auth: {}, googleProvider: {} }));
 
 const TestComponent = (): import('react').ReactElement => {
   const { user } = useAuthContext();
@@ -31,7 +34,11 @@ const ThrowComponent = (): import('react').ReactElement => {
 
 describe('AuthContext', (): void => {
   it('renders children when loaded', (): void => {
-    render(<AuthProvider><TestComponent /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <TestComponent />
+      </AuthProvider>,
+    );
     expect(screen.getByTestId('user')).toHaveTextContent('123');
   });
 

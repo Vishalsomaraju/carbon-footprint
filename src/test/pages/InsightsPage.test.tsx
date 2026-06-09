@@ -29,7 +29,6 @@ const defaultInsightsState = {
   lastGenTime: 0,
 };
 
-
 vi.mock('../../hooks', () => ({
   useInsights: vi.fn(),
   useActivities: vi.fn(),
@@ -46,15 +45,29 @@ describe('InsightsPage', (): void => {
       ...defaultInsightsState,
       activitiesCount: 1,
       insights: [
-        { id: '1', title: 'Tip 1', body: 'Test body', type: 'tip', category: 'transport', generatedAt: Date.now() },
-        { id: '2', title: 'Tip 2', body: 'Test body', type: 'tip', category: 'food', generatedAt: Date.now() },
+        {
+          id: '1',
+          title: 'Tip 1',
+          body: 'Test body',
+          type: 'tip',
+          category: 'transport',
+          generatedAt: Date.now(),
+        },
+        {
+          id: '2',
+          title: 'Tip 2',
+          body: 'Test body',
+          type: 'tip',
+          category: 'food',
+          generatedAt: Date.now(),
+        },
       ],
     });
 
     render(
       <BrowserRouter>
         <InsightsPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     expect(screen.getByText('Tip 1')).toBeInTheDocument();
@@ -65,37 +78,49 @@ describe('InsightsPage', (): void => {
     render(
       <BrowserRouter>
         <InsightsPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText(/Log some activities first/i)).toBeInTheDocument();
   });
 
   it('handles insights error state', async (): Promise<void> => {
-    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 1, error: 'Failed to load insights. Please try again later.' });
+    vi.mocked(useInsights).mockReturnValue({
+      ...defaultInsightsState,
+      activitiesCount: 1,
+      error: 'Failed to load insights. Please try again later.',
+    });
     render(
       <BrowserRouter>
         <InsightsPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText(/Failed to load insights/i)).toBeInTheDocument();
   });
 
   it('handles chat interaction successfully', async (): Promise<void> => {
-    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 1, chatResp: 'Chat response' });
+    vi.mocked(useInsights).mockReturnValue({
+      ...defaultInsightsState,
+      activitiesCount: 1,
+      chatResp: 'Chat response',
+    });
     render(
       <BrowserRouter>
         <InsightsPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText('Chat response')).toBeInTheDocument();
   });
 
   it('handles chat interaction error', async (): Promise<void> => {
-    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 1, chatResp: 'Sorry, I encountered an error. Try again.' });
+    vi.mocked(useInsights).mockReturnValue({
+      ...defaultInsightsState,
+      activitiesCount: 1,
+      chatResp: 'Sorry, I encountered an error. Try again.',
+    });
     render(
       <BrowserRouter>
         <InsightsPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     expect(screen.getByText(/Sorry, I encountered an error/i)).toBeInTheDocument();
   });

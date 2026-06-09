@@ -9,14 +9,23 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from '../../components/auth/ProtectedRoute';
 import { useAuthContext } from '../../contexts/AuthContext';
 
-vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
-  useAuthContext: vi.fn()
-}));
+vi.mock(
+  '../../contexts/AuthContext',
+  (): Record<string, unknown> => ({
+    useAuthContext: vi.fn(),
+  }),
+);
 
 describe('ProtectedRoute', (): void => {
   it('shows loading state initially', (): void => {
     (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null, loading: true });
-    render(<MemoryRouter><ProtectedRoute><div>Content</div></ProtectedRoute></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <ProtectedRoute>
+          <div>Content</div>
+        </ProtectedRoute>
+      </MemoryRouter>,
+    );
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
@@ -26,19 +35,31 @@ describe('ProtectedRoute', (): void => {
       <MemoryRouter initialEntries={['/protected']}>
         <Routes>
           <Route path="/" element={<div data-testid="home">Home</div>} />
-          <Route path="/protected" element={<ProtectedRoute><div data-testid="protected">Protected</div></ProtectedRoute>} />
+          <Route
+            path="/protected"
+            element={
+              <ProtectedRoute>
+                <div data-testid="protected">Protected</div>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByTestId('home')).toBeInTheDocument();
   });
 
   it('renders children when user is authenticated', (): void => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: { uid: '123' }, loading: false });
+    (useAuthContext as import('vitest').Mock).mockReturnValue({
+      user: { uid: '123' },
+      loading: false,
+    });
     render(
       <MemoryRouter>
-        <ProtectedRoute><div data-testid="protected">Protected</div></ProtectedRoute>
-      </MemoryRouter>
+        <ProtectedRoute>
+          <div data-testid="protected">Protected</div>
+        </ProtectedRoute>
+      </MemoryRouter>,
     );
     expect(screen.getByTestId('protected')).toBeInTheDocument();
   });

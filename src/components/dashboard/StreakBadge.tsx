@@ -15,7 +15,7 @@ export const StreakBadge: React.FC<Props> = ({ activities }): React.ReactElement
   const streak = useMemo(() => {
     if (!activities.length) return 0;
     // Simple mock logic for demonstration
-    const uniqueDays = new Set(activities.map(a => a.date.split('T')[0]));
+    const uniqueDays = new Set(activities.map((a) => a.date.split('T')[0]));
     return uniqueDays.size;
   }, [activities]);
 

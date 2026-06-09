@@ -9,21 +9,30 @@ import { BrowserRouter } from 'react-router-dom';
 import { LogActivityPage } from '../../pages/LogActivityPage';
 import { useAuth, useActivities } from '../../hooks';
 
-vi.mock('../../hooks', (): Record<string, unknown> => ({
-  useAuth: vi.fn(),
-  useActivities: vi.fn(),
-}));
+vi.mock(
+  '../../hooks',
+  (): Record<string, unknown> => ({
+    useAuth: vi.fn(),
+    useActivities: vi.fn(),
+  }),
+);
 
 describe('LogActivityPage', (): void => {
   it('renders and interacts with form steps', async (): Promise<void> => {
-    (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
+    (useAuth as unknown as import('vitest').Mock).mockReturnValue({
+      user: { displayName: 'John' },
+    });
     const mockAddActivity = vi.fn().mockResolvedValue(true);
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false, addActivity: mockAddActivity });
+    (useActivities as unknown as import('vitest').Mock).mockReturnValue({
+      activities: [],
+      loading: false,
+      addActivity: mockAddActivity,
+    });
 
     render(
       <BrowserRouter>
         <LogActivityPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     // Step 1: Category Selection
@@ -41,22 +50,30 @@ describe('LogActivityPage', (): void => {
     fireEvent.click(screen.getByRole('button', { name: /Save Activity/i }));
 
     // Verify it called addActivity
-    expect(mockAddActivity).toHaveBeenCalledWith(expect.objectContaining({
-      category: 'transport',
-      subCategory: 'car_petrol',
-      value: 15
-    }));
+    expect(mockAddActivity).toHaveBeenCalledWith(
+      expect.objectContaining({
+        category: 'transport',
+        subCategory: 'car_petrol',
+        value: 15,
+      }),
+    );
   });
 
   it('handles submission errors', async (): Promise<void> => {
-    (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
+    (useAuth as unknown as import('vitest').Mock).mockReturnValue({
+      user: { displayName: 'John' },
+    });
     const mockAddActivity = vi.fn().mockRejectedValue(new Error('Firebase error'));
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false, addActivity: mockAddActivity });
+    (useActivities as unknown as import('vitest').Mock).mockReturnValue({
+      activities: [],
+      loading: false,
+      addActivity: mockAddActivity,
+    });
 
     render(
       <BrowserRouter>
         <LogActivityPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     fireEvent.click(screen.getByText('Transport'));

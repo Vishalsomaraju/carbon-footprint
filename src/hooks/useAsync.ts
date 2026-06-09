@@ -8,7 +8,15 @@ import { trackError } from '../utils/errorTracker';
 
 type AsyncFunction<T, Args extends unknown[]> = (...args: Args) => Promise<T>;
 
-export function useAsync<T, Args extends unknown[]>(asyncFunction: AsyncFunction<T, Args>): { execute: (...args: Args) => Promise<T>; data: T | null; loading: boolean; error: Error | null; setData: React.Dispatch<React.SetStateAction<T | null>> } {
+export function useAsync<T, Args extends unknown[]>(
+  asyncFunction: AsyncFunction<T, Args>,
+): {
+  execute: (...args: Args) => Promise<T>;
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+  setData: React.Dispatch<React.SetStateAction<T | null>>;
+} {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -29,7 +37,7 @@ export function useAsync<T, Args extends unknown[]>(asyncFunction: AsyncFunction
         setLoading(false);
       }
     },
-    [asyncFunction]
+    [asyncFunction],
   );
 
   return { execute, data, loading, error, setData };

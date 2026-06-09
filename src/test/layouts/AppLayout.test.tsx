@@ -1,4 +1,3 @@
- 
 /**
  * @module layouts/AppLayout.test
  */
@@ -10,7 +9,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { AppLayout } from '../../layouts/AppLayout';
 
 vi.mock('../../hooks', () => ({
-  useAuth: vi.fn()
+  useAuth: vi.fn(),
 }));
 
 vi.mock('react-router-dom', async () => {
@@ -18,7 +17,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useLocation: (): { pathname: string } => ({ pathname: '/' }),
-    Outlet: (): null => null
+    Outlet: (): null => null,
   };
 });
 
@@ -27,13 +26,13 @@ describe('AppLayout', (): void => {
     render(
       <MemoryRouter>
         <AppLayout />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Look for both desktop and mobile instances
     const brandElements = screen.getAllByText('CarbonWise');
     expect(brandElements.length).toBeGreaterThan(0);
-    
+
     // Check for some nav links
     const dashboardLinks = screen.getAllByText('Dashboard');
     expect(dashboardLinks.length).toBeGreaterThan(0);

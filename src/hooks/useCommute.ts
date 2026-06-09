@@ -20,8 +20,8 @@ export const useCommute = (): {
   loading: boolean;
   result: CommuteResult | null;
   error: string;
-  toast: {msg: string, type: 'success'|'error'} | null;
-  setToast: (v: {msg: string, type: 'success'|'error'} | null) => void;
+  toast: { msg: string; type: 'success' | 'error' } | null;
+  setToast: (v: { msg: string; type: 'success' | 'error' } | null) => void;
   logLoading: boolean;
   handleCalculate: () => Promise<void>;
   handleLog: () => Promise<void>;
@@ -30,13 +30,13 @@ export const useCommute = (): {
   const [destination, setDestination] = useState('');
   const [mode, setMode] = useState<keyof typeof EMISSION_FACTORS.transport>('car_petrol_per_km');
   const [days, setDays] = useState(5);
-  
+
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CommuteResult | null>(null);
   const [error, setError] = useState('');
-  
+
   const { addActivity } = useActivities();
-  const [toast, setToast] = useState<{msg: string, type: 'success'|'error'} | null>(null);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
   const [logLoading, setLogLoading] = useState(false);
 
   const handleCalculate = async (): Promise<void> => {
@@ -66,7 +66,7 @@ export const useCommute = (): {
         subCategory: mode,
         value: result.distanceKm * 2, // round trip
         description: `Commute: ${origin} to ${destination}`,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       });
       setToast({ msg: 'Commute logged successfully!', type: 'success' });
     } catch (err) {
@@ -78,8 +78,21 @@ export const useCommute = (): {
   };
 
   return {
-    origin, setOrigin, destination, setDestination,
-    mode, setMode, days, setDays, loading, result,
-    error, toast, setToast, logLoading, handleCalculate, handleLog
+    origin,
+    setOrigin,
+    destination,
+    setDestination,
+    mode,
+    setMode,
+    days,
+    setDays,
+    loading,
+    result,
+    error,
+    toast,
+    setToast,
+    logLoading,
+    handleCalculate,
+    handleLog,
   };
 };

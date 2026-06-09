@@ -19,7 +19,7 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
   const [step, setStep] = useState(1);
   const [data, setData] = useState({ category: '', subCategory: '', value: 0 });
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState<{msg: string; type: 'success'|'error'} | null>(null);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const handleSubmit = async (notes: string): Promise<void> => {
     try {
@@ -29,9 +29,9 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
         subCategory: data.subCategory,
         value: data.value,
         description: notes,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       } as import('../types').ActivityRecord);
-      
+
       setToast({ msg: 'Activity saved successfully!', type: 'success' });
       setTimeout(() => navigate('/dashboard'), 1500);
     } catch (err) {
@@ -47,15 +47,41 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
       <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Log Activity</h1>
         <div className="flex gap-2">
-          {[1, 2, 3].map(i => (
-            <div key={i} className={`h-2 flex-1 rounded-full ${step >= i ? 'bg-carbon-500' : 'bg-gray-200'}`} />
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className={`h-2 flex-1 rounded-full ${step >= i ? 'bg-carbon-500' : 'bg-gray-200'}`}
+            />
           ))}
         </div>
       </div>
 
-      {step === 1 && <CategorySelector onSelect={c => { setData({ ...data, category: c }); setStep(2); }} />}
-      {step === 2 && <ActivityForm category={data.category} onBack={() => setStep(1)} onNext={d => { setData({ ...data, ...d }); setStep(3); }} />}
-      {step === 3 && <ConfirmationStep data={data} onBack={() => setStep(2)} onSubmit={handleSubmit} isLoading={loading} />}
+      {step === 1 && (
+        <CategorySelector
+          onSelect={(c) => {
+            setData({ ...data, category: c });
+            setStep(2);
+          }}
+        />
+      )}
+      {step === 2 && (
+        <ActivityForm
+          category={data.category}
+          onBack={() => setStep(1)}
+          onNext={(d) => {
+            setData({ ...data, ...d });
+            setStep(3);
+          }}
+        />
+      )}
+      {step === 3 && (
+        <ConfirmationStep
+          data={data}
+          onBack={() => setStep(2)}
+          onSubmit={handleSubmit}
+          isLoading={loading}
+        />
+      )}
 
       {toast && <Toast message={toast.msg} type={toast.type} onDismiss={() => setToast(null)} />}
     </div>

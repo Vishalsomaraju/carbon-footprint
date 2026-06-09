@@ -19,11 +19,11 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', cla
 
   return (
     <div className={clsx('flex items-center justify-center', className)}>
-      <div 
+      <div
         className={clsx(
           'animate-spin rounded-full border-t-green-600 border-r-green-600 border-b-transparent border-l-transparent',
-          sizes[size]
-        )} 
+          sizes[size],
+        )}
         role="status"
         aria-label="Loading"
       />

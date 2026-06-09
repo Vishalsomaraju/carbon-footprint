@@ -1,4 +1,3 @@
- 
 /**
  * @module hooks/useAuth.test
  */
@@ -12,17 +11,17 @@ import { authService, analyticsService } from '../../services';
 
 // Mock contexts and services
 vi.mock('../../contexts/AuthContext', () => ({
-  useAuthContext: vi.fn(() => ({ user: null as null, loading: false }))
+  useAuthContext: vi.fn(() => ({ user: null as null, loading: false })),
 }));
 
 vi.mock('../../services', () => ({
   authService: {
     signInWithGoogle: vi.fn(),
-    logout: vi.fn()
+    logout: vi.fn(),
   },
   analyticsService: {
-    logEvent: vi.fn()
-  }
+    logEvent: vi.fn(),
+  },
 }));
 
 describe('useAuth', (): void => {
@@ -32,7 +31,7 @@ describe('useAuth', (): void => {
 
   it('should return initial state', (): void => {
     const { result } = renderHook(() => useAuth());
-    
+
     expect(result.current.user).toBeNull();
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
@@ -40,8 +39,10 @@ describe('useAuth', (): void => {
 
   it('should handle login successfully', async (): Promise<void> => {
     const mockUser = { uid: '123', email: 'test@example.com' };
-    vi.mocked(authService.signInWithGoogle).mockResolvedValue(mockUser as unknown as Awaited<ReturnType<typeof authService.signInWithGoogle>>);
-    
+    vi.mocked(authService.signInWithGoogle).mockResolvedValue(
+      mockUser as unknown as Awaited<ReturnType<typeof authService.signInWithGoogle>>,
+    );
+
     const { result } = renderHook(() => useAuth());
 
     await act(async () => {
@@ -57,7 +58,7 @@ describe('useAuth', (): void => {
   it('should handle login error', async (): Promise<void> => {
     const error = new Error('Login failed');
     vi.mocked(authService.signInWithGoogle).mockRejectedValue(error);
-    
+
     const { result } = renderHook(() => useAuth());
 
     await act(async () => {
@@ -69,9 +70,12 @@ describe('useAuth', (): void => {
   });
 
   it('should handle logout successfully', async (): Promise<void> => {
-    vi.mocked(useAuthContext).mockReturnValue({ user: { uid: '123' } as unknown as import('firebase/auth').User, loading: false });
+    vi.mocked(useAuthContext).mockReturnValue({
+      user: { uid: '123' } as unknown as import('firebase/auth').User,
+      loading: false,
+    });
     vi.mocked(authService.logout).mockResolvedValue(undefined);
-    
+
     const { result } = renderHook(() => useAuth());
 
     await act(async () => {
@@ -85,7 +89,7 @@ describe('useAuth', (): void => {
   it('should handle logout error', async (): Promise<void> => {
     const error = new Error('Logout failed');
     vi.mocked(authService.logout).mockRejectedValue(error);
-    
+
     const { result } = renderHook(() => useAuth());
 
     await act(async () => {

@@ -10,11 +10,17 @@ import { useAuthContext } from '../contexts/AuthContext';
 import { EMISSION_FACTORS } from '../constants';
 import { trackError } from '../utils/errorTracker';
 
-export interface UseActivitiesReturn { 
-  activities: ActivityRecord[]; 
-  loading: boolean; 
-  error: Error | null; 
-  addActivity: (data: { category: string; subCategory?: string; value: number; description?: string; date: string }) => Promise<string>; 
+export interface UseActivitiesReturn {
+  activities: ActivityRecord[];
+  loading: boolean;
+  error: Error | null;
+  addActivity: (data: {
+    category: string;
+    subCategory?: string;
+    value: number;
+    description?: string;
+    date: string;
+  }) => Promise<string>;
   refresh: () => Promise<void>;
 }
 
@@ -48,33 +54,47 @@ export const useActivities = (): UseActivitiesReturn => {
     }
   }, [user, fetchActivities]);
 
-  const addActivity = useCallback(async (activityData: { category: string; subCategory?: string; value: number; description?: string; date: string }): Promise<string> => {
-    if (!user) throw new Error("User not authenticated");
-    let carbonImpact = activityData.value * 0.2; // Fallback
-    const { category, subCategory, value } = activityData;
-    if (category && subCategory && category in EMISSION_FACTORS) {
-      const factors = EMISSION_FACTORS[category as keyof typeof EMISSION_FACTORS];
-      if (subCategory in factors) carbonImpact = value * (factors[subCategory as keyof typeof factors] as number);
-    }
-    const newActivity: Omit<ActivityRecord, 'id'> = { ...activityData, carbonImpact, userId: user.uid };
-    
-    try {
-      const id = await activityService.logActivity(newActivity);
-      const activityWithId: ActivityRecord = { ...newActivity, id };
-      setActivities(prev => [activityWithId, ...prev]);
-      return id;
-    } catch (err: unknown) {
-      trackError(err, 'addActivity');
-      setError(err as Error);
-      throw err;
-    }
-  }, [user]);
+  const addActivity = useCallback(
+    async (activityData: {
+      category: string;
+      subCategory?: string;
+      value: number;
+      description?: string;
+      date: string;
+    }): Promise<string> => {
+      if (!user) throw new Error('User not authenticated');
+      let carbonImpact = activityData.value * 0.2; // Fallback
+      const { category, subCategory, value } = activityData;
+      if (category && subCategory && category in EMISSION_FACTORS) {
+        const factors = EMISSION_FACTORS[category as keyof typeof EMISSION_FACTORS];
+        if (subCategory in factors)
+          carbonImpact = value * (factors[subCategory as keyof typeof factors] as number);
+      }
+      const newActivity: Omit<ActivityRecord, 'id'> = {
+        ...activityData,
+        carbonImpact,
+        userId: user.uid,
+      };
+
+      try {
+        const id = await activityService.logActivity(newActivity);
+        const activityWithId: ActivityRecord = { ...newActivity, id };
+        setActivities((prev) => [activityWithId, ...prev]);
+        return id;
+      } catch (err: unknown) {
+        trackError(err, 'addActivity');
+        setError(err as Error);
+        throw err;
+      }
+    },
+    [user],
+  );
 
   return {
     activities,
     loading,
     error,
     addActivity,
-    refresh: fetchActivities
+    refresh: fetchActivities,
   };
 };

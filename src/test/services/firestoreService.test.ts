@@ -5,7 +5,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getDocs, addDoc } from 'firebase/firestore';
 
-import { activityService } from '../services/activityService';
+import { activityService } from '../../services/activityService';
 
 vi.mock('firebase/firestore', (): Record<string, unknown> => ({
   collection: vi.fn(),
@@ -25,7 +25,7 @@ vi.mock('firebase/firestore', (): Record<string, unknown> => ({
   serverTimestamp: vi.fn().mockReturnValue('SERVER_TIMESTAMP'),
 }));
 
-vi.mock('../config', (): Record<string, unknown> => ({ db: {} }));
+vi.mock('../../lib/firebase', (): Record<string, unknown> => ({ db: {} }));
 
 describe('firestoreService (activityService)', (): void => {
   beforeEach((): void => {

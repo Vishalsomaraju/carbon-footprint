@@ -4,10 +4,14 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { 
-  calculateTransportCo2, calculateFoodCo2, calculateEnergyCo2, calculateShoppingCo2, calculateCo2 
-} from '../utils/co2Calculator';
-import { formatCo2, getFootprintLevel } from '../utils/co2';
+import {
+  calculateTransportCo2,
+  calculateFoodCo2,
+  calculateEnergyCo2,
+  calculateShoppingCo2,
+  calculateCo2,
+} from '../../utils/co2Calculator';
+import { formatCo2, getFootprintLevel } from '../../utils/co2';
 
 describe('co2Calculator', (): void => {
   it('calculateTransportCo2 works', (): void => {

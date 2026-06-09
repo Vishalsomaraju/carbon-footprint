@@ -1,4 +1,3 @@
- 
 /**
  * @module hooks/useActivities.test
  */
@@ -14,18 +13,18 @@ import { activityService } from '../../services';
 const mockUser = { uid: 'user123' };
 
 vi.mock('../../contexts/AuthContext', () => ({
-  useAuthContext: vi.fn((): { user: typeof mockUser | null } => ({ user: mockUser }))
+  useAuthContext: vi.fn((): { user: typeof mockUser | null } => ({ user: mockUser })),
 }));
 
 vi.mock('../../services', () => ({
   activityService: {
     getUserActivities: vi.fn(),
-    logActivity: vi.fn()
-  }
+    logActivity: vi.fn(),
+  },
 }));
 
 vi.mock('../utils/errorTracker', () => ({
-  trackError: vi.fn()
+  trackError: vi.fn(),
 }));
 
 describe('useActivities', (): void => {
@@ -34,14 +33,25 @@ describe('useActivities', (): void => {
   });
 
   it('should fetch activities on mount if user is authenticated', async (): Promise<void> => {
-    const mockActivities = [{ id: '1', category: 'transport', value: 10, carbonImpact: 2, date: '2023-01-01', userId: 'user123' }];
-    vi.mocked(activityService.getUserActivities).mockResolvedValue(mockActivities as unknown as Awaited<ReturnType<typeof activityService.getUserActivities>>);
+    const mockActivities = [
+      {
+        id: '1',
+        category: 'transport',
+        value: 10,
+        carbonImpact: 2,
+        date: '2023-01-01',
+        userId: 'user123',
+      },
+    ];
+    vi.mocked(activityService.getUserActivities).mockResolvedValue(
+      mockActivities as unknown as Awaited<ReturnType<typeof activityService.getUserActivities>>,
+    );
 
     const { result } = renderHook(() => useActivities());
 
     // Wait for the initial effect to complete
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(activityService.getUserActivities).toHaveBeenCalledWith('user123');
@@ -52,7 +62,7 @@ describe('useActivities', (): void => {
 
   it('should not fetch activities if user is not authenticated', async (): Promise<void> => {
     vi.mocked(useAuthContext).mockReturnValue({ user: null, loading: false });
-    
+
     const { result } = renderHook(() => useActivities());
 
     expect(activityService.getUserActivities).not.toHaveBeenCalled();
@@ -61,41 +71,51 @@ describe('useActivities', (): void => {
   });
 
   it('should add an activity and update state', async (): Promise<void> => {
-    vi.mocked(useAuthContext).mockReturnValue({ user: mockUser as unknown as import('firebase/auth').User, loading: false });
+    vi.mocked(useAuthContext).mockReturnValue({
+      user: mockUser as unknown as import('firebase/auth').User,
+      loading: false,
+    });
     vi.mocked(activityService.getUserActivities).mockResolvedValue([]);
     vi.mocked(activityService.logActivity).mockResolvedValue('new-id');
 
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     await act(async () => {
-      const id = await result.current.addActivity({ category: 'transport', subCategory: 'car_petrol_per_km',
+      const id = await result.current.addActivity({
+        category: 'transport',
+        subCategory: 'car_petrol_per_km',
         value: 10,
         description: 'Test drive',
-        date: '2023-01-02'
+        date: '2023-01-02',
       });
       expect(id).toBe('new-id');
     });
 
-    expect(activityService.logActivity).toHaveBeenCalledWith(expect.objectContaining({
-      category: 'transport',
-      subCategory: 'car_petrol_per_km',
-      value: 10,
-      description: 'Test drive',
-      date: '2023-01-02',
-      carbonImpact: 2.1, // 10 * 0.21
-      userId: 'user123'
-    }));
+    expect(activityService.logActivity).toHaveBeenCalledWith(
+      expect.objectContaining({
+        category: 'transport',
+        subCategory: 'car_petrol_per_km',
+        value: 10,
+        description: 'Test drive',
+        date: '2023-01-02',
+        carbonImpact: 2.1, // 10 * 0.21
+        userId: 'user123',
+      }),
+    );
 
     expect(result.current.activities).toHaveLength(1);
     expect(result.current.activities[0].id).toBe('new-id');
   });
 
   it('should handle add activity error', async (): Promise<void> => {
-    vi.mocked(useAuthContext).mockReturnValue({ user: mockUser as unknown as import('firebase/auth').User, loading: false });
+    vi.mocked(useAuthContext).mockReturnValue({
+      user: mockUser as unknown as import('firebase/auth').User,
+      loading: false,
+    });
     vi.mocked(activityService.getUserActivities).mockResolvedValue([]);
     const error = new Error('Failed to add');
     vi.mocked(activityService.logActivity).mockRejectedValue(error);
@@ -103,36 +123,62 @@ describe('useActivities', (): void => {
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     await act(async () => {
-      await expect(result.current.addActivity({ category: 'transport', value: 10,
-        date: '2023-01-02'
-      })).rejects.toThrow('Failed to add');
+      await expect(
+        result.current.addActivity({ category: 'transport', value: 10, date: '2023-01-02' }),
+      ).rejects.toThrow('Failed to add');
     });
 
     expect(result.current.error).toEqual(error);
   });
 
   it('should calculate correct carbon impact for all categories', async (): Promise<void> => {
-    vi.mocked(useAuthContext).mockReturnValue({ user: mockUser as unknown as import('firebase/auth').User, loading: false });
+    vi.mocked(useAuthContext).mockReturnValue({
+      user: mockUser as unknown as import('firebase/auth').User,
+      loading: false,
+    });
     vi.mocked(activityService.getUserActivities).mockResolvedValue([]);
     vi.mocked(activityService.logActivity).mockResolvedValue('new-id');
 
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {
-      await result.current.addActivity({ category: 'energy', subCategory: 'electricity_per_kwh', value: 10, date: '2023-01-02' });
-      await result.current.addActivity({ category: 'food', subCategory: 'beef_per_meal', value: 10, date: '2023-01-02' });
-      await result.current.addActivity({ category: 'shopping', subCategory: 'clothing_item', value: 10, date: '2023-01-02' });
+      await result.current.addActivity({
+        category: 'energy',
+        subCategory: 'electricity_per_kwh',
+        value: 10,
+        date: '2023-01-02',
+      });
+      await result.current.addActivity({
+        category: 'food',
+        subCategory: 'beef_per_meal',
+        value: 10,
+        date: '2023-01-02',
+      });
+      await result.current.addActivity({
+        category: 'shopping',
+        subCategory: 'clothing_item',
+        value: 10,
+        date: '2023-01-02',
+      });
       await result.current.addActivity({ category: 'other', value: 10, date: '2023-01-02' });
     });
 
-    expect(activityService.logActivity).toHaveBeenCalledWith(expect.objectContaining({ category: 'energy', carbonImpact: 2.33 }));
-    expect(activityService.logActivity).toHaveBeenCalledWith(expect.objectContaining({ category: 'food', carbonImpact: 35 }));
-    expect(activityService.logActivity).toHaveBeenCalledWith(expect.objectContaining({ category: 'shopping', carbonImpact: 70 }));
-    expect(activityService.logActivity).toHaveBeenCalledWith(expect.objectContaining({ category: 'other', carbonImpact: 2 }));
+    expect(activityService.logActivity).toHaveBeenCalledWith(
+      expect.objectContaining({ category: 'energy', carbonImpact: 2.33 }),
+    );
+    expect(activityService.logActivity).toHaveBeenCalledWith(
+      expect.objectContaining({ category: 'food', carbonImpact: 35 }),
+    );
+    expect(activityService.logActivity).toHaveBeenCalledWith(
+      expect.objectContaining({ category: 'shopping', carbonImpact: 70 }),
+    );
+    expect(activityService.logActivity).toHaveBeenCalledWith(
+      expect.objectContaining({ category: 'other', carbonImpact: 2 }),
+    );
   });
 
   it('should throw error if adding activity without user', async (): Promise<void> => {
@@ -140,9 +186,9 @@ describe('useActivities', (): void => {
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {
-      await expect(result.current.addActivity({ category: 'transport', value: 10,
-        date: '2023-01-02'
-      })).rejects.toThrow('User not authenticated');
+      await expect(
+        result.current.addActivity({ category: 'transport', value: 10, date: '2023-01-02' }),
+      ).rejects.toThrow('User not authenticated');
     });
   });
 });

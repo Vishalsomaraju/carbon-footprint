@@ -20,7 +20,9 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
   };
 
   const handleDeleteAccount = (): void => {
-    const confirm = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
+    const confirm = window.confirm(
+      'Are you sure you want to delete your account? This action cannot be undone.',
+    );
     if (confirm) {
       trackEvent('account_deleted_requested');
       alert('Delete requested. You will be signed out.');
@@ -33,9 +35,9 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
   return (
     <div className="max-w-2xl mx-auto space-y-8 pb-20">
       <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-6">
-        <img 
-          src={user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.uid} 
-          alt="Avatar" 
+        <img
+          src={user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.uid}
+          alt="Avatar"
           className="w-20 h-20 rounded-full border-2 border-carbon-100"
         />
         <div>
@@ -45,18 +47,18 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
       </div>
 
       <StatsSection />
-      
+
       <GoalSlider userId={user.uid} />
 
       <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
         <h3 className="font-bold text-gray-900 mb-2">Account Settings</h3>
-        <button 
+        <button
           onClick={handleSignOut}
           className="w-full py-3 text-carbon-700 bg-carbon-50 font-medium rounded-lg hover:bg-carbon-100 transition-colors"
         >
           Sign Out
         </button>
-        <button 
+        <button
           onClick={handleDeleteAccount}
           className="w-full py-3 text-red-600 bg-red-50 font-medium rounded-lg hover:bg-red-100 transition-colors"
         >

@@ -77,5 +77,3 @@ export const LandingPage: React.FC = (): import('react').ReactElement => {
     </div>
   );
 };
-
-

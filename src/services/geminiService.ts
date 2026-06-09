@@ -27,23 +27,30 @@ async function callGemini(prompt: string): Promise<string> {
     }),
   });
   if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
-  const data = await response.json() as GeminiResponse;
+  const data = (await response.json()) as GeminiResponse;
   return data.candidates[0]?.content.parts[0]?.text ?? '';
 }
 
-export async function generateWeeklyInsights(activities: ActivityRecord[]): Promise<InsightMessage[]> {
+export async function generateWeeklyInsights(
+  activities: ActivityRecord[],
+): Promise<InsightMessage[]> {
   try {
-    const summary = activities.reduce((acc, a) => {
-      acc[a.category] = (acc[a.category] ?? 0) + a.carbonImpact;
-      return acc;
-    }, {} as Record<string, number>);
+    const summary = activities.reduce(
+      (acc, a) => {
+        acc[a.category] = (acc[a.category] ?? 0) + a.carbonImpact;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     const prompt = `You are a carbon footprint advisor. A user's activity summary for the past week (in kg CO2):
 Transport: ${(summary['transport'] ?? 0).toFixed(2)} kg
 Food: ${(summary['food'] ?? 0).toFixed(2)} kg
 Energy: ${(summary['energy'] ?? 0).toFixed(2)} kg
 Shopping: ${(summary['shopping'] ?? 0).toFixed(2)} kg
-Total: ${Object.values(summary).reduce((a, b) => a + b, 0).toFixed(2)} kg
+Total: ${Object.values(summary)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2)} kg
 
 Provide exactly 3 actionable, specific tips to reduce their carbon footprint. Focus on their highest-emission category.
 Format your response as JSON array: [{"title": "...", "body": "...", "category": "transport|food|energy|shopping|general", "type": "tip|warning"}]
@@ -51,7 +58,12 @@ Return ONLY the JSON array, no other text.`;
 
     const text = await callGemini(prompt);
     const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean) as Array<{ title: string; body: string; category: string; type: string }>;
+    const parsed = JSON.parse(clean) as Array<{
+      title: string;
+      body: string;
+      category: string;
+      type: string;
+    }>;
 
     trackEvent('gemini_insights_generated', { activity_count: activities.length });
 

@@ -78,7 +78,17 @@ export const useInsights = (): {
   };
 
   return {
-    insights, loading, error, chatMsg, setChatMsg, chatResp, chatLoading,
-    activitiesCount: activities.length, fetchInsights, handleRegenerate, handleChat, lastGenTime
+    insights,
+    loading,
+    error,
+    chatMsg,
+    setChatMsg,
+    chatResp,
+    chatLoading,
+    activitiesCount: activities.length,
+    fetchInsights,
+    handleRegenerate,
+    handleChat,
+    lastGenTime,
   };
 };

@@ -11,8 +11,22 @@ import { useCommute } from '../hooks';
 
 export const CommutePage: React.FC = (): React.ReactElement => {
   const {
-    origin, setOrigin, destination, setDestination, mode, setMode, days, setDays,
-    loading, result, error, toast, setToast, logLoading, handleCalculate, handleLog
+    origin,
+    setOrigin,
+    destination,
+    setDestination,
+    mode,
+    setMode,
+    days,
+    setDays,
+    loading,
+    result,
+    error,
+    toast,
+    setToast,
+    logLoading,
+    handleCalculate,
+    handleLog,
   } = useCommute();
 
   return (
@@ -22,17 +36,26 @@ export const CommutePage: React.FC = (): React.ReactElement => {
         <p className="text-gray-600 mt-1">Estimate your daily and annual commute emissions.</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <CommuteForm 
-          origin={origin} setOrigin={setOrigin}
-          destination={destination} setDestination={setDestination}
-          mode={mode} setMode={setMode}
-          days={days} setDays={setDays}
-          loading={loading} error={error} onCalculate={handleCalculate}
+        <CommuteForm
+          origin={origin}
+          setOrigin={setOrigin}
+          destination={destination}
+          setDestination={setDestination}
+          mode={mode}
+          setMode={setMode}
+          days={days}
+          setDays={setDays}
+          loading={loading}
+          error={error}
+          onCalculate={handleCalculate}
         />
         {result && (
-          <CommuteResults 
-            result={result} mode={mode} days={days} 
-            logLoading={logLoading} onLog={handleLog} 
+          <CommuteResults
+            result={result}
+            mode={mode}
+            days={days}
+            logLoading={logLoading}
+            onLog={handleLog}
           />
         )}
       </div>

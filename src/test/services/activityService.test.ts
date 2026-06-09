@@ -1,4 +1,3 @@
- 
 /**
  * @module __tests__/activityService.test
  */
@@ -21,13 +20,13 @@ vi.mock('firebase/firestore', async (importOriginal) => {
     getDocs: vi.fn(),
     orderBy: vi.fn(),
     Timestamp: {
-      now: vi.fn((): { toMillis: () => number } => ({ toMillis: (): number => 123456789 }))
-    }
+      now: vi.fn((): { toMillis: () => number } => ({ toMillis: (): number => 123456789 })),
+    },
   };
 });
 
-vi.mock('../../config', () => ({
-  db: {}
+vi.mock('../../lib/firebase', () => ({
+  db: {},
 }));
 
 describe('activityService', (): void => {
@@ -45,7 +44,7 @@ describe('activityService', (): void => {
         category: 'transport',
         value: 10,
         carbonImpact: 2,
-        date: '2023-10-01'
+        date: '2023-10-01',
       };
 
       const id = await activityService.logActivity(activityData);
@@ -63,7 +62,7 @@ describe('activityService', (): void => {
         category: 'transport',
         value: 10,
         carbonImpact: 2,
-        date: '2023-10-01'
+        date: '2023-10-01',
       };
 
       await expect(activityService.logActivity(activityData)).rejects.toThrow('Firestore error');
@@ -75,8 +74,8 @@ describe('activityService', (): void => {
       const mockDocs = {
         docs: [
           { id: 'doc-1', data: (): Record<string, unknown> => ({ userId: 'user-123', value: 10 }) },
-          { id: 'doc-2', data: (): Record<string, unknown> => ({ userId: 'user-123', value: 20 }) }
-        ]
+          { id: 'doc-2', data: (): Record<string, unknown> => ({ userId: 'user-123', value: 20 }) },
+        ],
       };
       vi.mocked(getDocs).mockResolvedValueOnce(mockDocs as unknown as QuerySnapshot);
 

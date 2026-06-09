@@ -70,4 +70,3 @@ export const ROUTES = {
   COMMUTE: '/commute',
   PROFILE: '/profile',
 } as const;
-

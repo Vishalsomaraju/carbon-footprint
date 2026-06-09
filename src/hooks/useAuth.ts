@@ -8,7 +8,13 @@ import { trackError } from '../utils/errorTracker';
 import { authService, analyticsService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
 
-export const useAuth = (): { user: User | null; loading: boolean; error: Error | null; login: () => Promise<User>; logout: () => Promise<void> } => {
+export const useAuth = (): {
+  user: User | null;
+  loading: boolean;
+  error: Error | null;
+  login: () => Promise<User>;
+  logout: () => Promise<void>;
+} => {
   const { user, loading } = useAuthContext();
   const [error, setError] = useState<Error | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -48,6 +54,6 @@ export const useAuth = (): { user: User | null; loading: boolean; error: Error |
     loading: loading || isAuthenticating,
     error,
     login,
-    logout
+    logout,
   };
 };

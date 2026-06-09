@@ -11,8 +11,11 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Card: React.FC<CardProps> = ({ children, className, ...props }) => {
   return (
-    <div 
-      className={clsx('bg-white rounded-xl shadow-md overflow-hidden border border-gray-100', className)}
+    <div
+      className={clsx(
+        'bg-white rounded-xl shadow-md overflow-hidden border border-gray-100',
+        className,
+      )}
       {...props}
     >
       {children}

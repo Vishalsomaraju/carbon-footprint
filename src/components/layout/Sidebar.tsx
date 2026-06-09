@@ -14,7 +14,10 @@ export const Sidebar: React.FC = (): import('react').ReactElement => {
     <aside className="hidden md:flex flex-col w-64 bg-slate-900 border-r border-slate-800 text-slate-300">
       <div className="p-4 flex items-center gap-2">
         <span className="text-2xl">🍃</span>
-        <span className="font-bold text-xl text-white tracking-wide" style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}>
+        <span
+          className="font-bold text-xl text-white tracking-wide"
+          style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}
+        >
           CarbonWise
         </span>
       </div>
