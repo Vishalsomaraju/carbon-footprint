@@ -17,7 +17,7 @@ describe('useAsync', () => {
     expect(result.current.data).toBeNull();
     expect(result.current.error).toBeNull();
 
-    let promise: Promise<string>;
+    let promise: Promise<unknown>;
     act(() => {
       promise = result.current.execute('arg1', 'arg2');
     });
