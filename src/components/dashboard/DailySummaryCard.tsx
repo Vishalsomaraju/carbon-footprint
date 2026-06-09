@@ -1,6 +1,6 @@
 /**
  * @module components/dashboard/DailySummaryCard
- * @description Shows today's total CO2 vs target with status badge.
+ * @description Shows today&apos;s total CO2 vs target with status badge.
  */
 
 import React from 'react';
@@ -25,7 +25,7 @@ export const DailySummaryCard: React.FC<Props> = ({ totalKg }): React.ReactEleme
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
       <div>
-        <h2 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1">Today's Footprint</h2>
+        <h2 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1">Today&apos;s Footprint</h2>
         <div className="flex items-end gap-2">
           <span className="text-4xl font-bold text-gray-900">{formatCo2(totalKg)}</span>
           <span className="text-gray-400 mb-1">/ {formatCo2(TARGET_KG_PER_DAY)} target</span>

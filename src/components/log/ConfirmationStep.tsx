@@ -24,7 +24,7 @@ export const ConfirmationStep: React.FC<Props> = ({ data, onSubmit, onBack, isLo
     const cats = EMISSION_FACTORS as any;
     const key = Object.keys(cats[data.category]).find(k => k.startsWith(data.subCategory));
     if (key) factor = cats[data.category][key];
-  } catch(e) {}
+  } catch(e) { /* ignored */ }
   const estimatedCo2 = (factor * data.value) || (data.value * 0.5);
 
   return (

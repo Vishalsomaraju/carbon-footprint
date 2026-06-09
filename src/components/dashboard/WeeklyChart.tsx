@@ -30,7 +30,7 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
     return last7Days;
   }, [activities]);
 
-  const getColor = (val: number) => {
+  const getColor = (val: number): [string, string] => {
     const level = getFootprintLevel(val);
     if (level === 'excellent') return '#22c55e';
     if (level === 'good') return '#3b82f6';

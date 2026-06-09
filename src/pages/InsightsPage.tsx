@@ -22,7 +22,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
   const [chatResp, setChatResp] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
 
-  const fetchInsights = async (): Promise<void> => {
+  const fetchInsights = React.useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
       setError('');
@@ -35,7 +35,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activities]);
 
   useEffect(() => {
     if (activities.length > 0 && insights.length === 0) {
@@ -43,7 +43,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
     } else if (activities.length === 0) {
       setLoading(false);
     }
-  }, [activities.length, insights.length]);
+  }, [activities.length, insights.length, fetchInsights]);
 
   const handleRegenerate = (): void => {
     if (Date.now() - lastGenTime < 60000) return;

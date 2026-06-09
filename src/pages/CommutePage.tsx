@@ -92,7 +92,8 @@ export const CommutePage: React.FC = (): React.ReactElement => {
           </div>
           <div>
             <label htmlFor="mode" className="block text-sm font-medium text-gray-700 mb-1">Transport Mode</label>
-            <select id="mode" value={mode} onChange={e => setMode(e.target.value as unknown)} className="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-carbon-500">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <select id="mode" value={mode} onChange={e => setMode(e.target.value as any)} className="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-carbon-500">
               {Object.keys(EMISSION_FACTORS.transport).map(k => (
                 <option key={k} value={k}>{k.replace('_per_km', '').replace('_', ' ').toUpperCase()}</option>
               ))}

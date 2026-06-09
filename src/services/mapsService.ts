@@ -16,7 +16,8 @@ function getMapsLoader(): Loader {
     loaderInstance = new Loader({
       apiKey: env.MAPS_API_KEY,
       version: 'weekly',
-      libraries: [...MAPS_LIBRARIES] as unknown[],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      libraries: [...MAPS_LIBRARIES] as any,
     });
   }
   return loaderInstance;

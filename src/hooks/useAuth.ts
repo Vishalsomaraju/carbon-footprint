@@ -1,8 +1,7 @@
-import type { User } from 'firebase/auth';
 /**
  * @module hooks/useAuth
  */
-
+import type { User } from 'firebase/auth';
 import { useState } from 'react';
 
 import { authService, analyticsService } from '../services';
