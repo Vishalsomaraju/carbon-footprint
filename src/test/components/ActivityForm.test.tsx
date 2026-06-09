@@ -13,21 +13,36 @@ describe('ActivityForm', (): void => {
     expect(screen.getByText(/Activity Type/i)).toBeInTheDocument();
   });
 
-  it('shows error if submitted empty', (): void => {
+  it('shows error if submitted empty', async (): Promise<void> => {
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
     render(<ActivityForm category="transport" onNext={vi.fn()} onBack={vi.fn()} />);
-    fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
-    expect(screen.getByRole('alert')).toHaveTextContent('Please select a subtype.');
+    await user.click(screen.getByRole('button', { name: /Continue/i }));
+    const alerts = await screen.findAllByRole('alert');
+    expect(alerts[0]).toHaveTextContent(/type is required/i);
   });
 
-  it('calls onNext with correct values', (): void => {
+  it('calls onNext with correct values', async (): Promise<void> => {
     const mockNext = vi.fn();
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
     render(<ActivityForm category="transport" onNext={mockNext} onBack={vi.fn()} />);
 
-    fireEvent.change(screen.getByLabelText(/Activity Type/i), { target: { value: 'car_petrol' } });
-    fireEvent.change(screen.getByLabelText(/Value/i), { target: { value: '15' } });
+    await user.selectOptions(screen.getByLabelText(/Activity Type/i), 'car_petrol');
+    const valueInput = screen.getByLabelText(/Value/i);
+    await user.clear(valueInput);
+    await user.type(valueInput, '15');
 
-    fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
-    expect(mockNext).toHaveBeenCalledWith({ subCategory: 'car_petrol', value: 15 });
+    await user.click(screen.getByRole('button', { name: /Continue/i }));
+    
+    // We must wait for React Hook Form's async validation to resolve before mockNext is called
+    const { waitFor } = await import('@testing-library/react');
+    await waitFor(() => {
+      expect(mockNext).toHaveBeenCalledWith(
+        { subCategory: 'car_petrol', value: 15 },
+        expect.anything()
+      );
+    });
   });
 
   it('calls onBack when Back is clicked', (): void => {

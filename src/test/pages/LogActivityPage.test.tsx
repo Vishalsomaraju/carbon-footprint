@@ -29,6 +29,9 @@ describe('LogActivityPage', (): void => {
       addActivity: mockAddActivity,
     });
 
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+
     render(
       <BrowserRouter>
         <LogActivityPage />
@@ -37,17 +40,21 @@ describe('LogActivityPage', (): void => {
 
     // Step 1: Category Selection
     expect(screen.getByText('Log Activity')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Transport'));
+    await user.click(screen.getByText('Transport'));
 
     // Step 2: Activity Form (Subtype & Value)
     expect(screen.getByText('Activity Type')).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/Activity Type/i), { target: { value: 'car_petrol' } });
-    fireEvent.change(screen.getByLabelText(/Value/i), { target: { value: '15' } });
-    fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
+    await user.selectOptions(screen.getByLabelText(/Activity Type/i), 'car_petrol');
+    
+    const valueInput = screen.getByLabelText(/Value/i);
+    await user.clear(valueInput);
+    await user.type(valueInput, '15');
+    
+    await user.click(screen.getByRole('button', { name: /Continue/i }));
 
     // Step 3: Confirmation Step
-    expect(screen.getByText(/Estimated Impact/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Save Activity/i }));
+    expect(await screen.findByText(/Estimated Impact/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Save Activity/i }));
 
     // Verify it called addActivity
     expect(mockAddActivity).toHaveBeenCalledWith(
@@ -70,17 +77,26 @@ describe('LogActivityPage', (): void => {
       addActivity: mockAddActivity,
     });
 
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+
     render(
       <BrowserRouter>
         <LogActivityPage />
       </BrowserRouter>,
     );
 
-    fireEvent.click(screen.getByText('Transport'));
-    fireEvent.change(screen.getByLabelText(/Activity Type/i), { target: { value: 'car_petrol' } });
-    fireEvent.change(screen.getByLabelText(/Value/i), { target: { value: '15' } });
-    fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
-    fireEvent.click(screen.getByRole('button', { name: /Save Activity/i }));
+    await user.click(screen.getByText('Transport'));
+    await user.selectOptions(screen.getByLabelText(/Activity Type/i), 'car_petrol');
+    
+    const valueInput = screen.getByLabelText(/Value/i);
+    await user.clear(valueInput);
+    await user.type(valueInput, '15');
+    
+    await user.click(screen.getByRole('button', { name: /Continue/i }));
+    
+    const saveButton = await screen.findByRole('button', { name: /Save Activity/i });
+    await user.click(saveButton);
 
     expect(await screen.findByText('Failed to save activity.')).toBeInTheDocument();
   });

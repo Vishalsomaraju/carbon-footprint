@@ -47,5 +47,9 @@ describe('Toast', (): void => {
     fireEvent.click(screen.getByRole('button'));
 
     expect(screen.queryByText('Error!')).not.toBeInTheDocument();
+
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
   });
 });

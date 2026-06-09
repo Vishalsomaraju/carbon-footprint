@@ -43,7 +43,7 @@ describe('ProfilePage', (): void => {
     vi.clearAllMocks();
   });
 
-  it('renders profile stats', (): void => {
+  it('renders profile stats', async (): Promise<void> => {
     (useAuth as unknown as import('vitest').Mock).mockReturnValue({
       user: { displayName: 'John Doe', email: 'john@example.com', uid: 'user1' },
     });
@@ -57,6 +57,9 @@ describe('ProfilePage', (): void => {
       </BrowserRouter>,
     );
     expect(screen.getByText('John Doe')).toBeInTheDocument();
+    
+    // Wait for GoalSlider to finish loading
+    await screen.findByText('50 kg');
   });
 
   it('signs out', async (): Promise<void> => {
@@ -77,6 +80,9 @@ describe('ProfilePage', (): void => {
 
     await user.click(screen.getByText(/Sign Out/i));
     expect(mockLogout).toHaveBeenCalled();
+    
+    // Wait for GoalSlider to finish loading
+    await screen.findByText('50 kg');
   });
 
   it('handles delete account', async (): Promise<void> => {
@@ -102,6 +108,9 @@ describe('ProfilePage', (): void => {
     await user.click(deleteBtn);
     expect(window.confirm).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith('account_deleted_requested');
+    
+    // Wait for GoalSlider to finish loading
+    await screen.findByText('50 kg');
   });
 });
 

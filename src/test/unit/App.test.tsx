@@ -47,13 +47,13 @@ describe('App router', (): void => {
     expect(screen.getByTestId('landing-page')).toBeInTheDocument();
   });
 
-  it('renders dashboard when authenticated', (): void => {
+  it('renders dashboard when authenticated', async (): Promise<void> => {
     (useAuthContext as import('vitest').Mock).mockReturnValue({
       user: { uid: '123' },
       loading: false,
     });
     window.history.pushState({}, 'Test', '/dashboard');
     render(<App />);
-    expect(screen.getByTestId('dashboard-page')).toBeInTheDocument();
+    expect(await screen.findByTestId('dashboard-page')).toBeInTheDocument();
   });
 });

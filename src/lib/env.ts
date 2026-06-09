@@ -2,45 +2,57 @@
 
 /**
  * @module env
- * @description Environment variable validation. Fails loudly at startup if misconfigured.
+ * @description Strict environment variable validation using Zod. Fails loudly at startup if misconfigured.
  */
+import { z } from 'zod';
 
-interface EnvConfig {
-  readonly FIREBASE_API_KEY: string;
-  readonly FIREBASE_AUTH_DOMAIN: string;
-  readonly FIREBASE_PROJECT_ID: string;
-  readonly FIREBASE_STORAGE_BUCKET: string;
-  readonly FIREBASE_MESSAGING_SENDER_ID: string;
-  readonly FIREBASE_APP_ID: string;
-  readonly FIREBASE_MEASUREMENT_ID: string;
-  readonly GEMINI_API_KEY: string;
-  readonly MAPS_API_KEY: string;
-}
+const envSchema = z.object({
+  VITE_FIREBASE_API_KEY: z.string().min(1, 'Firebase API Key is required'),
+  VITE_FIREBASE_AUTH_DOMAIN: z.string().min(1, 'Firebase Auth Domain is required'),
+  VITE_FIREBASE_PROJECT_ID: z.string().min(1, 'Firebase Project ID is required'),
+  VITE_FIREBASE_STORAGE_BUCKET: z.string().min(1, 'Firebase Storage Bucket is required'),
+  VITE_FIREBASE_MESSAGING_SENDER_ID: z.string().min(1, 'Firebase Messaging Sender ID is required'),
+  VITE_FIREBASE_APP_ID: z.string().min(1, 'Firebase App ID is required'),
+  VITE_FIREBASE_MEASUREMENT_ID: z.string().min(1, 'Firebase Measurement ID is required'),
+  VITE_GEMINI_API_KEY: z.string().min(1, 'Gemini API Key is required'),
+  VITE_MAPS_API_KEY: z.string().min(1, 'Maps API Key is required'),
+});
 
-function validateEnv(): EnvConfig {
-  const required: Array<keyof EnvConfig> = [
-    'FIREBASE_API_KEY',
-    'FIREBASE_AUTH_DOMAIN',
-    'FIREBASE_PROJECT_ID',
-    'FIREBASE_STORAGE_BUCKET',
-    'FIREBASE_MESSAGING_SENDER_ID',
-    'FIREBASE_APP_ID',
-    'FIREBASE_MEASUREMENT_ID',
-    'GEMINI_API_KEY',
-    'MAPS_API_KEY',
-  ];
-
-  const missing = required.filter((key) => !import.meta.env[`VITE_${key}`]);
-
-  if (missing.length > 0 && import.meta.env.MODE !== 'test') {
-    throw new Error(
-      `Missing required environment variables: ${missing.map((k) => `VITE_${k}`).join(', ')}`,
-    );
+function validateEnv() {
+  if (import.meta.env.MODE === 'test') {
+    // Return empty strings for testing environment to avoid failure when variables are not set
+    return {
+      FIREBASE_API_KEY: '',
+      FIREBASE_AUTH_DOMAIN: '',
+      FIREBASE_PROJECT_ID: '',
+      FIREBASE_STORAGE_BUCKET: '',
+      FIREBASE_MESSAGING_SENDER_ID: '',
+      FIREBASE_APP_ID: '',
+      FIREBASE_MEASUREMENT_ID: '',
+      GEMINI_API_KEY: '',
+      MAPS_API_KEY: '',
+    };
   }
 
-  return Object.fromEntries(
-    required.map((key) => [key, import.meta.env[`VITE_${key}`] as string]),
-  ) as unknown as EnvConfig;
+  const parsed = envSchema.safeParse(import.meta.env);
+
+  if (!parsed.success) {
+    console.error('❌ Invalid environment variables:', parsed.error.format());
+    throw new Error('Invalid environment variables. Check console for details.');
+  }
+
+  // Strip VITE_ prefix for internal usage
+  return {
+    FIREBASE_API_KEY: parsed.data.VITE_FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN: parsed.data.VITE_FIREBASE_AUTH_DOMAIN,
+    FIREBASE_PROJECT_ID: parsed.data.VITE_FIREBASE_PROJECT_ID,
+    FIREBASE_STORAGE_BUCKET: parsed.data.VITE_FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_SENDER_ID: parsed.data.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    FIREBASE_APP_ID: parsed.data.VITE_FIREBASE_APP_ID,
+    FIREBASE_MEASUREMENT_ID: parsed.data.VITE_FIREBASE_MEASUREMENT_ID,
+    GEMINI_API_KEY: parsed.data.VITE_GEMINI_API_KEY,
+    MAPS_API_KEY: parsed.data.VITE_MAPS_API_KEY,
+  };
 }
 
 export const env = validateEnv();
