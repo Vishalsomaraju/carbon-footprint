@@ -34,19 +34,7 @@ export const activityService = {
       );
       console.log('Fetching activities for user:', userId);
 
-      const timeoutPromise = new Promise<null>((resolve) =>
-        setTimeout(() => resolve(null), 1500)
-      );
-
-      const result = await Promise.race([getDocs(q), timeoutPromise]);
-
-      if (result === null) {
-        console.warn(
-          '[activityService] Firestore getDocs timed out. ' +
-          'Check that your Firestore database has been created in the Firebase Console.'
-        );
-        return [];
-      }
+      const result = await getDocs(q);
 
       console.log('Fetched activities successfully, count:', result.docs.length);
       return result.docs.map(
