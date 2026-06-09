@@ -32,7 +32,7 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
 
   const handleExportData = (): void => {
     trackEvent('data_export_requested');
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ user: user.uid, exportedAt: new Date().toISOString() }));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ user: user?.uid, exportedAt: new Date().toISOString() }));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", "carbonwise_data.json");
