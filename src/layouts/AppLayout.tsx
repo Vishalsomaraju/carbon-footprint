@@ -30,7 +30,9 @@ export const AppLayout: React.FC = (): import('react').ReactElement => {
         className="flex-1 flex flex-col h-full overflow-hidden relative bg-deep-void"
       >
         <ErrorBoundary>
-          <Outlet />
+          <React.Suspense fallback={<div className="flex-1 flex items-center justify-center p-8"><div className="w-8 h-8 rounded-full border-4 border-bio-emerald border-t-transparent animate-spin" /></div>}>
+            <Outlet />
+          </React.Suspense>
         </ErrorBoundary>
       </main>
 

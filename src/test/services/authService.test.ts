@@ -33,7 +33,7 @@ describe('authService', (): void => {
 
   describe('signInWithGoogle', (): void => {
     it('should call signInWithPopup', async (): Promise<void> => {
-      vi.mocked(signInWithPopup).mockResolvedValueOnce({ user: { uid: '123' } } as any);
+      vi.mocked(signInWithPopup).mockResolvedValueOnce({ user: { uid: '123' } } as unknown as import('firebase/auth').UserCredential);
 
       await authService.signInWithGoogle();
 
@@ -49,7 +49,7 @@ describe('authService', (): void => {
     
     it('should return null if user closed popup', async (): Promise<void> => {
       const mockError = new Error('Popup closed');
-      (mockError as any).code = 'auth/popup-closed-by-user';
+      (mockError as unknown as { code: string }).code = 'auth/popup-closed-by-user';
       vi.mocked(signInWithPopup).mockRejectedValueOnce(mockError);
 
       const result = await authService.signInWithGoogle();

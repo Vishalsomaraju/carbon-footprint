@@ -9,18 +9,13 @@ import { activityService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
 import { EMISSION_FACTORS } from '../constants';
 import { trackError } from '../utils/errorTracker';
+import { activitySchema, ActivityFormData } from '../utils/validation';
 
 export interface UseActivitiesReturn {
   activities: ActivityRecord[];
   loading: boolean;
   error: Error | null;
-  addActivity: (data: {
-    category: string;
-    subCategory?: string;
-    value: number;
-    description?: string;
-    date: string;
-  }) => Promise<string>;
+  addActivity: (data: ActivityFormData) => Promise<string>;
   refresh: () => Promise<void>;
 }
 
@@ -55,23 +50,22 @@ export const useActivities = (): UseActivitiesReturn => {
   }, [user, fetchActivities]);
 
   const addActivity = useCallback(
-    async (activityData: {
-      category: string;
-      subCategory?: string;
-      value: number;
-      description?: string;
-      date: string;
-    }): Promise<string> => {
+    async (activityData: ActivityFormData): Promise<string> => {
       if (!user) throw new Error('User not authenticated');
-      let carbonImpact = activityData.value * 0.2; // Fallback
-      const { category, subCategory, value } = activityData;
+      
+      const parsedData = activitySchema.parse(activityData);
+
+      let carbonImpact = parsedData.value * 0.2; // Fallback
+      const { category, subCategory, value } = parsedData;
+      
       if (category && subCategory && category in EMISSION_FACTORS) {
         const factors = EMISSION_FACTORS[category as keyof typeof EMISSION_FACTORS];
         if (subCategory in factors)
           carbonImpact = value * (factors[subCategory as keyof typeof factors] as number);
       }
+      
       const newActivity: Omit<ActivityRecord, 'id'> = {
-        ...activityData,
+        ...parsedData,
         carbonImpact,
         userId: user.uid,
       };

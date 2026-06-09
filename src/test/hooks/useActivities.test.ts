@@ -90,7 +90,7 @@ describe('useActivities', (): void => {
         subCategory: 'car_petrol_per_km',
         value: 10,
         description: 'Test drive',
-        date: '2023-01-02',
+        date: '2023-01-02T00:00:00Z',
       });
       expect(id).toBe('new-id');
     });
@@ -101,7 +101,7 @@ describe('useActivities', (): void => {
         subCategory: 'car_petrol_per_km',
         value: 10,
         description: 'Test drive',
-        date: '2023-01-02',
+        date: '2023-01-02T00:00:00Z',
         carbonImpact: 2.1, // 10 * 0.21
         userId: 'user123',
       }),
@@ -128,7 +128,7 @@ describe('useActivities', (): void => {
 
     await act(async () => {
       await expect(
-        result.current.addActivity({ category: 'transport', value: 10, date: '2023-01-02' }),
+        result.current.addActivity({ category: 'transport', subCategory: 'car_petrol', value: 10, date: '2023-01-02T00:00:00Z' }),
       ).rejects.toThrow('Failed to add');
     });
 
@@ -150,21 +150,21 @@ describe('useActivities', (): void => {
         category: 'energy',
         subCategory: 'electricity_per_kwh',
         value: 10,
-        date: '2023-01-02',
+        date: '2023-01-02T00:00:00Z',
       });
       await result.current.addActivity({
         category: 'food',
         subCategory: 'beef_per_meal',
         value: 10,
-        date: '2023-01-02',
+        date: '2023-01-02T00:00:00Z',
       });
       await result.current.addActivity({
         category: 'shopping',
         subCategory: 'clothing_item',
         value: 10,
-        date: '2023-01-02',
+        date: '2023-01-02T00:00:00Z',
       });
-      await result.current.addActivity({ category: 'other', value: 10, date: '2023-01-02' });
+      await result.current.addActivity({ category: 'transport', subCategory: 'unknown', value: 10, date: '2023-01-02T00:00:00Z' });
     });
 
     expect(activityService.logActivity).toHaveBeenCalledWith(
@@ -177,7 +177,7 @@ describe('useActivities', (): void => {
       expect.objectContaining({ category: 'shopping', carbonImpact: 70 }),
     );
     expect(activityService.logActivity).toHaveBeenCalledWith(
-      expect.objectContaining({ category: 'other', carbonImpact: 2 }),
+      expect.objectContaining({ category: 'transport', subCategory: 'unknown', carbonImpact: 2 }),
     );
   });
 
@@ -187,7 +187,7 @@ describe('useActivities', (): void => {
 
     await act(async () => {
       await expect(
-        result.current.addActivity({ category: 'transport', value: 10, date: '2023-01-02' }),
+        result.current.addActivity({ category: 'transport', subCategory: 'bus', value: 10, date: '2023-01-02T00:00:00Z' }),
       ).rejects.toThrow('User not authenticated');
     });
   });

@@ -11,7 +11,7 @@ export const Sidebar: React.FC = (): import('react').ReactElement => {
   const isActive = (path: string): boolean => location.pathname === path;
 
   return (
-    <nav className="hidden md:flex bg-surface-container-low border-r border-whisper-border w-72 flex-col pt-4 pb-8 z-50 transition-all duration-300 relative shrink-0">
+    <nav aria-label="Main Navigation" className="hidden md:flex bg-surface-container-low border-r border-whisper-border w-72 flex-col pt-4 pb-8 z-50 transition-all duration-300 relative shrink-0">
       <div className="px-gutter-md mb-8 flex items-center gap-4">
         <div className="w-10 h-10 rounded-lg bg-charcoal-core border border-whisper-border flex items-center justify-center overflow-hidden shrink-0">
           <span className="material-symbols-outlined fill text-bio-emerald">eco</span>
@@ -29,6 +29,7 @@ export const Sidebar: React.FC = (): import('react').ReactElement => {
             <Link
               key={item.path}
               to={item.path}
+              aria-current={active ? 'page' : undefined}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                 active
                   ? 'text-primary bg-surface-variant border-l-4 border-primary font-bold rounded-l-none scale-[0.98]'

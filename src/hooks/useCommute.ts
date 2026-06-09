@@ -7,6 +7,7 @@ import { calculateCommuteEmissions, CommuteResult } from '../services/mapsServic
 import { EMISSION_FACTORS } from '../constants';
 import { useActivities } from './useActivities';
 import { trackError } from '../utils/errorTracker';
+import { CommuteFormData } from '../utils/validation';
 
 export const useCommute = (): {
   origin: string;
@@ -23,7 +24,7 @@ export const useCommute = (): {
   toast: { msg: string; type: 'success' | 'error' } | null;
   setToast: (v: { msg: string; type: 'success' | 'error' } | null) => void;
   logLoading: boolean;
-  handleCalculate: () => Promise<void>;
+  handleCalculate: (data: CommuteFormData) => Promise<void>;
   handleLog: () => Promise<void>;
 } => {
   const [origin, setOrigin] = useState('');
@@ -39,15 +40,17 @@ export const useCommute = (): {
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
   const [logLoading, setLogLoading] = useState(false);
 
-  const handleCalculate = async (): Promise<void> => {
-    if (!origin || !destination) {
-      setError('Please enter origin and destination');
-      return;
-    }
+  const handleCalculate = async (data: CommuteFormData): Promise<void> => {
     try {
       setLoading(true);
       setError('');
-      const res = await calculateCommuteEmissions(origin, destination, mode, days);
+      // Update local state for CommuteResults
+      setOrigin(data.origin);
+      setDestination(data.destination);
+      setMode(data.mode as keyof typeof EMISSION_FACTORS.transport);
+      setDays(data.days);
+
+      const res = await calculateCommuteEmissions(data.origin, data.destination, data.mode as keyof typeof EMISSION_FACTORS.transport, data.days);
       setResult(res);
     } catch (err) {
       setError('Could not calculate commute. Please check the locations.');

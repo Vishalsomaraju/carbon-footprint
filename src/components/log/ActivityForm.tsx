@@ -3,7 +3,12 @@
  * @description Step 2: Subtype and value input.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+import { activitySchema } from '../../utils/validation';
 
 interface Props {
   readonly category: string;
@@ -18,32 +23,38 @@ const OPTIONS: Record<string, string[]> = {
   shopping: ['clothing', 'electronics'],
 };
 
-export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): React.ReactElement => {
-  const [subCategory, setSubCategory] = useState<string>('');
-  const [value, setValue] = useState<number | ''>('');
-  const [error, setError] = useState<string>('');
+const stepSchema = activitySchema.pick({ subCategory: true, value: true });
+type StepFormData = z.infer<typeof stepSchema>;
 
+export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): React.ReactElement => {
   const opts = OPTIONS[category] || [];
 
-  const handleNext = (): void => {
-    if (!subCategory) return setError('Please select a subtype.');
-    if (!value || value <= 0) return setError('Value must be greater than 0.');
-    onNext({ subCategory, value: Number(value) });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<StepFormData>({
+    resolver: zodResolver(stepSchema),
+    defaultValues: {
+      subCategory: '',
+    },
+  });
 
   return (
-    <div className="bg-charcoal-core p-6 rounded-2xl shadow-sm border border-whisper-border space-y-6">
+    <form
+      onSubmit={handleSubmit(onNext)}
+      className="bg-charcoal-core p-6 rounded-2xl shadow-sm border border-whisper-border space-y-6"
+      noValidate
+    >
       <div>
         <label htmlFor="subCategory" className="block font-label-sm text-label-sm text-muted-steel mb-1">
           Activity Type
         </label>
         <select
           id="subCategory"
-          value={subCategory}
-          onChange={(e) => {
-            setSubCategory(e.target.value);
-            setError('');
-          }}
+          {...register('subCategory')}
+          aria-invalid={errors.subCategory ? 'true' : 'false'}
+          aria-describedby={errors.subCategory ? 'subCategory-error' : undefined}
           className="w-full p-3 bg-surface-container-high border border-whisper-border rounded-lg focus:ring-2 focus:ring-bio-emerald outline-none text-on-surface font-body-md"
         >
           <option value="">Select type...</option>
@@ -53,7 +64,13 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
             </option>
           ))}
         </select>
+        {errors.subCategory && (
+          <p id="subCategory-error" className="text-critical-crimson text-sm mt-1" role="alert">
+            {errors.subCategory.message}
+          </p>
+        )}
       </div>
+
       <div>
         <label htmlFor="value" className="block font-label-sm text-label-sm text-muted-steel mb-1">
           Value (km, meals, kWh)
@@ -63,19 +80,18 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
           type="number"
           min="0.1"
           step="0.1"
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value ? Number(e.target.value) : '');
-            setError('');
-          }}
+          {...register('value', { valueAsNumber: true })}
+          aria-invalid={errors.value ? 'true' : 'false'}
+          aria-describedby={errors.value ? 'value-error' : undefined}
           className="w-full p-3 bg-surface-container-high border border-whisper-border rounded-lg focus:ring-2 focus:ring-bio-emerald outline-none text-on-surface font-body-md"
         />
+        {errors.value && (
+          <p id="value-error" className="text-critical-crimson text-sm mt-1" role="alert">
+            {errors.value.message}
+          </p>
+        )}
       </div>
-      {error && (
-        <div role="alert" className="text-critical-crimson text-sm">
-          {error}
-        </div>
-      )}
+
       <div className="flex justify-end gap-3 pt-4 border-t border-whisper-border">
         <button
           type="button"
@@ -85,13 +101,12 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
           Back
         </button>
         <button
-          type="button"
-          onClick={handleNext}
+          type="submit"
           className="px-6 py-2 bg-bio-emerald text-deep-void rounded-lg hover:opacity-90 font-label-sm text-label-sm font-bold"
         >
           Continue
         </button>
       </div>
-    </div>
+    </form>
   );
 };

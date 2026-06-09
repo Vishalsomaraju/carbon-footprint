@@ -30,7 +30,7 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
         value: data.value,
         description: notes,
         date: new Date().toISOString(),
-      } as import('../types').ActivityRecord);
+      } as import('../utils/validation').ActivityFormData);
 
       setToast({ msg: 'Activity saved successfully!', type: 'success' });
       setTimeout(() => navigate('/dashboard'), 1500);

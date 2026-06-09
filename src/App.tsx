@@ -2,17 +2,17 @@
  * @module src/App
  */
 
-import React from 'react';
+import React, { lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthProvider } from './contexts/AuthContext';
 import { AppLayout } from './layouts/AppLayout';
 import { LandingPage } from './pages/LandingPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { LogActivityPage } from './pages/LogActivityPage';
-import { ProfilePage } from './pages/ProfilePage';
-import { InsightsPage } from './pages/InsightsPage';
-import { CommutePage } from './pages/CommutePage';
+const DashboardPage = lazy(() => import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })));
+const LogActivityPage = lazy(() => import('./pages/LogActivityPage').then(m => ({ default: m.LogActivityPage })));
+const ProfilePage = lazy(() => import('./pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const InsightsPage = lazy(() => import('./pages/InsightsPage').then(m => ({ default: m.InsightsPage })));
+const CommutePage = lazy(() => import('./pages/CommutePage').then(m => ({ default: m.CommutePage })));
 import { ROUTES } from './constants';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 

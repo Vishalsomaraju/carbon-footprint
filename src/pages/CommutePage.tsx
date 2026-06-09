@@ -12,13 +12,9 @@ import { useCommute } from '../hooks';
 export const CommutePage: React.FC = (): React.ReactElement => {
   const {
     origin,
-    setOrigin,
     destination,
-    setDestination,
     mode,
-    setMode,
     days,
-    setDays,
     loading,
     result,
     error,
@@ -38,14 +34,7 @@ export const CommutePage: React.FC = (): React.ReactElement => {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <CommuteForm
-            origin={origin}
-            setOrigin={setOrigin}
-            destination={destination}
-            setDestination={setDestination}
-            mode={mode}
-            setMode={setMode}
-            days={days}
-            setDays={setDays}
+            defaultValues={{ origin, destination, mode, days }}
             loading={loading}
             error={error}
             onCalculate={handleCalculate}
