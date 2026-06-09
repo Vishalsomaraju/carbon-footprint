@@ -19,7 +19,9 @@ export const StatsSection: React.FC = (): React.ReactElement => {
     <div className="grid grid-cols-3 gap-4">
       <div className="bg-charcoal-core p-4 rounded-2xl border border-whisper-border text-center">
         <p className="font-label-sm text-label-sm text-muted-steel">Activities</p>
-        <p className="font-headline-md text-headline-md text-on-surface mt-1">{activities.length}</p>
+        <p className="font-headline-md text-headline-md text-on-surface mt-1">
+          {activities.length}
+        </p>
       </div>
       <div className="bg-charcoal-core p-4 rounded-2xl border border-whisper-border text-center">
         <p className="font-label-sm text-label-sm text-muted-steel">Total CO2</p>
@@ -31,7 +33,9 @@ export const StatsSection: React.FC = (): React.ReactElement => {
         <p className="font-label-sm text-label-sm text-muted-steel">Streak</p>
         <p className="font-headline-md text-headline-md text-alert-amber mt-1 flex items-center justify-center gap-1">
           {streak}
-          <span className="material-symbols-outlined text-alert-amber" style={{ fontSize: '20px' }}>local_fire_department</span>
+          <span className="material-symbols-outlined text-alert-amber" style={{ fontSize: '20px' }}>
+            local_fire_department
+          </span>
         </p>
       </div>
     </div>

@@ -15,8 +15,10 @@ export const authService = {
     } catch (error: unknown) {
       const authError = error as AuthError;
       // User deliberately closed the popup — not a real error
-      if (authError?.code === 'auth/popup-closed-by-user' ||
-          authError?.code === 'auth/cancelled-popup-request') {
+      if (
+        authError?.code === 'auth/popup-closed-by-user' ||
+        authError?.code === 'auth/cancelled-popup-request'
+      ) {
         return null;
       }
       trackError(error);

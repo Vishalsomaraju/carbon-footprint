@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { useCommute } from '../../hooks/useCommute';
 import { calculateCommuteEmissions } from '../../services/mapsService';
 import { useActivities } from '../../hooks/useActivities';
@@ -39,8 +40,15 @@ describe('useCommute', () => {
   });
 
   it('should calculate emissions successfully', async () => {
-    const mockResult = { distanceKm: 10, totalEmissions: 2.5, weeklyEmissions: 12.5, mode: 'car_petrol_per_km' };
-    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(mockResult);
+    const mockResult = {
+      distanceKm: 10,
+      totalEmissions: 2.5,
+      weeklyEmissions: 12.5,
+      mode: 'car_petrol_per_km',
+    };
+    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResult,
+    );
 
     const { result } = renderHook(() => useCommute());
 
@@ -61,7 +69,9 @@ describe('useCommute', () => {
   });
 
   it('should handle calculation error', async () => {
-    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('API error'));
+    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error('API error'),
+    );
 
     const { result } = renderHook(() => useCommute());
 
@@ -81,8 +91,15 @@ describe('useCommute', () => {
   });
 
   it('should log commute successfully', async () => {
-    const mockResult = { distanceKm: 10, totalEmissions: 2.5, weeklyEmissions: 12.5, mode: 'car_petrol_per_km' };
-    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(mockResult);
+    const mockResult = {
+      distanceKm: 10,
+      totalEmissions: 2.5,
+      weeklyEmissions: 12.5,
+      mode: 'car_petrol_per_km',
+    };
+    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResult,
+    );
 
     const { result } = renderHook(() => useCommute());
 
@@ -117,8 +134,15 @@ describe('useCommute', () => {
   });
 
   it('should handle log error', async () => {
-    const mockResult = { distanceKm: 10, totalEmissions: 2.5, weeklyEmissions: 12.5, mode: 'car_petrol_per_km' };
-    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(mockResult);
+    const mockResult = {
+      distanceKm: 10,
+      totalEmissions: 2.5,
+      weeklyEmissions: 12.5,
+      mode: 'car_petrol_per_km',
+    };
+    (calculateCommuteEmissions as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResult,
+    );
 
     const { result } = renderHook(() => useCommute());
 

@@ -56,7 +56,10 @@ export const CommuteForm: React.FC<CommuteFormProps> = ({
       </div>
 
       <div>
-        <label htmlFor="destination" className="block font-label-sm text-label-sm text-muted-steel mb-1">
+        <label
+          htmlFor="destination"
+          className="block font-label-sm text-label-sm text-muted-steel mb-1"
+        >
           Destination (Work)
         </label>
         <input

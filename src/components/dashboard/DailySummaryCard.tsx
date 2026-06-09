@@ -28,12 +28,14 @@ export const DailySummaryCard: React.FC<Props> = ({ totalKg }): React.ReactEleme
       </div>
       <div className="mt-auto">
         <div className="flex items-end gap-2 mb-2">
-          <span className="font-display-lg text-display-lg text-bio-emerald">{formatCo2(totalKg).replace(' kg', '')}</span>
+          <span className="font-display-lg text-display-lg text-bio-emerald">
+            {formatCo2(totalKg).replace(' kg', '')}
+          </span>
           <span className="font-mono-metrics text-mono-metrics text-muted-steel mb-2">kg CO2e</span>
         </div>
         {/* Mini Progress/Goal Bar */}
         <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mt-4">
-          <div 
+          <div
             className="bg-bio-emerald h-full rounded-full relative transition-all duration-1000 ease-out"
             style={{ width: `${percentage}%` }}
           >

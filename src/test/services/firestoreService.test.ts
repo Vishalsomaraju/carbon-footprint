@@ -7,23 +7,31 @@ import { getDocs, addDoc } from 'firebase/firestore';
 
 import { activityService } from '../../services/activityService';
 
-vi.mock('firebase/firestore', (): Record<string, unknown> => ({
-  collection: vi.fn(),
-  addDoc: vi.fn().mockResolvedValue({ id: 'test-id' }),
-  getDocs: vi.fn().mockResolvedValue({ 
-    docs: [{ id: 'test-doc-1', data: () => ({ category: 'food', value: 10, date: '2023-01-01' }) }] 
+vi.mock(
+  'firebase/firestore',
+  (): Record<string, unknown> => ({
+    collection: vi.fn(),
+    addDoc: vi.fn().mockResolvedValue({ id: 'test-id' }),
+    getDocs: vi.fn().mockResolvedValue({
+      docs: [
+        { id: 'test-doc-1', data: () => ({ category: 'food', value: 10, date: '2023-01-01' }) },
+      ],
+    }),
+    getDoc: vi.fn().mockResolvedValue({ exists: () => false }),
+    setDoc: vi.fn().mockResolvedValue(undefined),
+    updateDoc: vi.fn().mockResolvedValue(undefined),
+    doc: vi.fn(),
+    query: vi.fn(),
+    where: vi.fn(),
+    orderBy: vi.fn(),
+    limit: vi.fn(),
+    Timestamp: {
+      now: vi.fn(() => ({ toDate: () => new Date() })),
+      fromDate: vi.fn((d: Date) => ({ toDate: () => d })),
+    },
+    serverTimestamp: vi.fn().mockReturnValue('SERVER_TIMESTAMP'),
   }),
-  getDoc: vi.fn().mockResolvedValue({ exists: () => false }),
-  setDoc: vi.fn().mockResolvedValue(undefined),
-  updateDoc: vi.fn().mockResolvedValue(undefined),
-  doc: vi.fn(),
-  query: vi.fn(),
-  where: vi.fn(),
-  orderBy: vi.fn(),
-  limit: vi.fn(),
-  Timestamp: { now: vi.fn(() => ({ toDate: () => new Date() })), fromDate: vi.fn((d: Date) => ({ toDate: () => d })) },
-  serverTimestamp: vi.fn().mockReturnValue('SERVER_TIMESTAMP'),
-}));
+);
 
 vi.mock('../../lib/firebase', (): Record<string, unknown> => ({ db: {} }));
 
@@ -33,7 +41,13 @@ describe('firestoreService (activityService)', (): void => {
   });
 
   it('addActivity calls addDoc with correct data', async (): Promise<void> => {
-    const id = await activityService.logActivity({ category: 'food', value: 10, userId: 'user1', carbonImpact: 1.5, date: '2023-01-01' });
+    const id = await activityService.logActivity({
+      category: 'food',
+      value: 10,
+      userId: 'user1',
+      carbonImpact: 1.5,
+      date: '2023-01-01',
+    });
     expect(id).toBe('test-id');
     expect(addDoc).toHaveBeenCalled();
   });

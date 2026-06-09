@@ -59,16 +59,16 @@ describe('mapsService', (): void => {
     class BadStatusDistanceMatrixService {
       getDistanceMatrix(): Promise<unknown> {
         return Promise.resolve({
-          rows: [
-            { elements: [{ status: 'NOT_FOUND' }] },
-          ],
+          rows: [{ elements: [{ status: 'NOT_FOUND' }] }],
         });
       }
     }
-    window.google.maps.DistanceMatrixService = BadStatusDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+    window.google.maps.DistanceMatrixService =
+      BadStatusDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5))
-      .rejects.toThrow('Could not calculate route distance');
+    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5)).rejects.toThrow(
+      'Could not calculate route distance',
+    );
   });
 
   it('calculateCommuteEmissions catches generic error', async (): Promise<void> => {
@@ -77,9 +77,11 @@ describe('mapsService', (): void => {
         return Promise.reject(new Error('Network error'));
       }
     }
-    window.google.maps.DistanceMatrixService = ErrorDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+    window.google.maps.DistanceMatrixService =
+      ErrorDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5))
-      .rejects.toThrow('Network error');
+    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5)).rejects.toThrow(
+      'Network error',
+    );
   });
 });

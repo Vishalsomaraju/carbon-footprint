@@ -57,7 +57,7 @@ describe('ProfilePage', (): void => {
       </BrowserRouter>,
     );
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    
+
     // Wait for GoalSlider to finish loading
     await screen.findByText('50 kg');
   });
@@ -80,7 +80,7 @@ describe('ProfilePage', (): void => {
 
     await user.click(screen.getByText(/Sign Out/i));
     expect(mockLogout).toHaveBeenCalled();
-    
+
     // Wait for GoalSlider to finish loading
     await screen.findByText('50 kg');
   });
@@ -108,7 +108,7 @@ describe('ProfilePage', (): void => {
     await user.click(deleteBtn);
     expect(window.confirm).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith('account_deleted_requested');
-    
+
     // Wait for GoalSlider to finish loading
     await screen.findByText('50 kg');
   });

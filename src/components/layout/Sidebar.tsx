@@ -11,17 +11,22 @@ export const Sidebar: React.FC = (): import('react').ReactElement => {
   const isActive = (path: string): boolean => location.pathname === path;
 
   return (
-    <nav aria-label="Main Navigation" className="hidden md:flex bg-surface-container-low border-r border-whisper-border w-72 flex-col pt-4 pb-8 z-50 transition-all duration-300 relative shrink-0">
+    <nav
+      aria-label="Main Navigation"
+      className="hidden md:flex bg-surface-container-low border-r border-whisper-border w-72 flex-col pt-4 pb-8 z-50 transition-all duration-300 relative shrink-0"
+    >
       <div className="px-gutter-md mb-8 flex items-center gap-4">
         <div className="w-10 h-10 rounded-lg bg-charcoal-core border border-whisper-border flex items-center justify-center overflow-hidden shrink-0">
           <span className="material-symbols-outlined fill text-bio-emerald">eco</span>
         </div>
         <div>
-          <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">CarbonWise</h1>
+          <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">
+            CarbonWise
+          </h1>
           <p className="font-label-sm text-label-sm text-muted-steel mt-1">Terminal v2.4.0</p>
         </div>
       </div>
-      
+
       <div className="flex-1 overflow-y-auto px-4 space-y-2">
         {NAV_ITEMS.map((item) => {
           const active = isActive(item.path);
@@ -49,11 +54,17 @@ export const Sidebar: React.FC = (): import('react').ReactElement => {
           <span className="font-label-sm text-label-sm">Generate Report</span>
         </button>
         <div className="pt-4 border-t border-whisper-border space-y-1">
-          <Link to="/support" className="flex items-center gap-3 text-muted-steel px-4 py-2 font-medium hover:text-on-surface-variant transition-colors duration-200 rounded-lg">
+          <Link
+            to="/support"
+            className="flex items-center gap-3 text-muted-steel px-4 py-2 font-medium hover:text-on-surface-variant transition-colors duration-200 rounded-lg"
+          >
             <span className="material-symbols-outlined">contact_support</span>
             <span className="font-label-sm text-label-sm">Support</span>
           </Link>
-          <Link to="/docs" className="flex items-center gap-3 text-muted-steel px-4 py-2 font-medium hover:text-on-surface-variant transition-colors duration-200 rounded-lg">
+          <Link
+            to="/docs"
+            className="flex items-center gap-3 text-muted-steel px-4 py-2 font-medium hover:text-on-surface-variant transition-colors duration-200 rounded-lg"
+          >
             <span className="material-symbols-outlined">menu_book</span>
             <span className="font-label-sm text-label-sm">Documentation</span>
           </Link>

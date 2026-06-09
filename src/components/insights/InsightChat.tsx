@@ -21,7 +21,9 @@ export const InsightChat: React.FC<InsightChatProps> = ({
   chatResp,
 }): import('react').ReactElement => (
   <div className="bg-charcoal-core p-6 rounded-2xl shadow-sm border border-whisper-border mt-12">
-    <h2 className="font-headline-md text-headline-md font-bold text-on-surface mb-4">Ask CarbonWise AI</h2>
+    <h2 className="font-headline-md text-headline-md font-bold text-on-surface mb-4">
+      Ask CarbonWise AI
+    </h2>
     <div className="flex gap-2 mb-4">
       <input
         type="text"

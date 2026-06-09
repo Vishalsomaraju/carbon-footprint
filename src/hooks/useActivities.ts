@@ -52,18 +52,18 @@ export const useActivities = (): UseActivitiesReturn => {
   const addActivity = useCallback(
     async (activityData: ActivityFormData): Promise<string> => {
       if (!user) throw new Error('User not authenticated');
-      
+
       const parsedData = activitySchema.parse(activityData);
 
       let carbonImpact = parsedData.value * 0.2; // Fallback
       const { category, subCategory, value } = parsedData;
-      
+
       if (category && subCategory && category in EMISSION_FACTORS) {
         const factors = EMISSION_FACTORS[category as keyof typeof EMISSION_FACTORS];
         if (subCategory in factors)
           carbonImpact = value * (factors[subCategory as keyof typeof factors] as number);
       }
-      
+
       const newActivity: Omit<ActivityRecord, 'id'> = {
         ...parsedData,
         carbonImpact,

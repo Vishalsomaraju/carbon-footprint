@@ -45,11 +45,11 @@ describe('LogActivityPage', (): void => {
     // Step 2: Activity Form (Subtype & Value)
     expect(screen.getByText('Activity Type')).toBeInTheDocument();
     await user.selectOptions(screen.getByLabelText(/Activity Type/i), 'car_petrol');
-    
+
     const valueInput = screen.getByLabelText(/Value/i);
     await user.clear(valueInput);
     await user.type(valueInput, '15');
-    
+
     await user.click(screen.getByRole('button', { name: /Continue/i }));
 
     // Step 3: Confirmation Step
@@ -88,13 +88,13 @@ describe('LogActivityPage', (): void => {
 
     await user.click(screen.getByText('Transport'));
     await user.selectOptions(screen.getByLabelText(/Activity Type/i), 'car_petrol');
-    
+
     const valueInput = screen.getByLabelText(/Value/i);
     await user.clear(valueInput);
     await user.type(valueInput, '15');
-    
+
     await user.click(screen.getByRole('button', { name: /Continue/i }));
-    
+
     const saveButton = await screen.findByRole('button', { name: /Save Activity/i });
     await user.click(saveButton);
 

@@ -50,9 +50,7 @@ export const CommuteResults: React.FC<CommuteResultsProps> = ({
           </p>
         </div>
         <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm">
-          <p className="font-label-sm text-label-sm text-muted-steel mb-1">
-            Annual Co2
-          </p>
+          <p className="font-label-sm text-label-sm text-muted-steel mb-1">Annual Co2</p>
           <p className="font-headline-lg text-headline-lg text-on-surface">
             {result.annualCo2Kg.toFixed(0)}{' '}
             <span className="font-body-md text-body-md text-muted-steel">kg</span>
@@ -66,7 +64,12 @@ export const CommuteResults: React.FC<CommuteResultsProps> = ({
       {bestAlternative && savings > 10 && (
         <div className="bg-charcoal-core p-6 rounded-2xl border border-bio-emerald/30">
           <p className="text-on-surface flex items-start gap-2">
-            <span className="material-symbols-outlined text-bio-emerald shrink-0 mt-0.5" style={{ fontSize: '18px' }}>lightbulb</span>
+            <span
+              className="material-symbols-outlined text-bio-emerald shrink-0 mt-0.5"
+              style={{ fontSize: '18px' }}
+            >
+              lightbulb
+            </span>
             <span>
               <span className="font-bold text-bio-emerald">Tip: </span>If you switched to{' '}
               <strong>{bestAlternative.name}</strong>, you&apos;d save{' '}
@@ -77,7 +80,9 @@ export const CommuteResults: React.FC<CommuteResultsProps> = ({
       )}
 
       <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm h-80 flex flex-col">
-        <h3 className="font-headline-md text-headline-md text-on-surface mb-4">Annual Emissions by Mode</h3>
+        <h3 className="font-headline-md text-headline-md text-on-surface mb-4">
+          Annual Emissions by Mode
+        </h3>
         <div className="flex-1 min-h-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -102,7 +107,7 @@ export const CommuteResults: React.FC<CommuteResultsProps> = ({
                   borderRadius: '4px',
                   fontFamily: 'JetBrains Mono',
                   fontSize: '12px',
-                  color: '#4edea3'
+                  color: '#4edea3',
                 }}
                 formatter={(val: number) => [val.toFixed(0) + ' kg', 'Annual CO2']}
               />

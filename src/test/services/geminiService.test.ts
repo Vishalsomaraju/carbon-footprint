@@ -22,8 +22,18 @@ describe('geminiService', (): void => {
     const mockRes = {
       ok: true,
       json: async (): Promise<unknown> => ({
-        candidates: [{ content: { parts: [{ text: '[{"type":"success","title":"Good job","description":"Very low emission"}]' }] } }]
-      })
+        candidates: [
+          {
+            content: {
+              parts: [
+                {
+                  text: '[{"type":"success","title":"Good job","description":"Very low emission"}]',
+                },
+              ],
+            },
+          },
+        ],
+      }),
     };
     (global.fetch as import('vitest').Mock).mockResolvedValue(mockRes);
 
@@ -36,8 +46,14 @@ describe('geminiService', (): void => {
     const mockRes = {
       ok: true,
       json: async (): Promise<unknown> => ({
-        candidates: [{ content: { parts: [{ text: '[{"type":"success","title":"Walk more","description":"Good"}]' }] } }]
-      })
+        candidates: [
+          {
+            content: {
+              parts: [{ text: '[{"type":"success","title":"Walk more","description":"Good"}]' }],
+            },
+          },
+        ],
+      }),
     };
     (global.fetch as import('vitest').Mock).mockResolvedValue(mockRes);
 
@@ -74,7 +90,10 @@ describe('geminiService', (): void => {
   });
 
   it('generateWeeklyInsights throws on 500', async (): Promise<void> => {
-    (global.fetch as import('vitest').Mock).mockResolvedValue({ ok: false, statusText: 'Server Error' });
+    (global.fetch as import('vitest').Mock).mockResolvedValue({
+      ok: false,
+      statusText: 'Server Error',
+    });
     await expect(generateWeeklyInsights([])).rejects.toThrow('Gemini API error: undefined');
   });
 
@@ -82,8 +101,8 @@ describe('geminiService', (): void => {
     const mockRes = {
       ok: true,
       json: async (): Promise<unknown> => ({
-        candidates: [{ content: { parts: [{ text: 'Here is your chat response.' }] } }]
-      })
+        candidates: [{ content: { parts: [{ text: 'Here is your chat response.' }] } }],
+      }),
     };
     (global.fetch as import('vitest').Mock).mockResolvedValue(mockRes);
 

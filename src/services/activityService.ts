@@ -37,9 +37,7 @@ export const activityService = {
       const result = await getDocs(q);
 
       console.log('Fetched activities successfully, count:', result.docs.length);
-      return result.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as ActivityRecord,
-      );
+      return result.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as ActivityRecord);
     } catch (error: unknown) {
       trackError(error);
       console.error('Error getting user activities: ', error);

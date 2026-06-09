@@ -48,7 +48,9 @@ export const CategoryBreakdown: React.FC<Props> = ({ activities }): React.ReactE
           return (
             <div key={cat} className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-surface-container-high border border-whisper-border flex items-center justify-center shrink-0">
-                <span className={`material-symbols-outlined text-${info.colorClass}`}>{info.icon}</span>
+                <span className={`material-symbols-outlined text-${info.colorClass}`}>
+                  {info.icon}
+                </span>
               </div>
               <div className="flex-1">
                 <div className="flex justify-between items-end mb-2">
@@ -58,7 +60,7 @@ export const CategoryBreakdown: React.FC<Props> = ({ activities }): React.ReactE
                   </span>
                 </div>
                 <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className={`bg-${info.colorClass} h-full rounded-full transition-all duration-1000 ease-out`}
                     style={{ width: `${percentage}%` }}
                   ></div>

@@ -50,7 +50,12 @@ export const useCommute = (): {
       setMode(data.mode as keyof typeof EMISSION_FACTORS.transport);
       setDays(data.days);
 
-      const res = await calculateCommuteEmissions(data.origin, data.destination, data.mode as keyof typeof EMISSION_FACTORS.transport, data.days);
+      const res = await calculateCommuteEmissions(
+        data.origin,
+        data.destination,
+        data.mode as keyof typeof EMISSION_FACTORS.transport,
+        data.days,
+      );
       setResult(res);
     } catch (err) {
       setError('Could not calculate commute. Please check the locations.');

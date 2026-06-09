@@ -34,13 +34,13 @@ describe('ActivityForm', (): void => {
     await user.type(valueInput, '15');
 
     await user.click(screen.getByRole('button', { name: /Continue/i }));
-    
+
     // We must wait for React Hook Form's async validation to resolve before mockNext is called
     const { waitFor } = await import('@testing-library/react');
     await waitFor(() => {
       expect(mockNext).toHaveBeenCalledWith(
         { subCategory: 'car_petrol', value: 15 },
-        expect.anything()
+        expect.anything(),
       );
     });
   });

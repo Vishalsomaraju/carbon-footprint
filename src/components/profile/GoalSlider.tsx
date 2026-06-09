@@ -50,9 +50,15 @@ export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactEl
       ) : (
         <>
           <div className="flex items-center justify-between mb-4">
-            <span className="font-label-sm text-label-sm text-muted-steel">{WEEKLY_GOAL_MIN} kg</span>
-            <span className="font-headline-md text-headline-md font-bold text-bio-emerald">{goal} kg</span>
-            <span className="font-label-sm text-label-sm text-muted-steel">{WEEKLY_GOAL_MAX} kg</span>
+            <span className="font-label-sm text-label-sm text-muted-steel">
+              {WEEKLY_GOAL_MIN} kg
+            </span>
+            <span className="font-headline-md text-headline-md font-bold text-bio-emerald">
+              {goal} kg
+            </span>
+            <span className="font-label-sm text-label-sm text-muted-steel">
+              {WEEKLY_GOAL_MAX} kg
+            </span>
           </div>
           <input
             type="range"

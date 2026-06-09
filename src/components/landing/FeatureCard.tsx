@@ -20,4 +20,3 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
     <h3 className="text-xl font-bold text-on-surface">{title}</h3>
   </div>
 );
-

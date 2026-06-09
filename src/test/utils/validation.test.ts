@@ -10,7 +10,7 @@ describe('Validation Schemas', () => {
         subCategory: 'car_petrol',
         value: 15.5,
         description: 'Drove to work',
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       };
       const result = activitySchema.safeParse(validActivity);
       expect(result.success).toBe(true);
@@ -21,7 +21,7 @@ describe('Validation Schemas', () => {
         category: 'invalid_category',
         subCategory: 'car_petrol',
         value: 15.5,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       };
       const result = activitySchema.safeParse(invalidActivity);
       expect(result.success).toBe(false);
@@ -35,7 +35,7 @@ describe('Validation Schemas', () => {
         category: 'transport',
         subCategory: 'car_petrol',
         value: -5,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       };
       const result = activitySchema.safeParse(invalidActivity);
       expect(result.success).toBe(false);
@@ -51,7 +51,7 @@ describe('Validation Schemas', () => {
         origin: '123 Main St',
         destination: '456 Work Ave',
         mode: 'bus_per_km',
-        days: 5
+        days: 5,
       };
       const result = commuteSchema.safeParse(validCommute);
       expect(result.success).toBe(true);
@@ -62,7 +62,7 @@ describe('Validation Schemas', () => {
         origin: '123 Main St',
         destination: '456 Work Ave',
         mode: 'bus_per_km',
-        days: 8
+        days: 8,
       };
       const result = commuteSchema.safeParse(invalidCommute);
       expect(result.success).toBe(false);
@@ -76,7 +76,7 @@ describe('Validation Schemas', () => {
         origin: '123 Main St',
         destination: '456 Work Ave',
         mode: 'teleportation',
-        days: 5
+        days: 5,
       };
       const result = commuteSchema.safeParse(invalidCommute);
       expect(result.success).toBe(false);

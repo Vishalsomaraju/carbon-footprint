@@ -27,7 +27,9 @@ export const CategorySelector: React.FC<Props> = ({ onSelect }): React.ReactElem
           >
             {cat.charAt(0).toUpperCase()}
           </div>
-          <span className="font-headline-sm text-headline-sm font-bold text-on-surface">{label}</span>
+          <span className="font-headline-sm text-headline-sm font-bold text-on-surface">
+            {label}
+          </span>
         </button>
       ))}
     </div>

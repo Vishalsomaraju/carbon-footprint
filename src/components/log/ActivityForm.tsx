@@ -47,7 +47,10 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
       noValidate
     >
       <div>
-        <label htmlFor="subCategory" className="block font-label-sm text-label-sm text-muted-steel mb-1">
+        <label
+          htmlFor="subCategory"
+          className="block font-label-sm text-label-sm text-muted-steel mb-1"
+        >
           Activity Type
         </label>
         <select

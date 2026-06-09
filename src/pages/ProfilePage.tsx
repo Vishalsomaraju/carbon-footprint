@@ -32,10 +32,12 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
 
   const handleExportData = (): void => {
     trackEvent('data_export_requested');
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ user: user?.uid, exportedAt: new Date().toISOString() }));
+    const dataStr =
+      'data:text/json;charset=utf-8,' +
+      encodeURIComponent(JSON.stringify({ user: user?.uid, exportedAt: new Date().toISOString() }));
     const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "carbonwise_data.json");
+    downloadAnchorNode.setAttribute('href', dataStr);
+    downloadAnchorNode.setAttribute('download', 'carbonwise_data.json');
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
@@ -63,7 +65,9 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
             className="w-20 h-20 rounded-full border-2 border-surface-container-high"
           />
           <div>
-            <h1 className="font-headline-md text-headline-md font-bold text-on-surface">{user.displayName || 'Eco Warrior'}</h1>
+            <h1 className="font-headline-md text-headline-md font-bold text-on-surface">
+              {user.displayName || 'Eco Warrior'}
+            </h1>
             <p className="font-body-md text-body-md text-muted-steel">{user.email}</p>
           </div>
         </div>

@@ -17,7 +17,9 @@ export const BottomNav: React.FC = (): import('react').ReactElement => {
           key={item.path}
           to={item.path}
           className={`p-2 rounded-lg flex flex-col items-center justify-center transition-colors ${
-            isActive(item.path) ? 'text-primary bg-surface-variant' : 'text-muted-steel hover:text-on-surface-variant'
+            isActive(item.path)
+              ? 'text-primary bg-surface-variant'
+              : 'text-muted-steel hover:text-on-surface-variant'
           }`}
         >
           {item.icon}

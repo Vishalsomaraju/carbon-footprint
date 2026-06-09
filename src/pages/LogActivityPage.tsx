@@ -46,7 +46,9 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
     <div className="flex-1 overflow-y-auto p-gutter-md lg:p-8">
       <div className="max-w-3xl mx-auto space-y-8 pb-20">
         <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm mb-6">
-          <h1 className="font-headline-md text-headline-md font-bold text-on-surface tracking-tight mb-4">Log Activity</h1>
+          <h1 className="font-headline-md text-headline-md font-bold text-on-surface tracking-tight mb-4">
+            Log Activity
+          </h1>
           <div className="flex gap-2">
             {[1, 2, 3].map((i) => (
               <div
@@ -57,34 +59,34 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
           </div>
         </div>
 
-      {step === 1 && (
-        <CategorySelector
-          onSelect={(c) => {
-            setData({ ...data, category: c });
-            setStep(2);
-          }}
-        />
-      )}
-      {step === 2 && (
-        <ActivityForm
-          category={data.category}
-          onBack={() => setStep(1)}
-          onNext={(d) => {
-            setData({ ...data, ...d });
-            setStep(3);
-          }}
-        />
-      )}
-      {step === 3 && (
-        <ConfirmationStep
-          data={data}
-          onBack={() => setStep(2)}
-          onSubmit={handleSubmit}
-          isLoading={loading}
-        />
-      )}
+        {step === 1 && (
+          <CategorySelector
+            onSelect={(c) => {
+              setData({ ...data, category: c });
+              setStep(2);
+            }}
+          />
+        )}
+        {step === 2 && (
+          <ActivityForm
+            category={data.category}
+            onBack={() => setStep(1)}
+            onNext={(d) => {
+              setData({ ...data, ...d });
+              setStep(3);
+            }}
+          />
+        )}
+        {step === 3 && (
+          <ConfirmationStep
+            data={data}
+            onBack={() => setStep(2)}
+            onSubmit={handleSubmit}
+            isLoading={loading}
+          />
+        )}
 
-      {toast && <Toast message={toast.msg} type={toast.type} onDismiss={() => setToast(null)} />}
+        {toast && <Toast message={toast.msg} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>
     </div>
   );

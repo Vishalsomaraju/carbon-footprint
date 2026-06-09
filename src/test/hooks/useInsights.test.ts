@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { useInsights } from '../../hooks/useInsights';
 import { generateWeeklyInsights, getReductionChat } from '../../services/geminiService';
 import { useActivities } from '../../hooks/useActivities';
@@ -38,7 +39,7 @@ describe('useInsights', () => {
   it('should fetch insights if activities exist', async () => {
     const mockActivities = [{ id: '1', category: 'transport', value: 10 }];
     const mockInsights = [{ type: 'success', title: 'Great', description: 'Good job' }];
-    
+
     (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       activities: mockActivities,
     });
@@ -61,11 +62,13 @@ describe('useInsights', () => {
 
   it('should handle fetch insights error', async () => {
     const mockActivities = [{ id: '1', category: 'transport', value: 10 }];
-    
+
     (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       activities: mockActivities,
     });
-    (generateWeeklyInsights as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('API error'));
+    (generateWeeklyInsights as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error('API error'),
+    );
 
     const { result } = renderHook(() => useInsights());
 
@@ -135,7 +138,9 @@ describe('useInsights', () => {
 
   it('should handle chat error', async () => {
     (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ activities: [] });
-    (getReductionChat as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Chat error'));
+    (getReductionChat as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error('Chat error'),
+    );
 
     const { result } = renderHook(() => useInsights());
 

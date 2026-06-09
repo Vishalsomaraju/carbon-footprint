@@ -128,7 +128,12 @@ describe('useActivities', (): void => {
 
     await act(async () => {
       await expect(
-        result.current.addActivity({ category: 'transport', subCategory: 'car_petrol', value: 10, date: '2023-01-02T00:00:00Z' }),
+        result.current.addActivity({
+          category: 'transport',
+          subCategory: 'car_petrol',
+          value: 10,
+          date: '2023-01-02T00:00:00Z',
+        }),
       ).rejects.toThrow('Failed to add');
     });
 
@@ -164,7 +169,12 @@ describe('useActivities', (): void => {
         value: 10,
         date: '2023-01-02T00:00:00Z',
       });
-      await result.current.addActivity({ category: 'transport', subCategory: 'unknown', value: 10, date: '2023-01-02T00:00:00Z' });
+      await result.current.addActivity({
+        category: 'transport',
+        subCategory: 'unknown',
+        value: 10,
+        date: '2023-01-02T00:00:00Z',
+      });
     });
 
     expect(activityService.logActivity).toHaveBeenCalledWith(
@@ -187,7 +197,12 @@ describe('useActivities', (): void => {
 
     await act(async () => {
       await expect(
-        result.current.addActivity({ category: 'transport', subCategory: 'bus', value: 10, date: '2023-01-02T00:00:00Z' }),
+        result.current.addActivity({
+          category: 'transport',
+          subCategory: 'bus',
+          value: 10,
+          date: '2023-01-02T00:00:00Z',
+        }),
       ).rejects.toThrow('User not authenticated');
     });
   });

@@ -21,7 +21,10 @@ export const commuteSchema = z.object({
   origin: z.string().min(3, 'Origin is required (min 3 chars).'),
   destination: z.string().min(3, 'Destination is required (min 3 chars).'),
   mode: z.enum(Object.keys(EMISSION_FACTORS.transport) as [string, ...string[]]),
-  days: z.number({ message: 'Days must be a number' }).min(1, 'Must commute at least 1 day.').max(7, 'Cannot exceed 7 days.'),
+  days: z
+    .number({ message: 'Days must be a number' })
+    .min(1, 'Must commute at least 1 day.')
+    .max(7, 'Cannot exceed 7 days.'),
 });
 
 export type ActivityFormData = z.infer<typeof activitySchema>;

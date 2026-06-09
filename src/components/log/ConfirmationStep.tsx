@@ -40,7 +40,9 @@ export const ConfirmationStep: React.FC<Props> = ({
         <p className="font-label-sm text-label-sm text-muted-steel uppercase tracking-wider font-bold mb-2">
           Estimated Impact
         </p>
-        <p className="font-headline-lg text-headline-lg font-bold text-on-surface">{formatCo2(estimatedCo2)}</p>
+        <p className="font-headline-lg text-headline-lg font-bold text-on-surface">
+          {formatCo2(estimatedCo2)}
+        </p>
       </div>
       <div>
         <label htmlFor="notes" className="block font-label-sm text-label-sm text-muted-steel mb-1">

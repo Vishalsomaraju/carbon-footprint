@@ -13,8 +13,8 @@ import { CategoryBreakdown } from '../components/dashboard/CategoryBreakdown';
 import { StreakBadge } from '../components/dashboard/StreakBadge';
 
 const DashboardSkeleton: React.FC = () => (
-  <div 
-    role="status" 
+  <div
+    role="status"
     aria-label="Loading dashboard"
     className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-container-max mx-auto animate-pulse"
   >
@@ -50,7 +50,13 @@ export const DashboardPage: React.FC = (): React.ReactElement => {
             onClick={() => navigate('/log')}
             className="bg-bio-emerald text-deep-void px-6 py-2 rounded-lg font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
           >
-            <span className="material-symbols-outlined" style={{ fontSize: '18px' }} aria-hidden="true">add_circle</span>
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: '18px' }}
+              aria-hidden="true"
+            >
+              add_circle
+            </span>
             Log Activity
           </button>
         </div>
@@ -61,8 +67,12 @@ export const DashboardPage: React.FC = (): React.ReactElement => {
         <div className="mb-6 flex items-start gap-3 bg-charcoal-core border border-critical-crimson/40 text-critical-crimson rounded-xl px-5 py-4">
           <span className="material-symbols-outlined shrink-0 mt-0.5">warning</span>
           <div className="flex-1 min-w-0">
-            <p className="font-label-sm text-label-sm font-bold mb-0.5">Could not load activity data</p>
-            <p className="font-body-md text-body-md text-muted-steel break-words">{error.message}</p>
+            <p className="font-label-sm text-label-sm font-bold mb-0.5">
+              Could not load activity data
+            </p>
+            <p className="font-body-md text-body-md text-muted-steel break-words">
+              {error.message}
+            </p>
           </div>
           <button
             onClick={() => setErrorDismissed(true)}
@@ -83,9 +93,12 @@ export const DashboardPage: React.FC = (): React.ReactElement => {
           <div className="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="material-symbols-outlined text-primary text-3xl">eco</span>
           </div>
-          <h3 className="font-headline-md text-headline-md text-on-surface mb-2">No activities logged yet</h3>
+          <h3 className="font-headline-md text-headline-md text-on-surface mb-2">
+            No activities logged yet
+          </h3>
           <p className="font-body-md text-body-md text-muted-steel max-w-md mx-auto mb-6">
-            Start tracking your daily choices to see your carbon footprint and get AI-powered insights.
+            Start tracking your daily choices to see your carbon footprint and get AI-powered
+            insights.
           </p>
           <button
             onClick={() => navigate('/log')}

@@ -38,15 +38,15 @@ export const LandingPage: React.FC = (): import('react').ReactElement => {
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans flex flex-col">
       <main className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 
+        <h1
           className="text-4xl md:text-6xl font-extrabold mb-6 max-w-4xl tracking-tight"
           style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}
         >
           Understand your impact. Start reducing it today.
         </h1>
         <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-12">
-          Track your carbon footprint across transport, food, energy, and shopping. 
-          Get AI-powered insights tailored to your lifestyle.
+          Track your carbon footprint across transport, food, energy, and shopping. Get AI-powered
+          insights tailored to your lifestyle.
         </p>
 
         <div className="flex flex-col items-center gap-4">
@@ -71,18 +71,9 @@ export const LandingPage: React.FC = (): import('react').ReactElement => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-5xl w-full text-left">
-          <FeatureCard 
-            title="Track Daily Activities"
-            icon="monitoring"
-          />
-          <FeatureCard 
-            title="AI Personalized Insights"
-            icon="query_stats"
-          />
-          <FeatureCard 
-            title="Commute Calculator"
-            icon="electric_car"
-          />
+          <FeatureCard title="Track Daily Activities" icon="monitoring" />
+          <FeatureCard title="AI Personalized Insights" icon="query_stats" />
+          <FeatureCard title="Commute Calculator" icon="electric_car" />
         </div>
       </main>
 

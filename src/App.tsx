@@ -8,11 +8,21 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { AppLayout } from './layouts/AppLayout';
 import { LandingPage } from './pages/LandingPage';
-const DashboardPage = lazy(() => import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })));
-const LogActivityPage = lazy(() => import('./pages/LogActivityPage').then(m => ({ default: m.LogActivityPage })));
-const ProfilePage = lazy(() => import('./pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
-const InsightsPage = lazy(() => import('./pages/InsightsPage').then(m => ({ default: m.InsightsPage })));
-const CommutePage = lazy(() => import('./pages/CommutePage').then(m => ({ default: m.CommutePage })));
+const DashboardPage = lazy(() =>
+  import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
+);
+const LogActivityPage = lazy(() =>
+  import('./pages/LogActivityPage').then((m) => ({ default: m.LogActivityPage })),
+);
+const ProfilePage = lazy(() =>
+  import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage })),
+);
+const InsightsPage = lazy(() =>
+  import('./pages/InsightsPage').then((m) => ({ default: m.InsightsPage })),
+);
+const CommutePage = lazy(() =>
+  import('./pages/CommutePage').then((m) => ({ default: m.CommutePage })),
+);
 import { ROUTES } from './constants';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
