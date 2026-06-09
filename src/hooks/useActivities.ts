@@ -1,17 +1,23 @@
-
 /**
  * @module hooks/useActivities
  */
 
 import { useState, useEffect, useCallback } from 'react';
 
-import { ActivityRecord , ActivityRecord } from '../types';
+import { ActivityRecord } from '../types';
 import { activityService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
 import { EMISSION_FACTORS } from '../constants';
 import { trackError } from '../utils/errorTracker';
 
-export interface UseActivitiesReturn { activities: import('../types').ActivityRecord[]; loading: boolean; error: Error | null; addActivity: (data: Omit<import('../types').ActivityRecord, 'id' | 'co2Kg' | 'timestamp'>) => Promise<void>; }
+export interface UseActivitiesReturn { 
+  activities: ActivityRecord[]; 
+  loading: boolean; 
+  error: Error | null; 
+  addActivity: (data: { category: string; subCategory?: string; value: number; description?: string; date: string }) => Promise<string>; 
+  refresh: () => Promise<void>;
+}
+
 export const useActivities = (): UseActivitiesReturn => {
   const { user } = useAuthContext();
   const [activities, setActivities] = useState<ActivityRecord[]>([]);

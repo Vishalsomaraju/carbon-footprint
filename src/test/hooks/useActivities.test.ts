@@ -72,9 +72,7 @@ describe('useActivities', (): void => {
     });
 
     await act(async () => {
-      const id = await result.current.addActivity({
-        category: 'transport',
-        subCategory: 'car_petrol_per_km',
+      const id = await result.current.addActivity({ category: 'transport', subCategory: 'car_petrol_per_km',
         value: 10,
         description: 'Test drive',
         date: '2023-01-02'
@@ -109,9 +107,7 @@ describe('useActivities', (): void => {
     });
 
     await act(async () => {
-      await expect(result.current.addActivity({
-        category: 'transport',
-        value: 10,
+      await expect(result.current.addActivity({ category: 'transport', value: 10,
         date: '2023-01-02'
       })).rejects.toThrow('Failed to add');
     });
@@ -144,9 +140,7 @@ describe('useActivities', (): void => {
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {
-      await expect(result.current.addActivity({
-        category: 'transport',
-        value: 10,
+      await expect(result.current.addActivity({ category: 'transport', value: 10,
         date: '2023-01-02'
       })).rejects.toThrow('User not authenticated');
     });

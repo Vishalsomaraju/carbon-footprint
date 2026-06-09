@@ -7,7 +7,7 @@ import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 
 import { ROUTES } from '../constants';
-import { ErrorBoundary } from '../components/ui';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
 interface NavItem {
   readonly label: string;

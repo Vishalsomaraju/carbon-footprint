@@ -54,6 +54,7 @@ export const useCommute = (): UseCommuteReturn => {
     setLoading(true);
     try {
       await addActivity({
+          category: "transport",
         category: 'transport',
         subCategory: mode === 'driving' ? 'car_petrol_per_km' : mode === 'transit' ? 'bus_per_km' : 'walking_per_km',
         value: route.distanceKm,

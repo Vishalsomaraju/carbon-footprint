@@ -1,65 +1,69 @@
 /**
  * @module pages/DashboardPage
+ * @description Core user dashboard showing footprint stats.
  */
 
-import React, { useEffect, useCallback } from 'react';
-
-import { useAuth, useActivities, useGeminiInsights } from '../hooks';
-import { ActivityForm, FootprintChart, InsightCard } from '../components/features';
+import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth, useActivities } from '../hooks';
+import { DailySummaryCard } from '../components/dashboard/DailySummaryCard';
+import { WeeklyChart } from '../components/dashboard/WeeklyChart';
+import { CategoryBreakdown } from '../components/dashboard/CategoryBreakdown';
+import { StreakBadge } from '../components/dashboard/StreakBadge';
 import { LoadingSpinner } from '../components/ui';
 
 export const DashboardPage: React.FC = (): React.ReactElement => {
   const { user } = useAuth();
-  const { activities, loading: activitiesLoading, addActivity } = useActivities();
-  const { insights, loading: insightsLoading, generateInsights } = useGeminiInsights();
+  const { activities, loading } = useActivities();
+  const navigate = useNavigate();
 
-  const handleSubmit = useCallback(async (activityData: { category: string; subCategory: string; value: number; description: string; date: string }): Promise<void> => {
-    await addActivity(activityData);
-  }, [addActivity]);
+  const todayTotal = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return activities.filter(a => a.date.startsWith(today)).reduce((sum, a) => sum + (a.carbonImpact || 0), 0);
+  }, [activities]);
 
-  useEffect(() => {
-    if (activities.length > 0 && insights.length === 0) {
-      generateInsights(activities);
-    }
-  }, [activities, insights.length, generateInsights]);
-
-  if (activitiesLoading && activities.length === 0) {
+  if (loading && !activities.length) {
     return <div className="flex justify-center p-12"><LoadingSpinner size="lg" /></div>;
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Welcome, {user?.displayName || 'Eco-Warrior'}!</h1>
-        <p className="text-gray-600 mt-1">Here is your carbon footprint summary.</p>
+    <div className="space-y-8 max-w-6xl mx-auto pb-24">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Welcome, {user?.displayName || 'Eco-Warrior'}!</h1>
+          <p className="text-gray-600 mt-1">Here is your carbon footprint summary.</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <StreakBadge activities={activities} />
+          <button 
+            onClick={() => navigate('/log')}
+            className="px-6 py-2.5 bg-carbon-600 text-white font-medium rounded-lg hover:bg-carbon-700 transition-colors shadow-sm"
+          >
+            Log Activity
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 space-y-8">
-          <ActivityForm onSubmit={handleSubmit} isLoading={activitiesLoading} />
+      {!activities.length ? (
+        <div className="text-center p-12 bg-white rounded-xl border border-dashed border-gray-300">
+          <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl">🌱</span>
+          </div>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">No activities logged yet</h3>
+          <p className="text-gray-500 max-w-md mx-auto mb-6">Start tracking your daily choices to see your carbon footprint and get AI-powered insights.</p>
+          <button onClick={() => navigate('/log')} className="text-carbon-600 font-bold hover:underline">Log your first activity &rarr;</button>
         </div>
-
-        <div className="lg:col-span-2 space-y-8">
-          <FootprintChart activities={activities} />
-
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">AI Insights</h2>
-            {insightsLoading ? (
-              <div className="flex justify-center p-8"><LoadingSpinner /></div>
-            ) : insights.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {insights.map((insight: import('../types').InsightMessage) => (
-                  <InsightCard key={insight.id} insight={insight} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 bg-white p-6 rounded-lg border">
-                Log more activities to get personalized AI insights!
-              </p>
-            )}
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1 space-y-8">
+            <DailySummaryCard totalKg={todayTotal} />
+          </div>
+          <div className="lg:col-span-2 space-y-8">
+            <CategoryBreakdown activities={activities} />
+            <WeeklyChart activities={activities} />
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

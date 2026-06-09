@@ -13,7 +13,7 @@ export const useAuth = (): { user: User | null; loading: boolean; error: Error |
   const [error, setError] = useState<Error | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const login = async (): Promise<void> => {
+  const login = async (): Promise<User> => {
     setIsAuthenticating(true);
     setError(null);
     try {

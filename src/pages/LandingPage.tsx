@@ -7,7 +7,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../hooks';
-import { Button, GoogleIcon } from '../components/ui';
+import { Button } from '../components/ui/Button';
+import { GoogleIcon } from '../components/ui';
 
 export const LandingPage: React.FC = (): import('react').ReactElement => {
   const { login, user, loading } = useAuth();

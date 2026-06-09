@@ -58,7 +58,7 @@ export const ActivityForm: React.FC<ActivityFormProps> = memo(({ onSubmit, isLoa
         </FormField>
 
         <FormField label="Description" htmlFor="description">
-          <Input id="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="e.g., Drove to work" disabled={isLoading} />
+          <Input id="description" type="text" value={description} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)} placeholder="e.g., Drove to work" disabled={isLoading} />
         </FormField>
         
         <FormField label="Date" htmlFor="date" required>

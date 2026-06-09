@@ -2,7 +2,8 @@
  * @module pages/ProfilePage
  */
 
-import { Card, Button } from '../components/ui';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 
 export const ProfilePage = (): React.ReactElement => {
   return (

@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 
 import { useCommute } from '../hooks';
-import { Card } from '../components/ui';
+import { Card } from '../components/ui/Card';
 import { CommuteForm, CommuteSummary } from '../components/features';
 
 export const CommutePage: React.FC = (): React.ReactElement => {
