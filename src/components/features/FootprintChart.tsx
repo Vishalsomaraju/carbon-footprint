@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @module features/FootprintChart
  */
@@ -24,7 +25,7 @@ interface FootprintChartProps {
 export const FootprintChart: React.FC<FootprintChartProps> = memo(({ activities }): React.ReactElement => {
   const data = useMemo(() => {
     // Group by date
-    const grouped = activities.reduce((acc: Record<string, unknown>, curr) => {
+    const grouped = activities.reduce((acc: any, curr) => {
       const date = curr.date.split('T')[0];
       if (!acc[date]) {
         acc[date] = { date, transport: 0, home_energy: 0, food: 0, shopping: 0 };
@@ -39,9 +40,9 @@ export const FootprintChart: React.FC<FootprintChartProps> = memo(({ activities 
       
       acc[date][curr.category as keyof typeof acc[string]] += footprint;
       return acc;
-    }, {} as Record<string, unknown>);
+    }, {} as any);
 
-    return Object.values(grouped).sort((a: {date: string}, b: {date: string}) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(-7); // last 7 days
+    return (Object.values(grouped) as any[]).sort((a: {date: string}, b: {date: string}) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(-7); // last 7 days
   }, [activities]);
 
   if (!activities.length) {

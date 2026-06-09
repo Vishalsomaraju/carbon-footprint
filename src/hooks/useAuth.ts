@@ -1,3 +1,4 @@
+import type { User } from 'firebase/auth';
 /**
  * @module hooks/useAuth
  */
@@ -20,7 +21,7 @@ export const useAuth = (): { user: User | null; loading: boolean; error: Error |
       analyticsService.logEvent('login', { method: 'google' });
       return loggedInUser;
     } catch (err: unknown) {
-      setError(err);
+      setError(err as Error);
       throw err;
     } finally {
       setIsAuthenticating(false);
@@ -33,7 +34,7 @@ export const useAuth = (): { user: User | null; loading: boolean; error: Error |
       await authService.logout();
       analyticsService.logEvent('logout');
     } catch (err: unknown) {
-      setError(err);
+      setError(err as Error);
       throw err;
     } finally {
       setIsAuthenticating(false);

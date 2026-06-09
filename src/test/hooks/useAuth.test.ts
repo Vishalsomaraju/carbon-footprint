@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @module hooks/useAuth.test
  */
@@ -10,11 +11,11 @@ import { useAuth } from '../../hooks/useAuth';
 import { authService, analyticsService } from '../../services';
 
 // Mock contexts and services
-vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
-  useAuthContext: vi.fn((): import("react").ReactElement => ({ user: null, loading: false }))
+vi.mock('../../contexts/AuthContext', (): any => ({
+  useAuthContext: vi.fn((): any => ({ user: null, loading: false }))
 }));
 
-vi.mock('../../services', (): Record<string, unknown> => ({
+vi.mock('../../services', (): any => ({
   authService: {
     signInWithGoogle: vi.fn(),
     logout: vi.fn()
@@ -38,7 +39,7 @@ describe('useAuth', (): void => {
 
   it('should handle login successfully', async (): Promise<void> => {
     const mockUser = { uid: '123', email: 'test@example.com' };
-    (authService.signInWithGoogle as import('vitest').Mock).mockResolvedValue(mockUser);
+    (authService.signInWithGoogle as any).mockResolvedValue(mockUser);
     
     const { result } = renderHook(() => useAuth());
 
@@ -54,7 +55,7 @@ describe('useAuth', (): void => {
 
   it('should handle login error', async (): Promise<void> => {
     const error = new Error('Login failed');
-    (authService.signInWithGoogle as import('vitest').Mock).mockRejectedValue(error);
+    (authService.signInWithGoogle as any).mockRejectedValue(error);
     
     const { result } = renderHook(() => useAuth());
 
@@ -67,8 +68,8 @@ describe('useAuth', (): void => {
   });
 
   it('should handle logout successfully', async (): Promise<void> => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: { uid: '123' }, loading: false });
-    (authService.logout as import('vitest').Mock).mockResolvedValue(undefined);
+    (useAuthContext as any).mockReturnValue({ user: { uid: '123' }, loading: false });
+    (authService.logout as any).mockResolvedValue(undefined);
     
     const { result } = renderHook(() => useAuth());
 
@@ -82,7 +83,7 @@ describe('useAuth', (): void => {
 
   it('should handle logout error', async (): Promise<void> => {
     const error = new Error('Logout failed');
-    (authService.logout as import('vitest').Mock).mockRejectedValue(error);
+    (authService.logout as any).mockRejectedValue(error);
     
     const { result } = renderHook(() => useAuth());
 

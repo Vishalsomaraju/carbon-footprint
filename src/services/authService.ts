@@ -2,7 +2,7 @@
  * @module services/authService
  */
 
-import { signInWithPopup, signOut } from 'firebase/auth';
+import { signInWithPopup, signOut, User } from 'firebase/auth';
 
 import { auth, googleProvider } from '../config';
 

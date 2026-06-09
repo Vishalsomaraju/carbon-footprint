@@ -10,7 +10,7 @@ import { ChatSection } from '../components/features/ChatSection';
 import { LoadingSpinner } from '../components/ui';
 import { trackError } from '../services/analyticsService';
 
-export const InsightsPage: React.FC = () => {
+export const InsightsPage: React.FC = (): React.ReactElement => {
   const { activities } = useActivities();
   const { insights, loading: insightsLoading, generateInsights } = useGeminiInsights();
 
@@ -18,7 +18,7 @@ export const InsightsPage: React.FC = () => {
 
   useEffect(() => {
     if (activities.length > 0 && insights.length === 0) {
-      generateInsights(activities).catch(err => trackError(err));
+      generateInsights(activities).catch((err: Error) => trackError(err));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activities.length, insights.length]);
@@ -61,7 +61,7 @@ export const InsightsPage: React.FC = () => {
           <div className="flex justify-center p-12"><LoadingSpinner size="lg" /></div>
         ) : insights.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {insights.map((insight) => (
+            {insights.map((insight: import('../types').InsightMessage) => (
               <InsightCard key={insight.id} insight={insight} />
             ))}
           </div>

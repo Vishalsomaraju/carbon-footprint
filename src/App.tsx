@@ -7,8 +7,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthProvider, useAuthContext } from './contexts/AuthContext';
 import { AppLayout } from './layouts/AppLayout';
-import { AuthPage } from './pages/AuthPage';
+import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { LogActivityPage } from './pages/LogActivityPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { InsightsPage } from './pages/InsightsPage';
 import { CommutePage } from './pages/CommutePage';
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }): React.Reac
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={ROUTES.HOME} replace />;
   }
 
   return <>{children}</>;
@@ -38,7 +39,7 @@ export const App = (): React.ReactElement => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<AuthPage />} />
+          <Route path={ROUTES.HOME} element={<LandingPage />} />
           <Route
             element={
               <ProtectedRoute>
@@ -47,11 +48,12 @@ export const App = (): React.ReactElement => {
             }
           >
             <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path={ROUTES.LOG} element={<LogActivityPage />} />
+            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
             <Route path={ROUTES.INSIGHTS} element={<InsightsPage />} />
             <Route path={ROUTES.COMMUTE} element={<CommutePage />} />
           </Route>
-          <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
+          <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -1,15 +1,17 @@
+
 /**
  * @module hooks/useActivities
  */
 
 import { useState, useEffect, useCallback } from 'react';
 
-import { ActivityRecord } from '../types';
+import { ActivityRecord , ActivityRecord } from '../types';
 import { activityService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
 import { EMISSION_FACTORS } from '../constants';
 import { trackError } from '../utils/errorTracker';
 
+export interface UseActivitiesReturn { activities: import('../types').ActivityRecord[]; loading: boolean; error: Error | null; addActivity: (data: Omit<import('../types').ActivityRecord, 'id' | 'co2Kg' | 'timestamp'>) => Promise<void>; }
 export const useActivities = (): UseActivitiesReturn => {
   const { user } = useAuthContext();
   const [activities, setActivities] = useState<ActivityRecord[]>([]);
@@ -25,7 +27,7 @@ export const useActivities = (): UseActivitiesReturn => {
       setActivities(data);
     } catch (err: unknown) {
       trackError(err, 'fetchActivities');
-      setError(err);
+      setError(err as Error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +59,7 @@ export const useActivities = (): UseActivitiesReturn => {
       return id;
     } catch (err: unknown) {
       trackError(err, 'addActivity');
-      setError(err);
+      setError(err as Error);
       throw err;
     }
   }, [user]);

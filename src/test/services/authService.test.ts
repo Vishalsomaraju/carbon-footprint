@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @module __tests__/authService.test
  */
@@ -14,14 +15,14 @@ vi.mock('firebase/auth', async (importOriginal) => {
     getAuth: vi.fn(),
     signInWithPopup: vi.fn(),
     signOut: vi.fn(),
-    GoogleAuthProvider: vi.fn((): import("react").ReactElement => ({
+    GoogleAuthProvider: vi.fn((): any => ({
       addScope: vi.fn(),
       setCustomParameters: vi.fn()
     }))
   };
 });
 
-vi.mock('../../config', (): Record<string, unknown> => ({
+vi.mock('../../config', (): any => ({
   auth: {},
   googleProvider: {}
 }));
@@ -34,7 +35,7 @@ describe('authService', (): void => {
   describe('signInWithGoogle', (): void => {
     it('should call signInWithPopup and return the user', async (): Promise<void> => {
       const mockUserCredential = { user: { uid: 'user-123', email: 'test@example.com' } };
-      vi.mocked(signInWithPopup).mockResolvedValueOnce(mockUserCredential as import('vitest').Mock);
+      vi.mocked(signInWithPopup).mockResolvedValueOnce(mockUserCredential as any);
 
       const user = await authService.signInWithGoogle();
 

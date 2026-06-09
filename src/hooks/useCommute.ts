@@ -9,6 +9,15 @@ import { mapsService } from '../services';
 import { CommuteRoute } from '../types';
 import { trackError, trackEvent } from '../services/analyticsService';
 
+export interface UseCommuteReturn {
+  route: CommuteRoute | null;
+  loading: boolean;
+  error: string;
+  success: boolean;
+  calculateRoute: (origin: string, destination: string, mode: string) => Promise<void>;
+  logCommute: (mode: string) => Promise<void>;
+}
+
 export const useCommute = (): UseCommuteReturn => {
   const { addActivity } = useActivities();
   const [route, setRoute] = useState<CommuteRoute | null>(null);

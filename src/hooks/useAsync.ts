@@ -20,7 +20,7 @@ export function useAsync<T, Args extends unknown[]>(asyncFunction: AsyncFunction
         setData(result);
         return result;
       } catch (err: unknown) {
-        setError(err);
+        setError(err as Error);
         throw err;
       } finally {
         setLoading(false);

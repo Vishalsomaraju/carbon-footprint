@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @module features/FootprintChart.test
  */
@@ -8,15 +9,15 @@ import { describe, it, expect, vi } from 'vitest';
 import { FootprintChart } from '../../components/features/FootprintChart';
 
 // Mock recharts to avoid rendering issues in JSDOM
-vi.mock('recharts', (): Record<string, unknown> => ({
-  ResponsiveContainer: ({ children }: unknown) => <div>{children}</div>,
-  BarChart: ({ children }: unknown) => <div data-testid="bar-chart">{children}</div>,
-  Bar: (): import("react").ReactElement => <div data-testid="bar" />,
-  XAxis: (): import("react").ReactElement => <div />,
-  YAxis: (): import("react").ReactElement => <div />,
-  CartesianGrid: (): import("react").ReactElement => <div />,
-  Tooltip: (): import("react").ReactElement => <div />,
-  Legend: (): import("react").ReactElement => <div />
+vi.mock('recharts', (): any => ({
+  ResponsiveContainer: ({ children }: { children?: import('react').ReactNode }) => <div>{children}</div>,
+  BarChart: ({ children }: { children?: import('react').ReactNode }) => <div data-testid="bar-chart">{children}</div>,
+  Bar: (): any => <div data-testid="bar" />,
+  XAxis: (): any => <div />,
+  YAxis: (): any => <div />,
+  CartesianGrid: (): any => <div />,
+  Tooltip: (): any => <div />,
+  Legend: (): any => <div />
 }));
 
 describe('FootprintChart', (): void => {

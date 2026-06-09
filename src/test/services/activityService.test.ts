@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @module __tests__/activityService.test
  */
@@ -18,12 +19,12 @@ vi.mock('firebase/firestore', async (importOriginal) => {
     getDocs: vi.fn(),
     orderBy: vi.fn(),
     Timestamp: {
-      now: vi.fn((): import("react").ReactElement => ({ toMillis: () => 123456789 }))
+      now: vi.fn((): any => ({ toMillis: () => 123456789 }))
     }
   };
 });
 
-vi.mock('../../config', (): Record<string, unknown> => ({
+vi.mock('../../config', (): any => ({
   db: {}
 }));
 
@@ -35,7 +36,7 @@ describe('activityService', (): void => {
   describe('logActivity', (): void => {
     it('should add a document to the activities collection', async (): Promise<void> => {
       const mockDocRef = { id: 'test-doc-id' };
-      vi.mocked(addDoc).mockResolvedValueOnce(mockDocRef as import('vitest').Mock);
+      vi.mocked(addDoc).mockResolvedValueOnce(mockDocRef as any);
 
       const activityData = {
         userId: 'user-123',
@@ -45,7 +46,7 @@ describe('activityService', (): void => {
         date: '2023-10-01'
       };
 
-      const id = await activityService.logActivity(activityData as import('vitest').Mock);
+      const id = await activityService.logActivity(activityData as any);
 
       expect(addDoc).toHaveBeenCalledTimes(1);
       expect(id).toBe('test-doc-id');
@@ -63,7 +64,7 @@ describe('activityService', (): void => {
         date: '2023-10-01'
       };
 
-      await expect(activityService.logActivity(activityData as import('vitest').Mock)).rejects.toThrow('Firestore error');
+      await expect(activityService.logActivity(activityData as any)).rejects.toThrow('Firestore error');
     });
   });
 
@@ -71,11 +72,11 @@ describe('activityService', (): void => {
     it('should return a list of activities for a user', async (): Promise<void> => {
       const mockDocs = {
         docs: [
-          { id: 'doc-1', data: (): import("react").ReactElement => ({ userId: 'user-123', value: 10 }) },
-          { id: 'doc-2', data: (): import("react").ReactElement => ({ userId: 'user-123', value: 20 }) }
+          { id: 'doc-1', data: (): any => ({ userId: 'user-123', value: 10 }) },
+          { id: 'doc-2', data: (): any => ({ userId: 'user-123', value: 20 }) }
         ]
       };
-      vi.mocked(getDocs).mockResolvedValueOnce(mockDocs as import('vitest').Mock);
+      vi.mocked(getDocs).mockResolvedValueOnce(mockDocs as any);
 
       const activities = await activityService.getUserActivities('user-123');
 

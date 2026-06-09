@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @module hooks/useActivities.test
  */
@@ -12,18 +13,18 @@ import { activityService } from '../../services';
 // Mock contexts and services
 const mockUser = { uid: 'user123' };
 
-vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
-  useAuthContext: vi.fn((): import("react").ReactElement => ({ user: mockUser }))
+vi.mock('../../contexts/AuthContext', (): any => ({
+  useAuthContext: vi.fn((): any => ({ user: mockUser }))
 }));
 
-vi.mock('../../services', (): Record<string, unknown> => ({
+vi.mock('../../services', (): any => ({
   activityService: {
     getUserActivities: vi.fn(),
     logActivity: vi.fn()
   }
 }));
 
-vi.mock('../utils/errorTracker', (): Record<string, unknown> => ({
+vi.mock('../utils/errorTracker', (): any => ({
   trackError: vi.fn()
 }));
 
@@ -34,7 +35,7 @@ describe('useActivities', (): void => {
 
   it('should fetch activities on mount if user is authenticated', async (): Promise<void> => {
     const mockActivities = [{ id: '1', category: 'transport', value: 10, carbonImpact: 2, date: '2023-01-01', userId: 'user123' }];
-    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue(mockActivities);
+    (activityService.getUserActivities as any).mockResolvedValue(mockActivities);
 
     const { result } = renderHook(() => useActivities());
 
@@ -50,7 +51,7 @@ describe('useActivities', (): void => {
   });
 
   it('should not fetch activities if user is not authenticated', async (): Promise<void> => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null });
+    (useAuthContext as any).mockReturnValue({ user: null });
     
     const { result } = renderHook(() => useActivities());
 
@@ -60,9 +61,9 @@ describe('useActivities', (): void => {
   });
 
   it('should add an activity and update state', async (): Promise<void> => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: mockUser });
-    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue([]);
-    (activityService.logActivity as import('vitest').Mock).mockResolvedValue('new-id');
+    (useAuthContext as any).mockReturnValue({ user: mockUser });
+    (activityService.getUserActivities as any).mockResolvedValue([]);
+    (activityService.logActivity as any).mockResolvedValue('new-id');
 
     const { result } = renderHook(() => useActivities());
 
@@ -96,10 +97,10 @@ describe('useActivities', (): void => {
   });
 
   it('should handle add activity error', async (): Promise<void> => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: mockUser });
-    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue([]);
+    (useAuthContext as any).mockReturnValue({ user: mockUser });
+    (activityService.getUserActivities as any).mockResolvedValue([]);
     const error = new Error('Failed to add');
-    (activityService.logActivity as import('vitest').Mock).mockRejectedValue(error);
+    (activityService.logActivity as any).mockRejectedValue(error);
 
     const { result } = renderHook(() => useActivities());
 
@@ -119,9 +120,9 @@ describe('useActivities', (): void => {
   });
 
   it('should calculate correct carbon impact for all categories', async (): Promise<void> => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: mockUser });
-    (activityService.getUserActivities as import('vitest').Mock).mockResolvedValue([]);
-    (activityService.logActivity as import('vitest').Mock).mockResolvedValue('new-id');
+    (useAuthContext as any).mockReturnValue({ user: mockUser });
+    (activityService.getUserActivities as any).mockResolvedValue([]);
+    (activityService.logActivity as any).mockResolvedValue('new-id');
 
     const { result } = renderHook(() => useActivities());
 
@@ -139,7 +140,7 @@ describe('useActivities', (): void => {
   });
 
   it('should throw error if adding activity without user', async (): Promise<void> => {
-    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null });
+    (useAuthContext as any).mockReturnValue({ user: null });
     const { result } = renderHook(() => useActivities());
 
     await act(async () => {

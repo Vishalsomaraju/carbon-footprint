@@ -48,7 +48,7 @@ export const DashboardPage: React.FC = (): React.ReactElement => {
               <div className="flex justify-center p-8"><LoadingSpinner /></div>
             ) : insights.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {insights.map((insight) => (
+                {insights.map((insight: import('../types').InsightMessage) => (
                   <InsightCard key={insight.id} insight={insight} />
                 ))}
               </div>

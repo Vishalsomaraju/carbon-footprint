@@ -7,6 +7,13 @@ import { useState } from 'react';
 import { InsightMessage, ActivityRecord } from '../types';
 import { geminiService } from '../services';
 
+export interface UseGeminiInsightsReturn {
+  insights: InsightMessage[];
+  loading: boolean;
+  error: Error | null;
+  generateInsights: (activities: ActivityRecord[]) => Promise<InsightMessage[]>;
+}
+
 export const useGeminiInsights = (): UseGeminiInsightsReturn => {
   const [insights, setInsights] = useState<InsightMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -21,7 +28,7 @@ export const useGeminiInsights = (): UseGeminiInsightsReturn => {
       setInsights(newInsights);
       return newInsights;
     } catch (err: unknown) {
-      setError(err);
+      setError(err as Error);
       throw err;
     } finally {
       setLoading(false);

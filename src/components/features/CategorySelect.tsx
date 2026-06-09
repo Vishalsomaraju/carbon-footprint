@@ -2,7 +2,7 @@
  * @module features/CategorySelect
  */
 
-import React from 'react';
+import React, { JSX } from 'react';
 
 import { FormField } from '../ui';
 import { EMISSION_FACTORS, CATEGORY_LABELS } from '../../constants';
