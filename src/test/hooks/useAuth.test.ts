@@ -38,7 +38,7 @@ describe('useAuth', (): void => {
   });
 
   it('should handle login successfully', async (): Promise<void> => {
-    vi.mocked(authService.signInWithGoogle).mockResolvedValue(undefined);
+    vi.mocked(authService.signInWithGoogle).mockResolvedValue({ uid: '123' } as any);
 
     const { result } = renderHook(() => useAuth());
 

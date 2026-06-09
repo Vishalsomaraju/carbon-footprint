@@ -8,6 +8,14 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1500
   },
+  server: {
+    headers: {
+      // Required for Firebase signInWithPopup to work in Chrome:
+      // allows the Google auth popup to postMessage credentials back to this window
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Cross-Origin-Embedder-Policy': 'unsafe-none',
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
