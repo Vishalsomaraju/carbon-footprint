@@ -21,7 +21,7 @@ export const ConfirmationStep: React.FC<Props> = ({ data, onSubmit, onBack, isLo
   // Calculate mock value based on constants
   let factor = 0;
   try {
-    const cats = EMISSION_FACTORS as any;
+    const cats = EMISSION_FACTORS as Record<string, Record<string, number>>;
     const key = Object.keys(cats[data.category]).find(k => k.startsWith(data.subCategory));
     if (key) factor = cats[data.category][key];
   } catch(e) { /* ignored */ }

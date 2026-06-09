@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/9</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Functions</span>
                 <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -103,7 +103,22 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -114,21 +129,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,41 +144,55 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * @module src/App
+ */
+&nbsp;
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 &nbsp;
-import { AuthProvider, useAuthContext } from './store/AuthContext';
+import { AuthProvider, useAuthContext } from './contexts/AuthContext';
 import { AppLayout } from './layouts/AppLayout';
-import { AuthPage } from './pages/AuthPage';
+import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { SettingsPage } from './pages/SettingsPage';
+import { LogActivityPage } from './pages/LogActivityPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { InsightsPage } from './pages/InsightsPage';
+import { CommutePage } from './pages/CommutePage';
+import { ROUTES } from './constants';
 import { LoadingSpinner } from './components/ui';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 &nbsp;
-const ProtectedRoute = ({ children }: { children: React.ReactNode }): React.ReactElement =&gt; {
-  const { user, loading } = useAuthContext();
-  
-  if (loading) {
-    return &lt;div className="min-h-screen flex items-center justify-center"&gt;&lt;LoadingSpinner size="lg" /&gt;&lt;/div&gt;;
-  }
-  
-  if (!user) {
-    return &lt;Navigate to="/login" replace /&gt;;
-  }
-  
-  return &lt;&gt;{children}&lt;/&gt;;
-};
 &nbsp;
 export const App = (): React.ReactElement =&gt; {
   return (
     &lt;AuthProvider&gt;
       &lt;BrowserRouter&gt;
         &lt;Routes&gt;
-          &lt;Route path="/login" element={&lt;AuthPage /&gt;} /&gt;
-          &lt;Route element={&lt;ProtectedRoute&gt;&lt;AppLayout /&gt;&lt;/ProtectedRoute&gt;}&gt;
-            &lt;Route path="/" element={&lt;DashboardPage /&gt;} /&gt;
-            &lt;Route path="/settings" element={&lt;SettingsPage /&gt;} /&gt;
+          &lt;Route path={ROUTES.HOME} element={&lt;LandingPage /&gt;} /&gt;
+          &lt;Route
+            element={
+              &lt;ProtectedRoute&gt;
+                &lt;AppLayout /&gt;
+              &lt;/ProtectedRoute&gt;
+            }
+          &gt;
+            &lt;Route path={ROUTES.DASHBOARD} element={&lt;DashboardPage /&gt;} /&gt;
+            &lt;Route path={ROUTES.LOG} element={&lt;LogActivityPage /&gt;} /&gt;
+            &lt;Route path={ROUTES.PROFILE} element={&lt;ProfilePage /&gt;} /&gt;
+            &lt;Route path={ROUTES.INSIGHTS} element={&lt;InsightsPage /&gt;} /&gt;
+            &lt;Route path={ROUTES.COMMUTE} element={&lt;CommutePage /&gt;} /&gt;
           &lt;/Route&gt;
-          &lt;Route path="*" element={&lt;Navigate to="/" replace /&gt;} /&gt;
+          &lt;Route path="*" element={&lt;Navigate to={ROUTES.HOME} replace /&gt;} /&gt;
         &lt;/Routes&gt;
       &lt;/BrowserRouter&gt;
     &lt;/AuthProvider&gt;
@@ -190,7 +205,7 @@ export const App = (): React.ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-08T19:03:08.410Z
+                at 2026-06-09T07:06:14.897Z
             </div>
         <script src="../prettify.js"></script>
         <script>

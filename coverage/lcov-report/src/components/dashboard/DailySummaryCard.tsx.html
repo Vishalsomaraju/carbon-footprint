@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/hooks/useGeminiInsights.ts</title>
+    <title>Code coverage report for src/components/dashboard/DailySummaryCard.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> useGeminiInsights.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/dashboard</a> DailySummaryCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -96,71 +96,89 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * @module components/dashboard/DailySummaryCard
+ * @description Shows today&amp;apos;s total CO2 vs target with status badge.
+ */
 &nbsp;
-import { Insight, ActivityRecord } from '../types';
-import { geminiService } from '../services';
+import React from 'react';
 &nbsp;
-export const useGeminiInsights = () =&gt; {
-  const [insights, setInsights] = useState&lt;Insight[]&gt;([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState&lt;Error | null&gt;(null);
+import { formatCo2, getFootprintLevel } from '../../utils/co2';
+import { TARGET_KG_PER_DAY } from '../../constants';
 &nbsp;
-  const generateInsights = async (activities: ActivityRecord[]) =&gt; {
-    setLoading(true);
-    setError(null);
-    try {
-      const recentActivities = activities.slice(0, 10);
-      const newInsights = await geminiService.generateInsights(recentActivities);
-      setInsights(newInsights);
-      return newInsights;
-    } catch (err: any) {
-      setError(err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+interface Props {
+  readonly totalKg: number;
+}
+&nbsp;
+export const DailySummaryCard: React.FC&lt;Props&gt; = ({ totalKg }): React.ReactElement =&gt; {
+  const level = getFootprintLevel(totalKg);
+  
+  const badgeColors = {
+    excellent: 'bg-green-100 text-green-800 border-green-200',
+    good: 'bg-blue-100 text-blue-800 border-blue-200',
+    average: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    poor: 'bg-red-100 text-red-800 border-red-200',
   };
 &nbsp;
-  return {
-    insights,
-    loading,
-    error,
-    generateInsights
-  };
+  return (
+    &lt;div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between"&gt;
+      &lt;div&gt;
+        &lt;h2 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1"&gt;Today&amp;apos;s Footprint&lt;/h2&gt;
+        &lt;div className="flex items-end gap-2"&gt;
+          &lt;span className="text-4xl font-bold text-gray-900"&gt;{formatCo2(totalKg)}&lt;/span&gt;
+          &lt;span className="text-gray-400 mb-1"&gt;/ {formatCo2(TARGET_KG_PER_DAY)} target&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div className={`px-4 py-2 rounded-full border text-sm font-bold uppercase tracking-wide ${badgeColors[level]}`}&gt;
+        {level}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -169,16 +187,16 @@ export const useGeminiInsights = () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-08T19:03:08.410Z
+                at 2026-06-09T07:06:14.897Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

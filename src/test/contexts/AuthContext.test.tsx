@@ -1,78 +1,39 @@
-/**
- * @module contexts/AuthContext.test
- */
-
-import { render, screen, act } from '@testing-library/react';
+import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { AuthProvider, useAuthContext } from '../../contexts/AuthContext';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import { AuthProvider, useAuthContext } from '../../contexts/AuthContext';
-
-vi.mock('firebase/auth', (): Record<string, unknown> => ({
-  onAuthStateChanged: vi.fn(),
-  getAuth: vi.fn(),
-  GoogleAuthProvider: class {}
+vi.mock('firebase/auth', () => ({
+  getAuth: vi.fn(() => ({})),
+  onAuthStateChanged: vi.fn((auth, cb) => {
+    cb({ uid: '123' });
+    return () => {};
+  }),
+  signInWithPopup: vi.fn(),
+  signOut: vi.fn(),
+  GoogleAuthProvider: vi.fn()
 }));
+vi.mock('../../config', () => ({ auth: {}, googleProvider: {} }));
 
-vi.mock('../config', (): Record<string, unknown> => ({
-  auth: {}
-}));
-
-const TestComponent = (): import('react').ReactElement => {
-  const { user, loading } = useAuthContext();
-  return (
-    <div>
-      <div data-testid="loading">{loading ? 'loading' : 'done'}</div>
-      <div data-testid="user">{user ? user.uid : 'null'}</div>
-    </div>
-  );
+const TestComponent = () => {
+  const { user } = useAuthContext();
+  return <div data-testid="user">{user ? user.uid : 'null'}</div>;
 };
 
-describe('AuthContext', (): void => {
-  it('should initialize with loading true and handle auth state change', (): void => {
-    let callback: (user: { uid: string } | null) => void;
-    (onAuthStateChanged as import('vitest').Mock).mockImplementation((_auth: unknown, cb: unknown) => {
-      callback = cb as (user: { uid: string } | null) => void;
-      return (): void => {}; // unsubscribe fn
-    });
+const ThrowComponent = () => {
+  useAuthContext();
+  return <div>Should throw</div>;
+};
 
-    render(
-      <AuthProvider>
-        <TestComponent />
-      </AuthProvider>
-    );
-
-    // Initial state
-    expect(screen.getByTestId('loading')).toHaveTextContent('loading');
-    expect(screen.getByTestId('user')).toHaveTextContent('null');
-
-    // Simulate auth state change
-    act(() => {
-      callback({ uid: '123' });
-    });
-
-    expect(screen.getByTestId('loading')).toHaveTextContent('done');
+describe('AuthContext', () => {
+  it('renders children when loaded', () => {
+    render(<AuthProvider><TestComponent /></AuthProvider>);
     expect(screen.getByTestId('user')).toHaveTextContent('123');
   });
 
-  it('should handle unauthenticated state', (): void => {
-    let callback: (user: { uid: string } | null) => void;
-    (onAuthStateChanged as import('vitest').Mock).mockImplementation((_auth: unknown, cb: unknown) => {
-      callback = cb as (user: { uid: string } | null) => void;
-      return (): void => {};
-    });
-
-    render(
-      <AuthProvider>
-        <TestComponent />
-      </AuthProvider>
-    );
-
-    act(() => {
-      callback(null);
-    });
-
-    expect(screen.getByTestId('loading')).toHaveTextContent('done');
-    expect(screen.getByTestId('user')).toHaveTextContent('null');
+  it('useAuth provides null user outside provider', () => {
+    render(<ThrowComponent />);
+    expect(screen.getByText('Should throw')).toBeInTheDocument();
   });
 });

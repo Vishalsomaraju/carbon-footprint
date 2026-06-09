@@ -25,7 +25,7 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
 
   const opts = OPTIONS[category] || [];
 
-  const handleNext = () => {
+  const handleNext = (): void => {
     if (!subCategory) return setError('Please select a subtype.');
     if (!value || value <= 0) return setError('Value must be greater than 0.');
     onNext({ subCategory, value: Number(value) });

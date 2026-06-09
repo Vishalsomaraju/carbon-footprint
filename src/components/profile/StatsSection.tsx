@@ -10,7 +10,7 @@ export const StatsSection: React.FC = (): React.ReactElement => {
   const totalCo2 = activities.reduce((sum, a) => sum + a.carbonImpact, 0);
 
   let streak = 0;
-  const days = new Set(activities.map(a => new Date(a.date).toISOString().split('T')[0])).size;
+  const days = new Set(activities.map(a => new Date(a.date || new Date().toISOString()).toISOString().split('T')[0])).size;
   if (days > 0) streak = days; // Simplified streak calculation for display
 
   return (

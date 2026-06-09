@@ -1,11 +1,15 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /activities/{activityId} {
-      allow read, write: if request.auth != null && (resource == null || request.auth.uid == resource.data.userId);
-    }
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /activities/{activityId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+    match /dailySummaries/{summaryId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
     }
   }
 }

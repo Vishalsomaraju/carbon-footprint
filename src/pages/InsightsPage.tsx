@@ -2,7 +2,7 @@
  * @module pages/InsightsPage
  * @description Displays AI-generated weekly insights and provides a chat assistant.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { generateWeeklyInsights, getReductionChat } from '../services/geminiService';
 import { useActivities } from '../hooks';
@@ -22,7 +22,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
   const [chatResp, setChatResp] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
 
-  const fetchInsights = React.useCallback(async (): Promise<void> => {
+  const fetchInsights = useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
       setError('');
