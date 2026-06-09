@@ -1,0 +1,12 @@
+# Google Services Integrations
+
+The CarbonWise platform leverages the following Google services for authentication, data persistence, analytics, artificial intelligence, and mapping.
+
+| Service | Package | Files | Usage | Env Var | Docs |
+|---|---|---|---|---|---|
+| **Firebase Authentication** | `firebase/auth` | `src/lib/firebase.ts`, `src/services/authService.ts`, `src/contexts/AuthContext.tsx` | Provides secure Google Sign-In, eliminating the need to store passwords. | `VITE_FIREBASE_API_KEY`, etc. | [Firebase Auth Docs](https://firebase.google.com/docs/auth) |
+| **Firebase Firestore** | `firebase/firestore` | `src/lib/firebase.ts`, `src/services/activityService.ts` | NoSQL document database used to store user profiles, individual carbon emission logs, and aggregated daily summaries. | `VITE_FIREBASE_PROJECT_ID`, etc. | [Firestore Docs](https://firebase.google.com/docs/firestore) |
+| **Firebase Hosting** | `firebase-tools` | `firebase.json` | Deploys the built Vite React app to a global CDN. Configured with strict security headers (HSTS, X-Frame-Options). | N/A | [Firebase Hosting Docs](https://firebase.google.com/docs/hosting) |
+| **Firebase Analytics (GA4)**| `firebase/analytics` | `src/lib/firebase.ts`, `src/services/analyticsService.ts`, `src/utils/errorTracker.ts` | Tracks user engagement (e.g., logging an activity), captures fatal errors, and measures feature adoption. | `VITE_FIREBASE_MEASUREMENT_ID` | [Firebase Analytics Docs](https://firebase.google.com/docs/analytics) |
+| **Gemini AI** | REST API via `fetch` | `src/services/geminiService.ts`, `src/pages/InsightsPage.tsx` | Uses the `gemini-1.5-flash` model to analyze a user's recent emission activities and provide highly personalized, conversational reduction strategies. | `VITE_GEMINI_API_KEY` | [Gemini API Docs](https://ai.google.dev/docs) |
+| **Google Maps** | REST API via `fetch` | `src/services/mapsService.ts`, `src/pages/CommutePage.tsx` | Calls the Distance Matrix API to dynamically calculate exact route distances and transit times between an origin and destination to accurately compute transport emissions. | `VITE_GOOGLE_MAPS_API_KEY` | [Distance Matrix API Docs](https://developers.google.com/maps/documentation/distance-matrix) |

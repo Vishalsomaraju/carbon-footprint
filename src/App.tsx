@@ -17,7 +17,6 @@ import { ROUTES } from './constants';
 import { LoadingSpinner } from './components/ui';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
-
 export const App = (): React.ReactElement => {
   return (
     <AuthProvider>

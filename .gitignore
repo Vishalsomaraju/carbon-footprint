@@ -27,3 +27,10 @@ skills
 .env
 .env.local
 .env.*.local
+
+# Testing & Coverage
+coverage/
+
+# Firebase
+.firebase/
+firebase-debug.log
