@@ -1,6 +1,3 @@
-/**
- * @module hooks/useAuth
- */
 import type { User } from 'firebase/auth';
 import { useState } from 'react';
 
@@ -12,26 +9,24 @@ export const useAuth = (): {
   user: User | null;
   loading: boolean;
   error: Error | null;
-  login: () => Promise<User>;
+  login: () => Promise<void>;
   logout: () => Promise<void>;
 } => {
   const { user, loading } = useAuthContext();
   const [error, setError] = useState<Error | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const login = async (): Promise<User> => {
+
+  const login = async (): Promise<void> => {
     setIsAuthenticating(true);
     setError(null);
     try {
-      const loggedInUser = await authService.signInWithGoogle();
-      analyticsService.logEvent('login', { method: 'google' });
-      return loggedInUser;
+      await authService.signInWithGoogle();
     } catch (err: unknown) {
-      trackError(err);
+      trackError(err as Error);
       setError(err as Error);
-      throw err;
-    } finally {
       setIsAuthenticating(false);
+      throw err;
     }
   };
 

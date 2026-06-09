@@ -38,20 +38,15 @@ describe('useAuth', (): void => {
   });
 
   it('should handle login successfully', async (): Promise<void> => {
-    const mockUser = { uid: '123', email: 'test@example.com' };
-    vi.mocked(authService.signInWithGoogle).mockResolvedValue(
-      mockUser as unknown as Awaited<ReturnType<typeof authService.signInWithGoogle>>,
-    );
+    vi.mocked(authService.signInWithGoogle).mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useAuth());
 
     await act(async () => {
-      const user = await result.current.login();
-      expect(user).toEqual(mockUser);
+      await result.current.login();
     });
 
     expect(authService.signInWithGoogle).toHaveBeenCalledTimes(1);
-    expect(analyticsService.logEvent).toHaveBeenCalledWith('login', { method: 'google' });
     expect(result.current.error).toBeNull();
   });
 
@@ -66,8 +61,8 @@ describe('useAuth', (): void => {
     });
 
     expect(result.current.error).toEqual(error);
-    expect(analyticsService.logEvent).not.toHaveBeenCalled();
   });
+
 
   it('should handle logout successfully', async (): Promise<void> => {
     vi.mocked(useAuthContext).mockReturnValue({

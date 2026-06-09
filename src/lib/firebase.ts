@@ -4,7 +4,7 @@
  */
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 
@@ -22,7 +22,16 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// Explicitly use localStorage so credentials survive the redirect on localhost
+// without needing cross-origin access to firebaseapp.com storage.
+// Guard for test environment where Firebase is mocked.
+if (import.meta.env.MODE !== 'test') {
+  void setPersistence(auth, browserLocalPersistence);
+}
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 export const analytics =
-  typeof window !== 'undefined' && env.FIREBASE_MEASUREMENT_ID ? getAnalytics(app) : null;
+  typeof window !== 'undefined' && env.FIREBASE_MEASUREMENT_ID && import.meta.env.MODE !== 'test'
+    ? getAnalytics(app)
+    : null;

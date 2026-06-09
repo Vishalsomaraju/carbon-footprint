@@ -11,6 +11,7 @@ vi.mock(
   'firebase/auth',
   (): Record<string, unknown> => ({
     getAuth: vi.fn(() => ({})),
+    getRedirectResult: vi.fn().mockResolvedValue(null),
     onAuthStateChanged: vi.fn((_auth, cb) => {
       cb({ uid: '123' });
       return () => {};
@@ -18,6 +19,8 @@ vi.mock(
     signInWithPopup: vi.fn(),
     signOut: vi.fn(),
     GoogleAuthProvider: vi.fn(),
+    browserLocalPersistence: {},
+    setPersistence: vi.fn().mockResolvedValue(undefined),
   }),
 );
 vi.mock('../../lib/firebase', (): Record<string, unknown> => ({ auth: {}, googleProvider: {} }));
