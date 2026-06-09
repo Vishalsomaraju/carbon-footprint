@@ -109,4 +109,13 @@ describe('geminiService', (): void => {
     const text = await getReductionChat('Hello', 'Context');
     expect(text).toBe('Here is your chat response.');
   });
+
+  it('getReductionChat throws on error', async (): Promise<void> => {
+    (global.fetch as import('vitest').Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
+    });
+
+    await expect(getReductionChat('Hello', 'Context')).rejects.toThrow('Gemini API error: 500');
+  });
 });

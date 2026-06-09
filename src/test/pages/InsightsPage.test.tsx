@@ -61,6 +61,30 @@ describe('InsightsPage', (): void => {
           category: 'food',
           generatedAt: Date.now(),
         },
+        {
+          id: '3',
+          title: 'Tip 3',
+          body: 'Test body',
+          type: 'tip',
+          category: 'energy',
+          generatedAt: Date.now(),
+        },
+        {
+          id: '4',
+          title: 'Tip 4',
+          body: 'Test body',
+          type: 'tip',
+          category: 'shopping',
+          generatedAt: Date.now(),
+        },
+        {
+          id: '5',
+          title: 'Tip 5',
+          body: 'Test body',
+          type: 'tip',
+          category: 'unknown',
+          generatedAt: Date.now(),
+        },
       ],
     });
 

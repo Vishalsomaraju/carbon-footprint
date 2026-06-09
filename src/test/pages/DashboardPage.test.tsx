@@ -126,4 +126,31 @@ describe('DashboardPage', (): void => {
     await user.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/log');
   });
+
+  it('dismisses error banner', async (): Promise<void> => {
+    (useAuth as unknown as import('vitest').Mock).mockReturnValue({
+      user: { displayName: 'John' },
+    });
+    (useActivities as unknown as import('vitest').Mock).mockReturnValue({
+      activities: [],
+      loading: false,
+      error: new Error('Failed to load'),
+    });
+
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+
+    render(
+      <BrowserRouter>
+        <DashboardPage />
+      </BrowserRouter>,
+    );
+
+    expect(screen.getByText('Could not load activity data')).toBeInTheDocument();
+
+    const dismissButton = screen.getByRole('button', { name: 'Dismiss error' });
+    await user.click(dismissButton);
+
+    expect(screen.queryByText('Could not load activity data')).not.toBeInTheDocument();
+  });
 });

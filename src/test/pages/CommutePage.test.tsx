@@ -2,7 +2,7 @@
  * @module CommutePage.test
  */
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -125,5 +125,25 @@ describe('CommutePage', (): void => {
       </BrowserRouter>,
     );
     expect(screen.getByText('Commute logged successfully!')).toBeInTheDocument();
+  });
+  it('dismisses toast', async (): Promise<void> => {
+    vi.useFakeTimers();
+    vi.mocked(useCommute).mockReturnValue({
+      ...defaultCommuteState,
+      toast: { msg: 'Test toast', type: 'success' },
+    });
+    render(
+      <BrowserRouter>
+        <CommutePage />
+      </BrowserRouter>,
+    );
+
+    // Fast-forward past Toast timeout (3000ms + 300ms)
+    act(() => {
+      vi.advanceTimersByTime(3500);
+    });
+
+    expect(mockSetToast).toHaveBeenCalledWith(null);
+    vi.useRealTimers();
   });
 });

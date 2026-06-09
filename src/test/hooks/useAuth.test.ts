@@ -52,6 +52,20 @@ describe('useAuth', (): void => {
     expect(result.current.error).toBeNull();
   });
 
+  it('should not log event if login returns null', async (): Promise<void> => {
+    vi.mocked(authService.signInWithGoogle).mockResolvedValue(null);
+
+    const { result } = renderHook(() => useAuth());
+
+    await act(async () => {
+      await result.current.login();
+    });
+
+    expect(authService.signInWithGoogle).toHaveBeenCalledTimes(1);
+    expect(analyticsService.logEvent).not.toHaveBeenCalled();
+    expect(result.current.error).toBeNull();
+  });
+
   it('should handle login error', async (): Promise<void> => {
     const error = new Error('Login failed');
     vi.mocked(authService.signInWithGoogle).mockRejectedValue(error);

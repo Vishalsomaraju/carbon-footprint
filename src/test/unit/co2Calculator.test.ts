@@ -22,12 +22,15 @@ describe('co2Calculator', (): void => {
   it('calculateFoodCo2 works', (): void => {
     expect(calculateFoodCo2('beef', 2)).toBeCloseTo(7.0);
     expect(calculateFoodCo2('vegan', 2)).toBeCloseTo(0.36);
+    expect(calculateFoodCo2('invalid_food', 2)).toBe(0);
   });
   it('calculateEnergyCo2 works', (): void => {
     expect(calculateEnergyCo2('electricity', 100)).toBeCloseTo(23.3);
+    expect(calculateEnergyCo2('invalid_energy', 100)).toBe(0);
   });
   it('calculateShoppingCo2 works', (): void => {
     expect(calculateShoppingCo2('clothing_item', 2)).toBeCloseTo(14);
+    expect(calculateShoppingCo2('invalid_shopping', 2)).toBe(0);
   });
   it('calculateCo2 dispatches properly', (): void => {
     expect(calculateCo2('transport', 'car_petrol', 10)).toBeCloseTo(2.1);

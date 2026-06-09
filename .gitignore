@@ -39,6 +39,8 @@ firebase-debug.log
 cov.txt
 lint-results.txt
 gemini-test-output.txt
+coverage-report*.txt
+check.cjs
 .claude/
 CLAUDE.md
 AGENTS.md

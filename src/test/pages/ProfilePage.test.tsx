@@ -9,7 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { ProfilePage } from '../../pages/ProfilePage';
 import { useAuth, useActivities } from '../../hooks';
-import { trackEvent } from '../../utils/errorTracker';
+import { trackEvent, trackError } from '../../utils/errorTracker';
 
 vi.mock(
   '../../hooks',
@@ -111,6 +111,92 @@ describe('ProfilePage', (): void => {
 
     // Wait for GoalSlider to finish loading
     await screen.findByText('50 kg');
+  });
+
+  it('handles signout error', async (): Promise<void> => {
+    const error = new Error('Logout failed');
+    const mockLogout = vi.fn().mockRejectedValue(error);
+    (useAuth as unknown as import('vitest').Mock).mockReturnValue({
+      user: { displayName: 'John Doe', uid: 'user1' },
+      logout: mockLogout,
+    });
+    (useActivities as unknown as import('vitest').Mock).mockReturnValue({ activities: [] });
+
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <ProfilePage />
+      </BrowserRouter>,
+    );
+
+    await user.click(screen.getByText(/Sign Out/i));
+    expect(trackError).toHaveBeenCalledWith(error);
+  });
+
+  it('handles export data', async (): Promise<void> => {
+    (useAuth as unknown as import('vitest').Mock).mockReturnValue({
+      user: { displayName: 'John Doe', uid: 'user1' },
+      logout: vi.fn(),
+    });
+    (useActivities as unknown as import('vitest').Mock).mockReturnValue({ activities: [] });
+
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <ProfilePage />
+      </BrowserRouter>,
+    );
+
+    const originalCreateElement = document.createElement.bind(document);
+    let mockAnchor: HTMLAnchorElement | null = null;
+    const createElementSpy = vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
+      const element = originalCreateElement(tagName);
+      if (tagName === 'a') {
+        mockAnchor = element as HTMLAnchorElement;
+        vi.spyOn(mockAnchor, 'click').mockImplementation(() => {});
+        vi.spyOn(mockAnchor, 'remove').mockImplementation(() => {});
+      }
+      return element;
+    });
+
+    await user.click(screen.getByText(/Export My Data/i));
+
+    expect(trackEvent).toHaveBeenCalledWith('data_export_requested');
+    expect(mockAnchor).not.toBeNull();
+    expect(mockAnchor!.getAttribute('download')).toBe('carbonwise_data.json');
+    expect(mockAnchor!.click).toHaveBeenCalled();
+    expect(mockAnchor!.remove).toHaveBeenCalled();
+
+    createElementSpy.mockRestore();
+  });
+
+  it('handles clear data', async (): Promise<void> => {
+    (useAuth as unknown as import('vitest').Mock).mockReturnValue({
+      user: { displayName: 'John Doe', uid: 'user1' },
+      logout: vi.fn(),
+    });
+    (useActivities as unknown as import('vitest').Mock).mockReturnValue({ activities: [] });
+
+    const { userEvent } = await import('@testing-library/user-event');
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <ProfilePage />
+      </BrowserRouter>,
+    );
+
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+    await user.click(screen.getByText(/Clear All Data/i));
+
+    expect(window.confirm).toHaveBeenCalled();
+    expect(trackEvent).toHaveBeenCalledWith('data_clear_requested');
+    expect(alertSpy).toHaveBeenCalledWith(
+      'All your data has been permanently deleted from our servers.',
+    );
   });
 });
 

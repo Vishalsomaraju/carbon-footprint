@@ -70,6 +70,21 @@ describe('useActivities', (): void => {
     expect(result.current.loading).toBe(false);
   });
 
+  it('should handle fetch activities error', async (): Promise<void> => {
+    vi.mocked(useAuthContext).mockReturnValue({ user: mockUser as unknown as import('firebase/auth').User, loading: false });
+    const error = new Error('Fetch failed');
+    vi.mocked(activityService.getUserActivities).mockRejectedValue(error);
+
+    const { result } = renderHook(() => useActivities());
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(result.current.error).toEqual(error);
+    expect(result.current.loading).toBe(false);
+  });
+
   it('should add an activity and update state', async (): Promise<void> => {
     vi.mocked(useAuthContext).mockReturnValue({
       user: mockUser as unknown as import('firebase/auth').User,

@@ -47,4 +47,20 @@ describe('analyticsService', (): void => {
     // Restore
     Object.defineProperty(config, 'analytics', { value: originalAnalytics, writable: true });
   });
+
+  it('should call trackError and log to console.error', (): void => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const error = new Error('Test error');
+
+    analyticsService.trackError(error, { extra: 'data' });
+
+    expect(firebaseLogEvent).toHaveBeenCalledWith(config.analytics, 'error', {
+      message: 'Test error',
+      name: 'Error',
+      extra: 'data',
+    });
+    expect(consoleSpy).toHaveBeenCalledWith('[ErrorTracker]', error, { extra: 'data' });
+
+    consoleSpy.mockRestore();
+  });
 });

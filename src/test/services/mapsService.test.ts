@@ -2,6 +2,7 @@
  * @module mapsService.test
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { calculateCommuteEmissions } from '../../services/mapsService';
@@ -83,5 +84,78 @@ describe('mapsService', (): void => {
     await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5)).rejects.toThrow(
       'Network error',
     );
+  });
+
+  it('calculateCommuteEmissions uses correct travel mode for transit', async (): Promise<void> => {
+    let usedTravelMode = '';
+    class TransitDistanceMatrixService {
+      getDistanceMatrix(request: any): Promise<unknown> {
+        usedTravelMode = request.travelMode;
+        return Promise.resolve({
+          rows: [
+            { elements: [{ status: 'OK', distance: { value: 1000 }, duration: { value: 600 } }] },
+          ],
+        });
+      }
+    }
+    window.google.maps.DistanceMatrixService =
+      TransitDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+
+    await calculateCommuteEmissions('A', 'B', 'train_per_km', 5);
+    expect(usedTravelMode).toBe('TRANSIT');
+  });
+
+  it('calculateCommuteEmissions uses correct travel mode for bicycling', async (): Promise<void> => {
+    let usedTravelMode = '';
+    class BicyclingDistanceMatrixService {
+      getDistanceMatrix(request: any): Promise<unknown> {
+        usedTravelMode = request.travelMode;
+        return Promise.resolve({
+          rows: [
+            { elements: [{ status: 'OK', distance: { value: 1000 }, duration: { value: 600 } }] },
+          ],
+        });
+      }
+    }
+    window.google.maps.DistanceMatrixService =
+      BicyclingDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+
+    await calculateCommuteEmissions('A', 'B', 'cycling_per_km', 5);
+    expect(usedTravelMode).toBe('BICYCLING');
+  });
+
+  it('calculateCommuteEmissions uses correct travel mode for walking', async (): Promise<void> => {
+    let usedTravelMode = '';
+    class WalkingDistanceMatrixService {
+      getDistanceMatrix(request: any): Promise<unknown> {
+        usedTravelMode = request.travelMode;
+        return Promise.resolve({
+          rows: [
+            { elements: [{ status: 'OK', distance: { value: 1000 }, duration: { value: 600 } }] },
+          ],
+        });
+      }
+    }
+    window.google.maps.DistanceMatrixService =
+      WalkingDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+
+    await calculateCommuteEmissions('A', 'B', 'walking_per_km', 5);
+    expect(usedTravelMode).toBe('WALKING');
+  });
+
+  it('calculateCommuteEmissions handles undefined distance and duration', async (): Promise<void> => {
+    class EmptyDistanceMatrixService {
+      getDistanceMatrix(): Promise<unknown> {
+        return Promise.resolve({
+          rows: [{ elements: [{ status: 'OK' }] }], // no distance or duration
+        });
+      }
+    }
+    window.google.maps.DistanceMatrixService =
+      EmptyDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+
+    const result = await calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5);
+    expect(result.distanceKm).toBe(0);
+    expect(result.durationMinutes).toBe(0);
   });
 });

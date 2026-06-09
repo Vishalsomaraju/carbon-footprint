@@ -105,6 +105,38 @@ describe('useInsights', () => {
     expect(generateWeeklyInsights).not.toHaveBeenCalled();
   });
 
+  it('should regenerate if more than 60s since last gen', async () => {
+    vi.useFakeTimers();
+    try {
+      const mockActivities = [{ id: '1', category: 'transport', value: 10 }];
+      (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+        activities: mockActivities,
+      });
+      (generateWeeklyInsights as unknown as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+
+      const { result } = renderHook(() => useInsights());
+
+      await act(async () => {
+        vi.advanceTimersByTime(1);
+      });
+
+      // Reset mock count after initial fetch
+      (generateWeeklyInsights as unknown as ReturnType<typeof vi.fn>).mockClear();
+
+      // Fast-forward 61 seconds
+      vi.advanceTimersByTime(61000);
+
+      await act(async () => {
+        result.current.handleRegenerate();
+        vi.advanceTimersByTime(1);
+      });
+
+      expect(generateWeeklyInsights).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('should handle chat', async () => {
     (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ activities: [] });
     (getReductionChat as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('Chat response');
