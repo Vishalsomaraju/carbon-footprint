@@ -1,10 +1,12 @@
 /**
- * @module errorTracker
- * @description Centralized error tracking utility for all async catches.
+ * @module utils/errorTracker
+ * @description Shared error and event tracking.
  */
-
 export const trackError = (error: unknown, context?: string): void => {
-  // In a real production app this would ping Sentry/Datadog etc.
-  const errorMessage = error instanceof Error ? error.message : String(error);
-  console.error(`[ErrorTracker] ${context ? `(${context}) ` : ''}${errorMessage}`, error);
+  const msg = error instanceof Error ? error.message : String(error);
+  console.error(`[ErrorTracker] ${context ? `(${context}) ` : ''}${msg}`, error);
+};
+
+export const trackEvent = (eventName: string, properties?: Record<string, unknown>): void => {
+  console.log(`[Analytics] ${eventName}`, properties);
 };

@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+
 import { formatCo2 } from '../../utils/co2';
 import { EMISSION_FACTORS } from '../../constants';
 

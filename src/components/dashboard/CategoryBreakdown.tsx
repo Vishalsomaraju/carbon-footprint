@@ -4,6 +4,7 @@
  */
 
 import React, { useMemo } from 'react';
+
 import { ActivityRecord } from '../../types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from '../../constants';
 import { formatCo2 } from '../../utils/co2';

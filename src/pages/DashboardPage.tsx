@@ -5,6 +5,7 @@
 
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useAuth, useActivities } from '../hooks';
 import { DailySummaryCard } from '../components/dashboard/DailySummaryCard';
 import { WeeklyChart } from '../components/dashboard/WeeklyChart';

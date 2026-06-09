@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../../constants';
 
 interface Props {

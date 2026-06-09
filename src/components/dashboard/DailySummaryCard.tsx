@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+
 import { formatCo2, getFootprintLevel } from '../../utils/co2';
 import { TARGET_KG_PER_DAY } from '../../constants';
 

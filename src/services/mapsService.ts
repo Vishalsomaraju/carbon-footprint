@@ -1,74 +1,79 @@
+/// <reference types="@types/google.maps" />
 /**
  * @module services/mapsService
+ * @description Google Maps Distance Matrix API integration for commute emissions.
  */
-
 import { Loader } from '@googlemaps/js-api-loader';
 
 import { env } from '../lib/env';
-import { CommuteRoute } from '../types';
-import { EMISSION_FACTORS } from '../constants';
+import { trackError, trackEvent } from '../utils/errorTracker';
+import { EMISSION_FACTORS, MAPS_LIBRARIES } from '../constants';
 
-let googleMapsPromise: Promise<typeof google> | null = null;
+let loaderInstance: Loader | null = null;
 
-export const initGoogleMaps = (): Promise<typeof google> => {
-  if (!googleMapsPromise) {
-    const loader = new Loader({
+function getMapsLoader(): Loader {
+  if (!loaderInstance) {
+    loaderInstance = new Loader({
       apiKey: env.MAPS_API_KEY,
       version: 'weekly',
-      libraries: ['places', 'routes']
+      libraries: [...MAPS_LIBRARIES] as unknown[],
     });
-    googleMapsPromise = loader.load();
   }
-  return googleMapsPromise;
-};
+  return loaderInstance;
+}
 
-export const mapsService = {
-  calculateRoute: async (origin: string, destination: string, mode: string): Promise<CommuteRoute> => {
-    const google = await initGoogleMaps();
-    const directionsService = new google.maps.DirectionsService();
+export interface CommuteResult {
+  readonly distanceKm: number;
+  readonly durationMinutes: number;
+  readonly origin: string;
+  readonly destination: string;
+  readonly dailyCo2Kg: number;
+  readonly annualCo2Kg: number;
+  readonly transportMode: string;
+}
 
-    let travelMode = google.maps.TravelMode.DRIVING;
-    let factor: number = EMISSION_FACTORS.transport.car_petrol_per_km;
+export async function calculateCommuteEmissions(
+  origin: string,
+  destination: string,
+  transportMode: keyof typeof EMISSION_FACTORS.transport,
+  workDaysPerWeek: number
+): Promise<CommuteResult> {
+  try {
+    const loader = getMapsLoader();
+    await loader.load();
 
-    switch (mode) {
-      case 'transit':
-        travelMode = google.maps.TravelMode.TRANSIT;
-        factor = EMISSION_FACTORS.transport.bus_per_km;
-        break;
-      case 'bicycling':
-        travelMode = google.maps.TravelMode.BICYCLING;
-        factor = EMISSION_FACTORS.transport.cycling_per_km;
-        break;
-      case 'walking':
-        travelMode = google.maps.TravelMode.WALKING;
-        factor = EMISSION_FACTORS.transport.walking_per_km;
-        break;
-      default:
-        travelMode = google.maps.TravelMode.DRIVING;
+    const service = new window.google.maps.DistanceMatrixService();
+    const gmMode = transportMode.includes('car') || transportMode.includes('motorcycle')
+      ? window.google.maps.TravelMode.DRIVING
+      : transportMode.includes('train') || transportMode.includes('bus')
+      ? window.google.maps.TravelMode.TRANSIT
+      : transportMode.includes('cycling')
+      ? window.google.maps.TravelMode.BICYCLING
+      : window.google.maps.TravelMode.WALKING;
+
+    const result = await service.getDistanceMatrix({
+      origins: [origin],
+      destinations: [destination],
+      travelMode: gmMode,
+      unitSystem: window.google.maps.UnitSystem.METRIC,
+    });
+
+    const element = result.rows[0]?.elements[0];
+    if (!element || element.status !== 'OK') {
+      throw new Error('Could not calculate route distance');
     }
 
-    const response = await directionsService.route({
-      origin,
-      destination,
-      travelMode
-    });
+    const distanceKm = (element.distance?.value ?? 0) / 1000;
+    const durationMinutes = Math.round((element.duration?.value ?? 0) / 60);
+    const factor = EMISSION_FACTORS.transport[transportMode as keyof typeof EMISSION_FACTORS.transport] as number;
+    const dailyCo2Kg = parseFloat((factor * distanceKm * 2).toFixed(3)); // round trip
+    const annualCo2Kg = parseFloat((dailyCo2Kg * workDaysPerWeek * 52).toFixed(2));
 
-    const route = response.routes[0];
-    if (!route || !route.legs[0]) {
-      throw new Error('No route found');
-    }
+    trackEvent('commute_calculated', { transport_mode: transportMode, distance_km: distanceKm });
 
-    const distanceMeters = route.legs[0].distance?.value || 0;
-    const distanceKm = distanceMeters / 1000;
-
-    const dailyCo2Kg = distanceKm * factor;
-
-    return {
-      origin,
-      destination,
-      distanceKm,
-      transportMode: mode,
-      dailyCo2Kg
-    };
+    return { distanceKm, durationMinutes, origin, destination, dailyCo2Kg, annualCo2Kg, transportMode };
+  } catch (error) {
+    trackError(error as Error, 'calculateCommuteEmissions');
+    throw error;
   }
-};
+}

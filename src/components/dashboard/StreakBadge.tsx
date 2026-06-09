@@ -4,6 +4,7 @@
  */
 
 import React, { useMemo } from 'react';
+
 import { ActivityRecord } from '../../types';
 
 interface Props {

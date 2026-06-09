@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { CategorySelector } from '../components/log/CategorySelector';
 import { ActivityForm } from '../components/log/ActivityForm';
 import { ConfirmationStep } from '../components/log/ConfirmationStep';

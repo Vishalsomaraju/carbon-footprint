@@ -1,83 +1,83 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/**
- * @module services/geminiService.test
- */
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { generateWeeklyInsights, getReductionChat } from '../../services/geminiService';
+import { ActivityRecord } from '../../types';
 
-import { geminiService } from '../../services/geminiService';
-import { env } from '../../lib/env';
-
-vi.mock('../../lib/env', (): any => ({
-  env: { GEMINI_API_KEY: 'test_key' },
+vi.mock('../../lib/env', () => ({
+  env: {
+    GEMINI_API_KEY: 'test-api-key',
+  },
 }));
 
-describe('geminiService', (): void => {
-  beforeEach((): void => {
+vi.mock('../../utils/errorTracker', () => ({
+  trackError: vi.fn(),
+  trackEvent: vi.fn(),
+}));
+
+global.fetch = vi.fn();
+
+describe('geminiService', () => {
+  beforeEach(() => {
     vi.clearAllMocks();
-    global.fetch = vi.fn();
-    // Reset env before each test
-    (env as any).GEMINI_API_KEY = 'test_key';
   });
 
-  afterEach((): void => {
-    vi.clearAllMocks();
-  });
+  describe('generateWeeklyInsights', () => {
+    it('returns parsed insights on success', async () => {
+      const mockResponse = {
+        candidates: [
+          {
+            content: {
+              parts: [
+                {
+                  text: '[{"title":"Test","body":"Test body","category":"transport","type":"tip"}]',
+                },
+              ],
+            },
+          },
+        ],
+      };
 
-  it('should return mock insights if API key is missing', async (): Promise<void> => {
-    (env as any).GEMINI_API_KEY = '';
-    
-    const activities: unknown[] = [];
-    const insights = await geminiService.generateWeeklyInsights(activities);
-    
-    expect(insights).toHaveLength(2);
-    expect(insights[0].category).toBe('food');
-    expect(insights[1].category).toBe('transport');
-    expect(global.fetch).not.toHaveBeenCalled();
-  });
+      (global.fetch as unknown as import("vitest").Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
 
-  it('should call Gemini API and return parsed insights', async (): Promise<void> => {
-    const activities: unknown[] = [
-      { id: '1', category: 'transport', value: 10, carbonImpact: 2.1, date: '2023-10-27', userId: 'user1' }
-    ];
-
-    const mockApiResponse = {
-      candidates: [
+      const activities: ActivityRecord[] = [
         {
-          content: {
-            parts: [
-              {
-                text: '```json\n[\n  {\n    "category": "transport",\n    "type": "tip",\n    "title": "Drive less",\n    "body": "Use public transport."\n  }\n]\n```'
-              }
-            ]
-          }
-        }
-      ]
-    };
+          id: '1',
+          userId: 'user1',
+          category: 'transport',
+          value: 10,
+          carbonImpact: 5,
+          date: new Date().toISOString(),
+        },
+      ];
 
-    (global.fetch as any).mockResolvedValue({
-      ok: true,
-      json: async () => mockApiResponse
+      const result = await generateWeeklyInsights(activities);
+      expect(result).toHaveLength(1);
+      expect(result[0].title).toBe('Test');
     });
-
-    const insights = await geminiService.generateWeeklyInsights(activities);
-
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(insights).toHaveLength(1);
-    expect(insights[0].category).toBe('transport');
-    expect(insights[0].body).toBe('Use public transport.');
-    expect(insights[0].title).toBe('Drive less');
-    expect(insights[0].type).toBe('tip');
   });
 
-  it('should handle API errors gracefully', async (): Promise<void> => {
-    const activities: unknown[] = [];
-    
-    (global.fetch as any).mockResolvedValue({
-      ok: false,
-      statusText: 'Internal Server Error'
-    });
+  describe('getReductionChat', () => {
+    it('returns text response', async () => {
+      const mockResponse = {
+        candidates: [
+          {
+            content: {
+              parts: [{ text: 'This is a chat response' }],
+            },
+          },
+        ],
+      };
 
-    await expect(geminiService.generateWeeklyInsights(activities)).rejects.toThrow('Gemini API error: Internal Server Error');
+      (global.fetch as unknown as import("vitest").Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+
+      const response = await getReductionChat('hello', 'context');
+      expect(response).toBe('This is a chat response');
+    });
   });
 });

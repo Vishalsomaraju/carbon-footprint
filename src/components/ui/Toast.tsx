@@ -14,8 +14,8 @@ interface Props {
 export const Toast: React.FC<Props> = ({ message, type = 'success', onDismiss }): React.ReactElement | null => {
   const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  useEffect((): (() => void) => {
+    const timer = setTimeout((): void => {
       setVisible(false);
       setTimeout(onDismiss, 300); // allow animation
     }, 3000);

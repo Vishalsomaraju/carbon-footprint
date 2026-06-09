@@ -6,6 +6,7 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer, Cell } from 'recharts';
 import { format, subDays } from 'date-fns';
+
 import { TARGET_KG_PER_DAY } from '../../constants';
 import { ActivityRecord } from '../../types';
 import { getFootprintLevel } from '../../utils/co2';
