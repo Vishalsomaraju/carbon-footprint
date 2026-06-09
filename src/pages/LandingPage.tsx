@@ -66,15 +66,15 @@ export const LandingPage: React.FC = (): import('react').ReactElement => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-5xl w-full text-left">
           <FeatureCard 
             title="Track Daily Activities"
-            icon="📊"
+            icon="monitoring"
           />
           <FeatureCard 
             title="AI Personalized Insights"
-            icon="✨"
+            icon="query_stats"
           />
           <FeatureCard 
             title="Commute Calculator"
-            icon="🚗"
+            icon="electric_car"
           />
         </div>
       </main>

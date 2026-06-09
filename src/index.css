@@ -9,27 +9,42 @@
     box-sizing: border-box;
   }
   html {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Outfit', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   body {
-    @apply bg-carbon-950 text-carbon-50;
+    @apply bg-deep-void text-on-surface;
     margin: 0;
   }
   h1,
   h2,
   h3,
   h4 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Outfit', sans-serif;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-forest-500;
+    @apply outline-2 outline-offset-2 outline-bio-emerald;
   }
 }
 
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.forest.700') transparent;
+    scrollbar-color: #4edea3 transparent;
   }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Grid background for charts */
+.chart-grid {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
 }

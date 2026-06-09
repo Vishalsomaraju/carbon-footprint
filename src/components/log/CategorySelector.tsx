@@ -19,15 +19,15 @@ export const CategorySelector: React.FC<Props> = ({ onSelect }): React.ReactElem
           key={cat}
           type="button"
           onClick={() => onSelect(cat)}
-          className="p-6 bg-white border-2 border-gray-100 rounded-xl hover:border-carbon-500 transition-colors flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md"
+          className="p-6 bg-charcoal-core border border-whisper-border rounded-2xl hover:border-bio-emerald transition-colors flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md"
         >
           <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-white"
+            className="w-12 h-12 rounded-lg flex items-center justify-center text-deep-void font-bold"
             style={{ backgroundColor: CATEGORY_COLORS[cat as keyof typeof CATEGORY_COLORS] }}
           >
             {cat.charAt(0).toUpperCase()}
           </div>
-          <span className="text-lg font-bold text-gray-900">{label}</span>
+          <span className="font-headline-sm text-headline-sm font-bold text-on-surface">{label}</span>
         </button>
       ))}
     </div>

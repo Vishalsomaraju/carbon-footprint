@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CarbonWise - Atmospheric Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "outline": "#86948a",
+                        "secondary": "#bec6e0",
+                        "surface-container": "#191f31",
+                        "surface-variant": "#2e3447",
+                        "on-tertiary": "#263143",
+                        "critical-crimson": "#EF4444",
+                        "on-tertiary-fixed-variant": "#3c475a",
+                        "primary-fixed-dim": "#4edea3",
+                        "on-secondary": "#283044",
+                        "tertiary-container": "#98a3ba",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container-low": "#151b2d",
+                        "bio-emerald": "#10B981",
+                        "surface-container-highest": "#2e3447",
+                        "muted-steel": "#94A3B8",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dce1fb",
+                        "tertiary": "#bcc7de",
+                        "primary": "#4edea3",
+                        "inverse-primary": "#006c49",
+                        "canvas-white": "#F8FAFC",
+                        "on-background": "#dce1fb",
+                        "surface-dim": "#0c1324",
+                        "surface-container-high": "#23293c",
+                        "primary-fixed": "#6ffbbe",
+                        "tertiary-fixed-dim": "#bcc7de",
+                        "surface": "#0c1324",
+                        "on-primary-fixed-variant": "#005236",
+                        "on-surface": "#dce1fb",
+                        "on-secondary-container": "#adb4ce",
+                        "alert-amber": "#F59E0B",
+                        "outline-variant": "#3c4a42",
+                        "on-primary-fixed": "#002113",
+                        "on-error-container": "#ffdad6",
+                        "on-primary": "#003824",
+                        "charcoal-core": "#0F172A",
+                        "surface-tint": "#4edea3",
+                        "surface-bright": "#33394c",
+                        "inverse-on-surface": "#2a3043",
+                        "secondary-container": "#3f465c",
+                        "primary-container": "#10b981",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#bbcabf",
+                        "secondary-fixed": "#dae2fd",
+                        "deep-void": "#020617",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#00422b",
+                        "background": "#0c1324",
+                        "surface-container-lowest": "#070d1f",
+                        "on-tertiary-container": "#2e394c",
+                        "whisper-border": "#1E293B",
+                        "on-tertiary-fixed": "#111c2d",
+                        "tertiary-fixed": "#d8e3fb",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "24px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-lg": "32px",
+                        "container-max": "1280px",
+                        "gutter-md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Outfit"],
+                        "mono-metrics": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "display-lg": ["Outfit"],
+                        "body-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "mono-metrics": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #020617; /* deep-void */
+            color: #dce1fb; /* on-surface */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Grid background for charts */
+        .chart-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-hidden selection:bg-bio-emerald selection:text-deep-void">
+<!-- App Container -->
+<div class="flex h-screen w-full">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface-container-low border-r border-whisper-border w-72 flex-col pt-4 pb-8 z-50 transition-all duration-300 relative">
+<!-- Header -->
+<div class="px-gutter-md mb-8 flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-charcoal-core border border-whisper-border flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined fill text-bio-emerald">eco</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">CarbonWise</h1>
+<p class="font-label-sm text-label-sm text-muted-steel mt-1">Terminal v2.4.0</p>
+</div>
+</div>
+<!-- Primary Navigation -->
+<div class="flex-1 overflow-y-auto px-4 space-y-2">
+<a class="flex items-center gap-3 text-primary bg-surface-variant border-l-4 border-primary px-4 py-3 font-bold rounded-r-lg transition-all duration-100 ease-out scale-[0.98]" href="#">
+<span class="material-symbols-outlined fill">monitoring</span>
+<span class="font-label-sm text-label-sm">Atmospheric Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-muted-steel px-4 py-3 font-medium hover:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">factory</span>
+<span class="font-label-sm text-label-sm">Emission Streams</span>
+</a>
+<a class="flex items-center gap-3 text-muted-steel px-4 py-3 font-medium hover:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">eco</span>
+<span class="font-label-sm text-label-sm">Sequestration Log</span>
+</a>
+<a class="flex items-center gap-3 text-muted-steel px-4 py-3 font-medium hover:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="font-label-sm text-label-sm">Predictive Analytics</span>
+</a>
+<a class="flex items-center gap-3 text-muted-steel px-4 py-3 font-medium hover:text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label-sm text-label-sm">System Configuration</span>
+</a>
+</div>
+<!-- Footer Actions -->
+<div class="px-4 mt-auto space-y-4">
+<button class="w-full bg-surface-variant hover:bg-surface-container-high text-primary border border-whisper-border rounded-lg py-3 px-4 flex items-center justify-center gap-2 transition-colors duration-200">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-sm text-label-sm">Generate Report</span>
+</button>
+<div class="pt-4 border-t border-whisper-border space-y-1">
+<a class="flex items-center gap-3 text-muted-steel px-4 py-2 font-medium hover:text-on-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 text-muted-steel px-4 py-2 font-medium hover:text-on-surface-variant transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-sm text-label-sm">Documentation</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative bg-deep-void">
+<!-- TopAppBar -->
+<header class="bg-surface h-16 flex items-center justify-between px-gutter-md border-b border-whisper-border z-40 shrink-0">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Trigger (hidden on desktop) -->
+<button class="md:hidden text-muted-steel hover:text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight hidden sm:block">Welcome, Eco-Warrior!</h2>
+<!-- Carbon Footprint Pill -->
+<div class="ml-4 bg-charcoal-core border border-whisper-border rounded-full px-4 py-1.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-bio-emerald" style="font-size: 18px;">co2</span>
+<span class="font-mono-metrics text-mono-metrics text-primary">Daily Net: +12.4 kg</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-bio-emerald text-deep-void px-6 py-2 rounded-lg font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">add_circle</span>
+                        Log Activity
+                    </button>
+<div class="h-6 w-px bg-whisper-border mx-2"></div>
+<button class="text-muted-steel hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-muted-steel hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-whisper-border overflow-hidden ml-2">
+<!-- Placeholder for Avatar -->
+<div class="w-full h-full bg-gradient-to-br from-surface-container-high to-charcoal-core flex items-center justify-center">
+<span class="material-symbols-outlined text-muted-steel text-sm">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto p-gutter-md lg:p-8">
+<!-- Asymmetric Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-container-max mx-auto">
+<!-- Daily Summary Card (Col Span 4) -->
+<div class="lg:col-span-4 bg-charcoal-core border border-whisper-border rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group hover:border-outline-variant transition-colors duration-300">
+<!-- Subtle Inner Glow -->
+<div class="absolute inset-0 bg-gradient-to-br from-bio-emerald/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Daily Emission</h3>
+<span class="material-symbols-outlined text-muted-steel">today</span>
+</div>
+<p class="font-body-md text-body-md text-muted-steel mb-8">Current atmospheric load</p>
+</div>
+<div class="mt-auto">
+<div class="flex items-end gap-2 mb-2">
+<span class="font-display-lg text-display-lg text-bio-emerald">42.8</span>
+<span class="font-mono-metrics text-mono-metrics text-muted-steel mb-2">kg CO2e</span>
+</div>
+<!-- Mini Progress/Goal Bar -->
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mt-4">
+<div class="bg-bio-emerald h-full w-[65%] rounded-full relative">
+<!-- Shine effect -->
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]"></div>
+</div>
+</div>
+<div class="flex justify-between mt-2 font-mono-metrics text-[10px] text-muted-steel">
+<span>0</span>
+<span>Target: 60 kg</span>
+</div>
+</div>
+</div>
+<!-- Category Breakdown (Col Span 8) -->
+<div class="lg:col-span-8 bg-charcoal-core border border-whisper-border rounded-2xl p-6 relative">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Stream Analysis</h3>
+<button class="text-primary hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="space-y-6">
+<!-- Transport -->
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-whisper-border flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-alert-amber">electric_car</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface">Transport Matrix</span>
+<span class="font-mono-metrics text-mono-metrics text-alert-amber">24.5 kg</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-alert-amber h-full w-[55%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Energy -->
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-whisper-border flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">bolt</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface">Grid Consumption</span>
+<span class="font-mono-metrics text-mono-metrics text-primary">12.1 kg</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[30%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Food -->
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-whisper-border flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">restaurant</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-label-sm text-on-surface">Dietary Impact</span>
+<span class="font-mono-metrics text-mono-metrics text-secondary">6.2 kg</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[15%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Weekly Chart Area (Col Span 12) -->
+<div class="lg:col-span-12 bg-charcoal-core border border-whisper-border rounded-2xl p-6 min-h-[320px] flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">7-Day Trajectory</h3>
+<p class="font-mono-metrics text-mono-metrics text-muted-steel mt-1">Variance analysis &amp; trend forecasting</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface-variant text-on-surface px-3 py-1 rounded-md font-label-sm text-label-sm border border-whisper-border">Week</span>
+<span class="text-muted-steel px-3 py-1 font-label-sm text-label-sm hover:text-on-surface cursor-pointer">Month</span>
+</div>
+</div>
+<!-- Chart Container (Visual Mockup) -->
+<div class="flex-1 relative chart-grid rounded-lg border border-whisper-border overflow-hidden mt-4">
+<!-- Y-Axis Labels -->
+<div class="absolute left-2 top-2 bottom-6 flex flex-col justify-between font-mono-metrics text-[10px] text-muted-steel z-10">
+<span>100</span>
+<span>75</span>
+<span>50</span>
+<span>25</span>
+<span>0</span>
+</div>
+<!-- SVG Area Chart Mockup -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 300">
+<!-- Gradient Definition -->
+<defs>
+<lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#10B981" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Area Fill -->
+<path d="M0,250 L100,200 L250,220 L400,150 L550,180 L700,100 L850,140 L1000,80 L1000,300 L0,300 Z" fill="url(#areaGradient)"></path>
+<!-- Line -->
+<path d="M0,250 L100,200 L250,220 L400,150 L550,180 L700,100 L850,140 L1000,80" fill="none" stroke="#10B981" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<!-- Data Points -->
+<circle cx="100" cy="200" fill="#020617" r="4" stroke="#10B981" stroke-width="2" vector-effect="non-scaling-stroke"></circle>
+<circle cx="400" cy="150" fill="#020617" r="4" stroke="#10B981" stroke-width="2" vector-effect="non-scaling-stroke"></circle>
+<circle cx="700" cy="100" fill="#10B981" r="4" stroke="#020617" stroke-width="2" vector-effect="non-scaling-stroke"></circle> <!-- Highlighted point -->
+<circle cx="1000" cy="80" fill="#020617" r="4" stroke="#10B981" stroke-width="2" vector-effect="non-scaling-stroke"></circle>
+</svg>
+<!-- Hover Tooltip Mockup (Fixed positioned for visual) -->
+<div class="absolute left-[70%] top-[20%] -translate-x-1/2 -translate-y-full bg-surface-variant border border-primary px-3 py-2 rounded shadow-lg pointer-events-none">
+<div class="font-mono-metrics text-[12px] text-primary">Thu: 62.4 kg</div>
+</div>
+<!-- Vertical Guide Line -->
+<div class="absolute left-[70%] top-[30px] bottom-0 w-px bg-primary/30 border-l border-dashed border-primary/50 pointer-events-none"></div>
+<!-- X-Axis Labels -->
+<div class="absolute bottom-1 left-8 right-4 flex justify-between font-mono-metrics text-[10px] text-muted-steel z-10 px-4">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<style>
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</body></html>

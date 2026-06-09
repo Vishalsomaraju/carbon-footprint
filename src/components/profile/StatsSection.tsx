@@ -17,19 +17,22 @@ export const StatsSection: React.FC = (): React.ReactElement => {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className="bg-white p-4 rounded-xl border shadow-sm text-center">
-        <p className="text-sm text-gray-500 font-medium">Activities</p>
-        <p className="text-2xl font-bold text-gray-900">{activities.length}</p>
+      <div className="bg-charcoal-core p-4 rounded-2xl border border-whisper-border text-center">
+        <p className="font-label-sm text-label-sm text-muted-steel">Activities</p>
+        <p className="font-headline-md text-headline-md text-on-surface mt-1">{activities.length}</p>
       </div>
-      <div className="bg-white p-4 rounded-xl border shadow-sm text-center">
-        <p className="text-sm text-gray-500 font-medium">Total CO2</p>
-        <p className="text-2xl font-bold text-gray-900">
-          {totalCo2.toFixed(1)} <span className="text-sm">kg</span>
+      <div className="bg-charcoal-core p-4 rounded-2xl border border-whisper-border text-center">
+        <p className="font-label-sm text-label-sm text-muted-steel">Total CO2</p>
+        <p className="font-headline-md text-headline-md text-on-surface mt-1">
+          {totalCo2.toFixed(1)} <span className="text-sm text-muted-steel">kg</span>
         </p>
       </div>
-      <div className="bg-white p-4 rounded-xl border shadow-sm text-center">
-        <p className="text-sm text-gray-500 font-medium">Streak</p>
-        <p className="text-2xl font-bold text-orange-500">{streak} 🔥</p>
+      <div className="bg-charcoal-core p-4 rounded-2xl border border-whisper-border text-center">
+        <p className="font-label-sm text-label-sm text-muted-steel">Streak</p>
+        <p className="font-headline-md text-headline-md text-alert-amber mt-1 flex items-center justify-center gap-1">
+          {streak}
+          <span className="material-symbols-outlined text-alert-amber" style={{ fontSize: '20px' }}>local_fire_department</span>
+        </p>
       </div>
     </div>
   );

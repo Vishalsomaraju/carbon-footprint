@@ -32,9 +32,9 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+    <div className="bg-charcoal-core p-6 rounded-2xl shadow-sm border border-whisper-border space-y-6">
       <div>
-        <label htmlFor="subCategory" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="subCategory" className="block font-label-sm text-label-sm text-muted-steel mb-1">
           Activity Type
         </label>
         <select
@@ -44,7 +44,7 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
             setSubCategory(e.target.value);
             setError('');
           }}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-carbon-500 outline-none"
+          className="w-full p-3 bg-surface-container-high border border-whisper-border rounded-lg focus:ring-2 focus:ring-bio-emerald outline-none text-on-surface font-body-md"
         >
           <option value="">Select type...</option>
           {opts.map((opt) => (
@@ -55,7 +55,7 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
         </select>
       </div>
       <div>
-        <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="value" className="block font-label-sm text-label-sm text-muted-steel mb-1">
           Value (km, meals, kWh)
         </label>
         <input
@@ -68,26 +68,26 @@ export const ActivityForm: React.FC<Props> = ({ category, onNext, onBack }): Rea
             setValue(e.target.value ? Number(e.target.value) : '');
             setError('');
           }}
-          className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-carbon-500 outline-none"
+          className="w-full p-3 bg-surface-container-high border border-whisper-border rounded-lg focus:ring-2 focus:ring-bio-emerald outline-none text-on-surface font-body-md"
         />
       </div>
       {error && (
-        <div role="alert" className="text-red-600 text-sm">
+        <div role="alert" className="text-critical-crimson text-sm">
           {error}
         </div>
       )}
-      <div className="flex justify-end gap-3 pt-4 border-t">
+      <div className="flex justify-end gap-3 pt-4 border-t border-whisper-border">
         <button
           type="button"
           onClick={onBack}
-          className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+          className="px-4 py-2 text-muted-steel hover:bg-surface-variant rounded-lg font-label-sm text-label-sm font-bold"
         >
           Back
         </button>
         <button
           type="button"
           onClick={handleNext}
-          className="px-6 py-2 bg-carbon-600 text-white rounded-lg hover:bg-carbon-700 font-medium"
+          className="px-6 py-2 bg-bio-emerald text-deep-void rounded-lg hover:opacity-90 font-label-sm text-label-sm font-bold"
         >
           Continue
         </button>

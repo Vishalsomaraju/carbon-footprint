@@ -32,40 +32,40 @@ export const CommuteForm: React.FC<CommuteFormProps> = ({
   error,
   onCalculate,
 }): import('react').ReactElement => (
-  <div className="lg:col-span-1 bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4 h-fit">
+  <div className="lg:col-span-1 bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm space-y-4 h-fit">
     <div>
-      <label htmlFor="origin" className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor="origin" className="block font-label-sm text-label-sm text-muted-steel mb-1">
         Origin (Home)
       </label>
       <input
         id="origin"
         value={origin}
         onChange={(e): void => setOrigin(e.target.value)}
-        className="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-carbon-500"
+        className="w-full p-2.5 bg-surface-container-high border border-whisper-border rounded-lg outline-none focus:ring-2 focus:ring-bio-emerald text-on-surface placeholder-muted-steel font-body-md"
         placeholder="e.g. 123 Main St"
       />
     </div>
     <div>
-      <label htmlFor="dest" className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor="dest" className="block font-label-sm text-label-sm text-muted-steel mb-1">
         Destination (Work)
       </label>
       <input
         id="dest"
         value={destination}
         onChange={(e): void => setDestination(e.target.value)}
-        className="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-carbon-500"
+        className="w-full p-2.5 bg-surface-container-high border border-whisper-border rounded-lg outline-none focus:ring-2 focus:ring-bio-emerald text-on-surface placeholder-muted-steel font-body-md"
         placeholder="e.g. 456 Office Blvd"
       />
     </div>
     <div>
-      <label htmlFor="mode" className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor="mode" className="block font-label-sm text-label-sm text-muted-steel mb-1">
         Transport Mode
       </label>
       <select
         id="mode"
         value={mode}
         onChange={(e): void => setMode(e.target.value as keyof typeof EMISSION_FACTORS.transport)}
-        className="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-carbon-500"
+        className="w-full p-2.5 bg-surface-container-high border border-whisper-border rounded-lg outline-none focus:ring-2 focus:ring-bio-emerald text-on-surface font-body-md"
       >
         {Object.keys(EMISSION_FACTORS.transport).map((k) => (
           <option key={k} value={k}>
@@ -75,7 +75,7 @@ export const CommuteForm: React.FC<CommuteFormProps> = ({
       </select>
     </div>
     <div>
-      <label htmlFor="days" className="block text-sm font-medium text-gray-700 mb-1">
+      <label htmlFor="days" className="block font-label-sm text-label-sm text-muted-steel mb-1">
         Work Days / Week
       </label>
       <input
@@ -85,12 +85,12 @@ export const CommuteForm: React.FC<CommuteFormProps> = ({
         max="7"
         value={days}
         onChange={(e): void => setDays(Number(e.target.value))}
-        className="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-carbon-500"
+        className="w-full p-2.5 bg-surface-container-high border border-whisper-border rounded-lg outline-none focus:ring-2 focus:ring-bio-emerald text-on-surface font-body-md"
       />
     </div>
 
     {error && (
-      <div role="alert" className="text-red-600 text-sm mt-2">
+      <div role="alert" className="text-critical-crimson text-sm mt-2">
         {error}
       </div>
     )}
@@ -98,7 +98,7 @@ export const CommuteForm: React.FC<CommuteFormProps> = ({
     <button
       onClick={onCalculate}
       disabled={loading}
-      className="w-full py-3 mt-4 bg-carbon-600 text-white rounded-lg font-medium hover:bg-carbon-700 disabled:opacity-50"
+      className="w-full py-3 mt-4 bg-bio-emerald text-deep-void rounded-lg font-label-sm text-label-sm font-bold hover:opacity-90 disabled:opacity-50"
     >
       {loading ? 'Calculating...' : 'Calculate'}
     </button>

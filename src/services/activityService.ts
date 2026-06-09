@@ -32,19 +32,31 @@ export const activityService = {
         where('userId', '==', userId),
         orderBy('date', 'desc'),
       );
-      const querySnapshot = await getDocs(q);
+      console.log('Fetching activities for user:', userId);
 
-      return querySnapshot.docs.map(
-        (doc) =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          }) as ActivityRecord,
+      const timeoutPromise = new Promise<null>((resolve) =>
+        setTimeout(() => resolve(null), 1500)
+      );
+
+      const result = await Promise.race([getDocs(q), timeoutPromise]);
+
+      if (result === null) {
+        console.warn(
+          '[activityService] Firestore getDocs timed out. ' +
+          'Check that your Firestore database has been created in the Firebase Console.'
+        );
+        return [];
+      }
+
+      console.log('Fetched activities successfully, count:', result.docs.length);
+      return result.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() }) as ActivityRecord,
       );
     } catch (error: unknown) {
       trackError(error);
       console.error('Error getting user activities: ', error);
-      throw error;
+      // Return empty array on error so the UI can still render
+      return [];
     }
   },
 };

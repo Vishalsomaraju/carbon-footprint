@@ -38,7 +38,9 @@ describe('useAuth', (): void => {
   });
 
   it('should handle login successfully', async (): Promise<void> => {
-    vi.mocked(authService.signInWithGoogle).mockResolvedValue({ uid: '123' } as any);
+    vi.mocked(authService.signInWithGoogle).mockResolvedValue({
+      uid: '123',
+    } as unknown as import('firebase/auth').User);
 
     const { result } = renderHook(() => useAuth());
 
@@ -62,7 +64,6 @@ describe('useAuth', (): void => {
 
     expect(result.current.error).toEqual(error);
   });
-
 
   it('should handle logout successfully', async (): Promise<void> => {
     vi.mocked(useAuthContext).mockReturnValue({

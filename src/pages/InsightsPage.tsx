@@ -5,7 +5,6 @@
 import React from 'react';
 
 import { useInsights } from '../hooks';
-import { CATEGORY_COLORS } from '../constants';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { InsightChat } from '../components/insights/InsightChat';
 
@@ -25,25 +24,26 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
     lastGenTime,
   } = useInsights();
 
-  const getIcon = (cat: string): string => {
-    if (cat === 'transport') return '🚗';
-    if (cat === 'food') return '🍔';
-    if (cat === 'energy') return '⚡';
-    if (cat === 'shopping') return '🛍️';
-    return '💡';
+  const getCategoryIcon = (cat: string): string => {
+    if (cat === 'transport') return 'electric_car';
+    if (cat === 'food') return 'restaurant';
+    if (cat === 'energy') return 'bolt';
+    if (cat === 'shopping') return 'shopping_bag';
+    return 'lightbulb';
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-20">
-      <div className="flex justify-between items-center bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+    <div className="flex-1 overflow-y-auto p-gutter-md lg:p-8">
+      <div className="max-w-4xl mx-auto space-y-8 pb-20">
+        <div className="flex justify-between items-center bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">AI Insights</h1>
-          <p className="text-gray-600 mt-1">Personalized advice based on your logs.</p>
+          <h1 className="font-headline-md text-headline-md font-bold text-on-surface">AI Insights</h1>
+          <p className="font-body-md text-body-md text-muted-steel mt-1">Personalized advice based on your logs.</p>
         </div>
         <button
           onClick={handleRegenerate}
           disabled={loading || Date.now() - lastGenTime < 60000}
-          className="px-4 py-2 bg-carbon-100 text-carbon-700 font-medium rounded-lg hover:bg-carbon-200 disabled:opacity-50"
+          className="px-4 py-2 bg-surface-container-high text-on-surface font-medium rounded-lg hover:bg-surface-variant disabled:opacity-50 border border-whisper-border"
         >
           Regenerate Insights
         </button>
@@ -54,17 +54,17 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
           <LoadingSpinner size="lg" />
         </div>
       ) : error ? (
-        <div className="p-6 bg-red-50 text-red-700 rounded-xl border border-red-200 text-center">
+        <div className="p-6 bg-charcoal-core text-critical-crimson rounded-2xl border border-critical-crimson/40 text-center">
           <p>{error}</p>
           <button
             onClick={fetchInsights}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg"
+            className="mt-4 px-4 py-2 bg-critical-crimson text-white rounded-lg hover:bg-critical-crimson/90"
           >
             Retry
           </button>
         </div>
       ) : activitiesCount === 0 ? (
-        <div className="p-6 bg-gray-50 text-gray-600 rounded-xl text-center border border-dashed border-gray-300">
+        <div className="p-6 bg-charcoal-core text-muted-steel rounded-2xl text-center border border-dashed border-whisper-border">
           Log some activities first to get personalized insights!
         </div>
       ) : (
@@ -72,19 +72,15 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
           {insights.map((i) => (
             <div
               key={i.id}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col"
+              className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border flex flex-col"
             >
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-xl mb-4"
-                style={{
-                  backgroundColor:
-                    CATEGORY_COLORS[i.category as keyof typeof CATEGORY_COLORS] || '#e5e7eb',
-                }}
-              >
-                {getIcon(i.category || 'general')}
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high border border-whisper-border flex items-center justify-center mb-4">
+                <span className="material-symbols-outlined text-bio-emerald">
+                  {getCategoryIcon(i.category || 'general')}
+                </span>
               </div>
-              <h3 className="font-bold text-gray-900 mb-2">{i.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed flex-grow">{i.body}</p>
+              <h3 className="font-bold text-on-surface mb-2">{i.title}</h3>
+              <p className="font-body-md text-body-md text-muted-steel leading-relaxed flex-grow">{i.body}</p>
             </div>
           ))}
         </div>
@@ -97,6 +93,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
         chatLoading={chatLoading}
         chatResp={chatResp}
       />
+      </div>
     </div>
   );
 };

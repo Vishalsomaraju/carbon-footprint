@@ -33,37 +33,39 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
   if (!user) return <div />;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 pb-20">
-      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center gap-6">
-        <img
-          src={user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.uid}
-          alt="Avatar"
-          className="w-20 h-20 rounded-full border-2 border-carbon-100"
-        />
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{user.displayName || 'Eco Warrior'}</h1>
-          <p className="text-gray-500">{user.email}</p>
+    <div className="flex-1 overflow-y-auto p-gutter-md lg:p-8">
+      <div className="max-w-2xl mx-auto space-y-8 pb-20">
+        <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm flex items-center gap-6">
+          <img
+            src={user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.uid}
+            alt="Avatar"
+            className="w-20 h-20 rounded-full border-2 border-surface-container-high"
+          />
+          <div>
+            <h1 className="font-headline-md text-headline-md font-bold text-on-surface">{user.displayName || 'Eco Warrior'}</h1>
+            <p className="font-body-md text-body-md text-muted-steel">{user.email}</p>
+          </div>
         </div>
-      </div>
 
-      <StatsSection />
+        <StatsSection />
 
-      <GoalSlider userId={user.uid} />
+        <GoalSlider userId={user.uid} />
 
-      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-        <h3 className="font-bold text-gray-900 mb-2">Account Settings</h3>
-        <button
-          onClick={handleSignOut}
-          className="w-full py-3 text-carbon-700 bg-carbon-50 font-medium rounded-lg hover:bg-carbon-100 transition-colors"
-        >
-          Sign Out
-        </button>
-        <button
-          onClick={handleDeleteAccount}
-          className="w-full py-3 text-red-600 bg-red-50 font-medium rounded-lg hover:bg-red-100 transition-colors"
-        >
-          Delete Account
-        </button>
+        <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm space-y-4">
+          <h3 className="font-bold text-on-surface mb-2">Account Settings</h3>
+          <button
+            onClick={handleSignOut}
+            className="w-full py-3 text-on-surface bg-surface-container-high font-medium rounded-lg hover:bg-surface-variant transition-colors"
+          >
+            Sign Out
+          </button>
+          <button
+            onClick={handleDeleteAccount}
+            className="w-full py-3 text-critical-crimson bg-critical-crimson/10 font-medium rounded-lg hover:bg-critical-crimson/20 transition-colors"
+          >
+            Delete Account
+          </button>
+        </div>
       </div>
     </div>
   );

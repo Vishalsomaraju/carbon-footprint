@@ -43,18 +43,19 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-20">
-      <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Log Activity</h1>
-        <div className="flex gap-2">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className={`h-2 flex-1 rounded-full ${step >= i ? 'bg-carbon-500' : 'bg-gray-200'}`}
-            />
-          ))}
+    <div className="flex-1 overflow-y-auto p-gutter-md lg:p-8">
+      <div className="max-w-3xl mx-auto space-y-8 pb-20">
+        <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm mb-6">
+          <h1 className="font-headline-md text-headline-md font-bold text-on-surface tracking-tight mb-4">Log Activity</h1>
+          <div className="flex gap-2">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className={`h-2 flex-1 rounded-full ${step >= i ? 'bg-bio-emerald' : 'bg-surface-container-high'}`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
       {step === 1 && (
         <CategorySelector
@@ -84,6 +85,7 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
       )}
 
       {toast && <Toast message={toast.msg} type={toast.type} onDismiss={() => setToast(null)} />}
+      </div>
     </div>
   );
 };
