@@ -20,8 +20,19 @@ export interface ActivityRecord {
   carbonImpact: number; // calculated CO2 equivalent
 }
 
-export interface Insight {
-  id: string;
-  text: string;
-  category: string;
+export interface CommuteRoute {
+  readonly origin: string;
+  readonly destination: string;
+  readonly distanceKm: number;
+  readonly transportMode: string;
+  readonly dailyCo2Kg: number;
+}
+
+export interface InsightMessage {
+  readonly id: string;
+  readonly type: 'tip' | 'warning' | 'achievement' | 'comparison';
+  readonly title: string;
+  readonly body: string;
+  readonly category?: 'transport' | 'energy' | 'food' | 'shopping' | 'general' | string;
+  readonly generatedAt: number;
 }

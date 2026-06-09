@@ -6,12 +6,24 @@ import { logEvent as firebaseLogEvent } from 'firebase/analytics';
 
 import { analytics } from '../config';
 
-export const analyticsService = {
-  logEvent: (eventName: string, eventParams?: Record<string, any>) => {
-    if (analytics) {
-      firebaseLogEvent(analytics, eventName, eventParams);
-    } else {
-      console.log(`[Analytics Mock] ${eventName}`, eventParams);
-    }
+export const trackEvent = (eventName: string, eventParams?: Record<string, any>): void => {
+  if (analytics) {
+    firebaseLogEvent(analytics, eventName, eventParams);
+  } else {
+    console.log(`[Analytics Mock] ${eventName}`, eventParams);
   }
+};
+
+export const trackError = (error: Error, context?: Record<string, any>): void => {
+  trackEvent('error', {
+    message: error.message,
+    name: error.name,
+    ...context
+  });
+  console.error('[ErrorTracker]', error, context);
+};
+
+export const analyticsService = {
+  logEvent: trackEvent,
+  trackError
 };

@@ -5,10 +5,10 @@
 import React from 'react';
 
 import { Card } from '../ui';
-import { Insight } from '../../types';
+import { InsightMessage } from '../../types';
 
 interface InsightCardProps {
-  insight: Insight;
+  insight: InsightMessage;
 }
 
 export const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
@@ -17,6 +17,7 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
       case 'transport':
         return '🚗';
       case 'home_energy':
+      case 'energy':
         return '⚡';
       case 'food':
         return '🍽️';
@@ -34,10 +35,10 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
       </div>
       <div>
         <h4 className="text-sm font-semibold capitalize text-gray-900 mb-1">
-          {insight.category.replace('_', ' ')} Tip
+          {insight.title || `${insight.category?.replace('_', ' ')} Tip`}
         </h4>
         <p className="text-sm text-gray-600 leading-relaxed">
-          {insight.text}
+          {insight.body}
         </p>
       </div>
     </Card>

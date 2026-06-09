@@ -27,22 +27,26 @@ describe('geminiService', () => {
     (env as any).GEMINI_API_KEY = '';
     
     const activities: any[] = [];
-    const insights = await geminiService.generateInsights(activities);
+    const insights = await geminiService.generateWeeklyInsights(activities);
     
     expect(insights).toHaveLength(2);
-    expect(insights[0].category).toBe('general');
+    expect(insights[0].category).toBe('food');
     expect(insights[1].category).toBe('transport');
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
   it('should call Gemini API and return parsed insights', async () => {
-    const mockResponse = {
+    const activities: any[] = [
+      { id: '1', category: 'transport', value: 10, carbonImpact: 2.1, date: '2023-10-27', userId: 'user1' }
+    ];
+
+    const mockApiResponse = {
       candidates: [
         {
           content: {
             parts: [
               {
-                text: '```json\n[{"category": "transport", "text": "Drive less"}]\n```'
+                text: '```json\n[\n  {\n    "category": "transport",\n    "type": "tip",\n    "title": "Drive less",\n    "body": "Use public transport."\n  }\n]\n```'
               }
             ]
           }
@@ -52,27 +56,27 @@ describe('geminiService', () => {
 
     (global.fetch as any).mockResolvedValue({
       ok: true,
-      json: async () => mockResponse
+      json: async () => mockApiResponse
     });
 
-    const activities: any[] = [{ id: '1', category: 'transport', value: 10 }];
-    const insights = await geminiService.generateInsights(activities);
+    const insights = await geminiService.generateWeeklyInsights(activities);
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(insights).toHaveLength(1);
     expect(insights[0].category).toBe('transport');
-    expect(insights[0].text).toBe('Drive less');
-    expect(insights[0].id).toBe('insight-0');
+    expect(insights[0].body).toBe('Use public transport.');
+    expect(insights[0].title).toBe('Drive less');
+    expect(insights[0].type).toBe('tip');
   });
 
-  it('should handle API errors', async () => {
+  it('should handle API errors gracefully', async () => {
+    const activities: any[] = [];
+    
     (global.fetch as any).mockResolvedValue({
       ok: false,
       statusText: 'Internal Server Error'
     });
 
-    const activities: any[] = [];
-    
-    await expect(geminiService.generateInsights(activities)).rejects.toThrow('Gemini API error: Internal Server Error');
+    await expect(geminiService.generateWeeklyInsights(activities)).rejects.toThrow('Gemini API error: Internal Server Error');
   });
 });

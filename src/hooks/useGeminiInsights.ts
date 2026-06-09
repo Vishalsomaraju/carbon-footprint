@@ -4,11 +4,11 @@
 
 import { useState } from 'react';
 
-import { Insight, ActivityRecord } from '../types';
+import { InsightMessage, ActivityRecord } from '../types';
 import { geminiService } from '../services';
 
 export const useGeminiInsights = () => {
-  const [insights, setInsights] = useState<Insight[]>([]);
+  const [insights, setInsights] = useState<InsightMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -17,7 +17,7 @@ export const useGeminiInsights = () => {
     setError(null);
     try {
       const recentActivities = activities.slice(0, 10);
-      const newInsights = await geminiService.generateInsights(recentActivities);
+      const newInsights = await geminiService.generateWeeklyInsights(recentActivities);
       setInsights(newInsights);
       return newInsights;
     } catch (err: any) {

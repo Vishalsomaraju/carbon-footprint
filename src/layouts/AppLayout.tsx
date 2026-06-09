@@ -7,6 +7,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks';
 import { ErrorBoundary } from '../components/ui';
+import { ROUTES } from '../constants';
 
 export const AppLayout: React.FC = () => {
   const { user, logout } = useAuth();
@@ -35,10 +36,22 @@ export const AppLayout: React.FC = () => {
               <div className="flex items-center gap-4">
                 <nav className="hidden md:flex space-x-4">
                   <Link 
-                    to="/" 
-                    className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/') ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:bg-gray-100'}`}
+                    to={ROUTES.DASHBOARD} 
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(ROUTES.DASHBOARD) ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:bg-gray-100'}`}
                   >
                     Dashboard
+                  </Link>
+                  <Link 
+                    to={ROUTES.INSIGHTS} 
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(ROUTES.INSIGHTS) ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:bg-gray-100'}`}
+                  >
+                    AI Insights
+                  </Link>
+                  <Link 
+                    to={ROUTES.COMMUTE} 
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(ROUTES.COMMUTE) ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:bg-gray-100'}`}
+                  >
+                    Commute
                   </Link>
                   <Link 
                     to="/settings" 

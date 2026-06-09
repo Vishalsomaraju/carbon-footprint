@@ -3,13 +3,33 @@
 @tailwind utilities;
 
 @layer base {
-  *, *::before, *::after { box-sizing: border-box; }
-  html { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-  body { @apply bg-carbon-950 text-carbon-50; margin: 0; }
-  h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
-  :focus-visible { @apply outline-2 outline-offset-2 outline-forest-500; }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-carbon-950 text-carbon-50;
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-forest-500;
+  }
 }
 
 @layer utilities {
-  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: theme('colors.forest.700') transparent; }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.forest.700') transparent;
+  }
 }

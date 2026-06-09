@@ -10,7 +10,7 @@ import { geminiService } from '../services';
 
 vi.mock('../services', () => ({
   geminiService: {
-    generateInsights: vi.fn()
+    generateWeeklyInsights: vi.fn()
   }
 }));
 
@@ -27,8 +27,8 @@ describe('useGeminiInsights', () => {
   });
 
   it('should generate insights successfully', async () => {
-    const mockInsights = [{ id: '1', category: 'transport', text: 'Walk more' }];
-    (geminiService.generateInsights as any).mockResolvedValue(mockInsights);
+    const mockInsights = [{ id: '1', type: 'tip', title: 'Walk more', body: 'Walk more to reduce transport emissions', category: 'transport', generatedAt: Date.now() }];
+    (geminiService.generateWeeklyInsights as any).mockResolvedValue(mockInsights);
     
     const { result } = renderHook(() => useGeminiInsights());
 
@@ -36,14 +36,14 @@ describe('useGeminiInsights', () => {
       await result.current.generateInsights([]);
     });
 
-    expect(geminiService.generateInsights).toHaveBeenCalledWith([]);
+    expect(geminiService.generateWeeklyInsights).toHaveBeenCalledWith([]);
     expect(result.current.insights).toEqual(mockInsights);
     expect(result.current.loading).toBe(false);
   });
 
   it('should handle errors when generating insights', async () => {
     const error = new Error('Failed to generate');
-    (geminiService.generateInsights as any).mockRejectedValue(error);
+    (geminiService.generateWeeklyInsights as any).mockRejectedValue(error);
     
     const { result } = renderHook(() => useGeminiInsights());
 

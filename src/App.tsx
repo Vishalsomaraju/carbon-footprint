@@ -10,6 +10,9 @@ import { AppLayout } from './layouts/AppLayout';
 import { AuthPage } from './pages/AuthPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { InsightsPage } from './pages/InsightsPage';
+import { CommutePage } from './pages/CommutePage';
+import { ROUTES } from './constants';
 import { LoadingSpinner } from './components/ui';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }): React.ReactElement => {
@@ -33,10 +36,12 @@ export const App = (): React.ReactElement => {
         <Routes>
           <Route path="/login" element={<AuthPage />} />
           <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-            <Route path="/" element={<DashboardPage />} />
+            <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path={ROUTES.INSIGHTS} element={<InsightsPage />} />
+            <Route path={ROUTES.COMMUTE} element={<CommutePage />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
