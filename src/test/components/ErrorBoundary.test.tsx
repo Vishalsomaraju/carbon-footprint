@@ -1,13 +1,18 @@
+/**
+ * @module ErrorBoundary.test
+ */
+
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
 import { ErrorBoundary } from '../../components/ui/ErrorBoundary';
 
-const ThrowError = () => {
+const ThrowError = (): never => {
   throw new Error('Test error');
 };
 
-describe('ErrorBoundary', () => {
-  it('renders children when no error', () => {
+describe('ErrorBoundary', (): void => {
+  it('renders children when no error', (): void => {
     render(
       <ErrorBoundary>
         <div>Normal content</div>
@@ -16,7 +21,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Normal content')).toBeInTheDocument();
   });
 
-  it('renders fallback UI when error occurs', () => {
+  it('renders fallback UI when error occurs', (): void => {
     // Suppress console.error in tests
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     
@@ -32,7 +37,7 @@ describe('ErrorBoundary', () => {
     spy.mockRestore();
   });
 
-  it('renders custom fallback when provided', () => {
+  it('renders custom fallback when provided', (): void => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     
     render(

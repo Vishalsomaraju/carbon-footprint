@@ -1,18 +1,23 @@
+/**
+ * @module Toast.test
+ */
+
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { Toast } from '../../components/ui/Toast';
 
-describe('Toast', () => {
-  beforeEach(() => {
+describe('Toast', (): void => {
+  beforeEach((): void => {
     vi.useFakeTimers();
   });
 
-  afterEach(() => {
+  afterEach((): void => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
   });
 
-  it('renders success message and dismisses after timeout', () => {
+  it('renders success message and dismisses after timeout', (): void => {
     const onDismiss = vi.fn();
     render(<Toast message="Success!" type="success" onDismiss={onDismiss} />);
     
@@ -33,7 +38,7 @@ describe('Toast', () => {
     expect(onDismiss).toHaveBeenCalled();
   });
 
-  it('renders error message and can be dismissed manually', () => {
+  it('renders error message and can be dismissed manually', (): void => {
     const onDismiss = vi.fn();
     render(<Toast message="Error!" type="error" onDismiss={onDismiss} />);
     

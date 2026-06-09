@@ -6,16 +6,16 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
 };
 
-vi.mock('firebase/app', () => ({
+vi.mock('firebase/app', (): Record<string, unknown> => ({
   initializeApp: vi.fn(() => ({}))
 }));
 
-vi.mock('firebase/auth', () => ({
+vi.mock('firebase/auth', (): Record<string, unknown> => ({
   getAuth: vi.fn(() => ({})),
   GoogleAuthProvider: class {},
   onAuthStateChanged: vi.fn(),
@@ -23,7 +23,7 @@ vi.mock('firebase/auth', () => ({
   signOut: vi.fn()
 }));
 
-vi.mock('firebase/firestore', () => ({
+vi.mock('firebase/firestore', (): Record<string, unknown> => ({
   getFirestore: vi.fn(() => ({})),
   collection: vi.fn(),
   doc: vi.fn(),

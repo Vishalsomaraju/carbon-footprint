@@ -1,28 +1,32 @@
+/**
+ * @module geminiService.test
+ */
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { generateWeeklyInsights, getReductionChat } from '../../services/geminiService';
 import { ActivityRecord } from '../../types';
 
-vi.mock('../../lib/env', () => ({
+vi.mock('../../lib/env', (): Record<string, unknown> => ({
   env: {
     GEMINI_API_KEY: 'test-api-key',
   },
 }));
 
-vi.mock('../../utils/errorTracker', () => ({
+vi.mock('../../utils/errorTracker', (): Record<string, unknown> => ({
   trackError: vi.fn(),
   trackEvent: vi.fn(),
 }));
 
 global.fetch = vi.fn();
 
-describe('geminiService', () => {
-  beforeEach(() => {
+describe('geminiService', (): void => {
+  beforeEach((): void => {
     vi.clearAllMocks();
   });
 
-  describe('generateWeeklyInsights', () => {
-    it('returns parsed insights on success', async () => {
+  describe('generateWeeklyInsights', (): void => {
+    it('returns parsed insights on success', async (): Promise<void> => {
       const mockResponse = {
         candidates: [
           {
@@ -59,8 +63,8 @@ describe('geminiService', () => {
     });
   });
 
-  describe('getReductionChat', () => {
-    it('returns text response', async () => {
+  describe('getReductionChat', (): void => {
+    it('returns text response', async (): Promise<void> => {
       const mockResponse = {
         candidates: [
           {

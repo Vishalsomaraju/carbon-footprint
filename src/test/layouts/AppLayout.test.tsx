@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 /**
  * @module layouts/AppLayout.test
  */
@@ -9,15 +9,16 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { AppLayout } from '../../layouts/AppLayout';
 
-vi.mock('../../hooks', (): any => ({
+vi.mock('../../hooks', () => ({
   useAuth: vi.fn()
 }));
 
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
-    ...actual as any,
-    useLocation: (): any => ({ pathname: '/' })
+    ...actual,
+    useLocation: (): { pathname: string } => ({ pathname: '/' }),
+    Outlet: (): null => null
   };
 });
 

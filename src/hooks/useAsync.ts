@@ -4,6 +4,8 @@
 
 import { useState, useCallback } from 'react';
 
+import { trackError } from '../utils/errorTracker';
+
 type AsyncFunction<T, Args extends unknown[]> = (...args: Args) => Promise<T>;
 
 export function useAsync<T, Args extends unknown[]>(asyncFunction: AsyncFunction<T, Args>): { execute: (...args: Args) => Promise<T>; data: T | null; loading: boolean; error: Error | null; setData: React.Dispatch<React.SetStateAction<T | null>> } {
@@ -20,6 +22,7 @@ export function useAsync<T, Args extends unknown[]>(asyncFunction: AsyncFunction
         setData(result);
         return result;
       } catch (err: unknown) {
+        trackError(err);
         setError(err as Error);
         throw err;
       } finally {

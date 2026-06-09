@@ -6,6 +6,7 @@ import { collection, addDoc, query, where, getDocs, orderBy, Timestamp } from 'f
 
 import { db } from '../config';
 import { ActivityRecord } from '../types';
+import { trackError } from '../utils/errorTracker';
 
 const COLLECTION_NAME = 'activities';
 
@@ -17,7 +18,8 @@ export const activityService = {
         createdAt: Timestamp.now()
       });
       return docRef.id;
-    } catch (error) {
+    } catch (error: unknown) {
+      trackError(error);
       console.error("Error logging activity: ", error);
       throw error;
     }
@@ -36,7 +38,8 @@ export const activityService = {
         id: doc.id,
         ...doc.data()
       } as ActivityRecord));
-    } catch (error) {
+    } catch (error: unknown) {
+      trackError(error);
       console.error("Error getting user activities: ", error);
       throw error;
     }

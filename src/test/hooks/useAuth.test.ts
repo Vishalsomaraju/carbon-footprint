@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 /**
  * @module hooks/useAuth.test
  */
@@ -11,11 +11,11 @@ import { useAuth } from '../../hooks/useAuth';
 import { authService, analyticsService } from '../../services';
 
 // Mock contexts and services
-vi.mock('../../contexts/AuthContext', (): any => ({
-  useAuthContext: vi.fn((): any => ({ user: null, loading: false }))
+vi.mock('../../contexts/AuthContext', () => ({
+  useAuthContext: vi.fn(() => ({ user: null as null, loading: false }))
 }));
 
-vi.mock('../../services', (): any => ({
+vi.mock('../../services', () => ({
   authService: {
     signInWithGoogle: vi.fn(),
     logout: vi.fn()
@@ -24,6 +24,7 @@ vi.mock('../../services', (): any => ({
     logEvent: vi.fn()
   }
 }));
+
 describe('useAuth', (): void => {
   beforeEach((): void => {
     vi.clearAllMocks();
@@ -39,7 +40,7 @@ describe('useAuth', (): void => {
 
   it('should handle login successfully', async (): Promise<void> => {
     const mockUser = { uid: '123', email: 'test@example.com' };
-    (authService.signInWithGoogle as any).mockResolvedValue(mockUser);
+    vi.mocked(authService.signInWithGoogle).mockResolvedValue(mockUser as unknown as Awaited<ReturnType<typeof authService.signInWithGoogle>>);
     
     const { result } = renderHook(() => useAuth());
 
@@ -55,7 +56,7 @@ describe('useAuth', (): void => {
 
   it('should handle login error', async (): Promise<void> => {
     const error = new Error('Login failed');
-    (authService.signInWithGoogle as any).mockRejectedValue(error);
+    vi.mocked(authService.signInWithGoogle).mockRejectedValue(error);
     
     const { result } = renderHook(() => useAuth());
 
@@ -68,8 +69,8 @@ describe('useAuth', (): void => {
   });
 
   it('should handle logout successfully', async (): Promise<void> => {
-    (useAuthContext as any).mockReturnValue({ user: { uid: '123' }, loading: false });
-    (authService.logout as any).mockResolvedValue(undefined);
+    vi.mocked(useAuthContext).mockReturnValue({ user: { uid: '123' } as unknown as import('firebase/auth').User, loading: false });
+    vi.mocked(authService.logout).mockResolvedValue(undefined);
     
     const { result } = renderHook(() => useAuth());
 
@@ -83,7 +84,7 @@ describe('useAuth', (): void => {
 
   it('should handle logout error', async (): Promise<void> => {
     const error = new Error('Logout failed');
-    (authService.logout as any).mockRejectedValue(error);
+    vi.mocked(authService.logout).mockRejectedValue(error);
     
     const { result } = renderHook(() => useAuth());
 

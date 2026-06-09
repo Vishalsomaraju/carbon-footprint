@@ -1,22 +1,26 @@
+/**
+ * @module co2Calculator
+ */
+
 import { EMISSION_FACTORS } from '../constants';
 
 export const calculateTransportCo2 = (subCategory: string, value: number): number => {
-  const factor = (EMISSION_FACTORS.transport as any)[subCategory + '_per_km'] || 0;
+  const factor = (EMISSION_FACTORS.transport as Record<string, number>)[subCategory + '_per_km'] || 0;
   return value * factor;
 };
 
 export const calculateFoodCo2 = (subCategory: string, value: number): number => {
-  const factor = (EMISSION_FACTORS.food as any)[subCategory + '_per_meal'] || 0;
+  const factor = (EMISSION_FACTORS.food as Record<string, number>)[subCategory + '_per_meal'] || 0;
   return value * factor;
 };
 
 export const calculateEnergyCo2 = (subCategory: string, value: number): number => {
-  const factor = (EMISSION_FACTORS.energy as any)[subCategory + '_per_kwh'] || (EMISSION_FACTORS.energy as any)[subCategory + '_per_litre'] || 0;
+  const factor = (EMISSION_FACTORS.energy as Record<string, number>)[subCategory + '_per_kwh'] || (EMISSION_FACTORS.energy as Record<string, number>)[subCategory + '_per_litre'] || 0;
   return value * factor;
 };
 
 export const calculateShoppingCo2 = (subCategory: string, value: number): number => {
-  const factor = (EMISSION_FACTORS.shopping as any)[subCategory] || 0;
+  const factor = (EMISSION_FACTORS.shopping as Record<string, number>)[subCategory] || 0;
   return value * factor;
 };
 

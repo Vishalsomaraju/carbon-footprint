@@ -5,7 +5,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { AuthProvider, useAuthContext } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { AppLayout } from './layouts/AppLayout';
 import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -14,7 +14,6 @@ import { ProfilePage } from './pages/ProfilePage';
 import { InsightsPage } from './pages/InsightsPage';
 import { CommutePage } from './pages/CommutePage';
 import { ROUTES } from './constants';
-import { LoadingSpinner } from './components/ui';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 export const App = (): React.ReactElement => {

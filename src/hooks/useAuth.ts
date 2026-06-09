@@ -4,6 +4,7 @@
 import type { User } from 'firebase/auth';
 import { useState } from 'react';
 
+import { trackError } from '../utils/errorTracker';
 import { authService, analyticsService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
 
@@ -20,6 +21,7 @@ export const useAuth = (): { user: User | null; loading: boolean; error: Error |
       analyticsService.logEvent('login', { method: 'google' });
       return loggedInUser;
     } catch (err: unknown) {
+      trackError(err);
       setError(err as Error);
       throw err;
     } finally {
@@ -33,6 +35,7 @@ export const useAuth = (): { user: User | null; loading: boolean; error: Error |
       await authService.logout();
       analyticsService.logEvent('logout');
     } catch (err: unknown) {
+      trackError(err);
       setError(err as Error);
       throw err;
     } finally {

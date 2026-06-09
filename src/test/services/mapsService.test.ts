@@ -1,32 +1,41 @@
+/**
+ * @module mapsService.test
+ */
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { calculateCommuteEmissions } from '../../services/mapsService';
 
-vi.mock('@googlemaps/js-api-loader', () => ({
+vi.mock('@googlemaps/js-api-loader', (): Record<string, unknown> => ({
   Loader: class {
-    load() { return Promise.resolve(true); }
+    load(): Promise<boolean> { return Promise.resolve(true); }
   }
 }));
 
-describe('mapsService', () => {
-  beforeEach(() => {
-    global.window = {
-      google: {
-        maps: {
-          DistanceMatrixService: class {
-            getDistanceMatrix() {
-              return Promise.resolve({
-                rows: [{ elements: [{ status: 'OK', distance: { value: 15000 }, duration: { value: 1800 } }] }]
-              });
-            }
-          },
-          TravelMode: { DRIVING: 'DRIVING', TRANSIT: 'TRANSIT', BICYCLING: 'BICYCLING', WALKING: 'WALKING' },
-          UnitSystem: { METRIC: 'METRIC' }
+class MockDistanceMatrixService {
+  getDistanceMatrix(): Promise<unknown> {
+    return Promise.resolve({
+      rows: [{ elements: [{ status: 'OK', distance: { value: 15000 }, duration: { value: 1800 } }] }]
+    });
+  }
+}
+
+describe('mapsService', (): void => {
+  beforeEach((): void => {
+    Object.assign(global, {
+      window: {
+        google: {
+          maps: {
+            DistanceMatrixService: MockDistanceMatrixService,
+            TravelMode: { DRIVING: 'DRIVING', TRANSIT: 'TRANSIT', BICYCLING: 'BICYCLING', WALKING: 'WALKING' },
+            UnitSystem: { METRIC: 'METRIC' }
+          }
         }
       }
-    } as any;
+    });
   });
 
-  it('calculateCommuteEmissions returns correct values', async () => {
+  it('calculateCommuteEmissions returns correct values', async (): Promise<void> => {
     const result = await calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5);
     expect(result.distanceKm).toBe(15);
     // 15000 meters = 15km. duration 1800 sec = 30 min.

@@ -1,3 +1,7 @@
+/**
+ * @module DashboardPage.test
+ */
+
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
@@ -10,17 +14,17 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
     ...actual,
-    useNavigate: () => mockNavigate,
+    useNavigate: (): import('vitest').Mock => mockNavigate,
   };
 });
 
-vi.mock('../../hooks', () => ({
+vi.mock('../../hooks', (): Record<string, unknown> => ({
   useAuth: vi.fn(),
   useActivities: vi.fn(),
 }));
 
-describe('DashboardPage', () => {
-  it('renders loading state initially', () => {
+describe('DashboardPage', (): void => {
+  it('renders loading state initially', (): void => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: true, addActivity: vi.fn() });
 
@@ -32,7 +36,7 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  it('renders empty state when no activities', () => {
+  it('renders empty state when no activities', (): void => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false, addActivity: vi.fn() });
 
@@ -44,7 +48,7 @@ describe('DashboardPage', () => {
     expect(screen.getByText('No activities logged yet')).toBeInTheDocument();
   });
 
-  it('renders with activities and shows charts', () => {
+  it('renders with activities and shows charts', (): void => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ 
       activities: [
@@ -63,7 +67,7 @@ describe('DashboardPage', () => {
     expect(screen.queryByText('No activities logged yet')).not.toBeInTheDocument();
   });
 
-  it('navigates to log activity from empty state', async () => {
+  it('navigates to log activity from empty state', async (): Promise<void> => {
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false });
 
     const { userEvent } = await import('@testing-library/user-event');
@@ -79,7 +83,7 @@ describe('DashboardPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/log');
   });
 
-  it('navigates to log activity from header button', async () => {
+  it('navigates to log activity from header button', async (): Promise<void> => {
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [{ carbonImpact: 10, date: new Date().toISOString(), category: 'transport' }], loading: false });
 
     const { userEvent } = await import('@testing-library/user-event');

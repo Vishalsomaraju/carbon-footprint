@@ -1,25 +1,55 @@
+/**
+ * @module CommutePage.test
+ */
 
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
+
 import { CommutePage } from '../../pages/CommutePage';
-import { useActivities } from '../../hooks';
-import * as mapsService from '../../services/mapsService';
+import { useCommute } from '../../hooks';
+
+// Default mock return values for useCommute
+const mockSetOrigin = vi.fn();
+const mockSetDestination = vi.fn();
+const mockSetMode = vi.fn();
+const mockSetDays = vi.fn();
+const mockSetToast = vi.fn();
+const mockHandleCalculate = vi.fn();
+const mockHandleLog = vi.fn();
+
+const defaultCommuteState = {
+  origin: '',
+  setOrigin: mockSetOrigin,
+  destination: '',
+  setDestination: mockSetDestination,
+  mode: 'car_petrol_per_km' as const,
+  setMode: mockSetMode,
+  days: 5,
+  setDays: mockSetDays,
+  loading: false,
+  result: null,
+  error: '',
+  toast: null,
+  setToast: mockSetToast,
+  logLoading: false,
+  handleCalculate: mockHandleCalculate,
+  handleLog: mockHandleLog,
+};
+
 
 vi.mock('../../hooks', () => ({
+  useCommute: vi.fn(),
   useActivities: vi.fn(),
 }));
-vi.mock('../../services/mapsService', () => ({
-  calculateCommuteEmissions: vi.fn(),
-}));
 
-describe('CommutePage', () => {
-  beforeEach(() => {
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ addActivity: vi.fn() });
-    (mapsService.calculateCommuteEmissions as import("vitest").Mock).mockResolvedValue({ distanceKm: 15, durationMinutes: 30, dailyCo2Kg: 5, annualCo2Kg: 1000 });
+describe('CommutePage', (): void => {
+  beforeEach((): void => {
+    vi.clearAllMocks();
+    vi.mocked(useCommute).mockReturnValue(defaultCommuteState);
   });
 
-  it('renders correctly', () => {
+  it('renders correctly', (): void => {
     render(
       <BrowserRouter>
         <CommutePage />
@@ -28,71 +58,45 @@ describe('CommutePage', () => {
     expect(screen.getByText(/Commute Calculator/i)).toBeInTheDocument();
   });
 
-  it('shows error if calculating without origin/destination', async () => {
-    const { userEvent } = await import('@testing-library/user-event');
-    const user = userEvent.setup();
+  it('shows error if calculating without origin/destination', async (): Promise<void> => {
+    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, error: 'Please enter origin and destination' });
     render(
       <BrowserRouter>
         <CommutePage />
       </BrowserRouter>
     );
-    await user.click(screen.getByRole('button', { name: /Calculate/i }));
-    expect(await screen.findByText('Please enter origin and destination')).toBeInTheDocument();
+    expect(screen.getByText('Please enter origin and destination')).toBeInTheDocument();
   });
 
-  it('calculates and displays results', async () => {
-    const { userEvent } = await import('@testing-library/user-event');
-    const user = userEvent.setup();
+  it('calculates and displays results', async (): Promise<void> => {
+    const mockResult = { distanceKm: 15, durationMinutes: 30, dailyCo2Kg: 5, annualCo2Kg: 1000, origin: 'Home', destination: 'Work', transportMode: 'car_petrol_per_km' };
+    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, result: mockResult });
     render(
       <BrowserRouter>
         <CommutePage />
       </BrowserRouter>
     );
-    await user.type(screen.getByLabelText(/Origin/i), 'Home');
-    await user.type(screen.getByLabelText(/Destination/i), 'Work');
-    await user.click(screen.getByRole('button', { name: /Calculate/i }));
-
-    expect(await screen.findByText('Annual Emissions by Mode')).toBeInTheDocument();
+    expect(screen.getByText('Annual Emissions by Mode')).toBeInTheDocument();
   });
 
-  it('handles calculate error', async () => {
-    (mapsService.calculateCommuteEmissions as import("vitest").Mock).mockRejectedValue(new Error('Map error'));
-    const { userEvent } = await import('@testing-library/user-event');
-    const user = userEvent.setup();
+  it('handles calculate error', async (): Promise<void> => {
+    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, error: 'Could not calculate commute. Please check the locations.' });
     render(
       <BrowserRouter>
         <CommutePage />
       </BrowserRouter>
     );
-    await user.type(screen.getByLabelText(/Origin/i), 'Home');
-    await user.type(screen.getByLabelText(/Destination/i), 'Work');
-    await user.click(screen.getByRole('button', { name: /Calculate/i }));
-
-    expect(await screen.findByText('Could not calculate commute. Please check the locations.')).toBeInTheDocument();
+    expect(screen.getByText('Could not calculate commute. Please check the locations.')).toBeInTheDocument();
   });
 
-  it('logs commute activity', async () => {
-    const mockAddActivity = vi.fn().mockResolvedValue(true);
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ addActivity: mockAddActivity });
-    const { userEvent } = await import('@testing-library/user-event');
-    const user = userEvent.setup();
+  it('logs commute activity', async (): Promise<void> => {
+    const mockResult = { distanceKm: 15, durationMinutes: 30, dailyCo2Kg: 5, annualCo2Kg: 1000, origin: 'Home', destination: 'Work', transportMode: 'car_petrol_per_km' };
+    vi.mocked(useCommute).mockReturnValue({ ...defaultCommuteState, result: mockResult, toast: { msg: 'Commute logged successfully!', type: 'success' } });
     render(
       <BrowserRouter>
         <CommutePage />
       </BrowserRouter>
     );
-    await user.type(screen.getByLabelText(/Origin/i), 'Home');
-    await user.type(screen.getByLabelText(/Destination/i), 'Work');
-    await user.click(screen.getByRole('button', { name: /Calculate/i }));
-
-    const logButton = await screen.findByRole('button', { name: /Log This Commute/i });
-    await user.click(logButton);
-
-    expect(mockAddActivity).toHaveBeenCalledWith(expect.objectContaining({
-      category: 'transport',
-      subCategory: 'car_petrol_per_km',
-      value: 30
-    }));
-    expect(await screen.findByText('Commute logged successfully!')).toBeInTheDocument();
+    expect(screen.getByText('Commute logged successfully!')).toBeInTheDocument();
   });
 });

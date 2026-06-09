@@ -1,3 +1,7 @@
+/**
+ * @module index
+ */
+
 
 export * from './Button';
 export * from './Card';

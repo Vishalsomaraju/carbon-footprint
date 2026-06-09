@@ -1,23 +1,27 @@
-import React from 'react';
+/**
+ * @module ProtectedRoute.test
+ */
+
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ProtectedRoute } from '../../components/auth/ProtectedRoute';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
-vi.mock('../../contexts/AuthContext', () => ({
+import { ProtectedRoute } from '../../components/auth/ProtectedRoute';
+import { useAuthContext } from '../../contexts/AuthContext';
+
+vi.mock('../../contexts/AuthContext', (): Record<string, unknown> => ({
   useAuthContext: vi.fn()
 }));
 
-describe('ProtectedRoute', () => {
-  it('shows loading state initially', () => {
-    (useAuthContext as any).mockReturnValue({ user: null, loading: true });
+describe('ProtectedRoute', (): void => {
+  it('shows loading state initially', (): void => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null, loading: true });
     render(<MemoryRouter><ProtectedRoute><div>Content</div></ProtectedRoute></MemoryRouter>);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  it('redirects to HOME when user is null', () => {
-    (useAuthContext as any).mockReturnValue({ user: null, loading: false });
+  it('redirects to HOME when user is null', (): void => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: null, loading: false });
     render(
       <MemoryRouter initialEntries={['/protected']}>
         <Routes>
@@ -29,8 +33,8 @@ describe('ProtectedRoute', () => {
     expect(screen.getByTestId('home')).toBeInTheDocument();
   });
 
-  it('renders children when user is authenticated', () => {
-    (useAuthContext as any).mockReturnValue({ user: { uid: '123' }, loading: false });
+  it('renders children when user is authenticated', (): void => {
+    (useAuthContext as import('vitest').Mock).mockReturnValue({ user: { uid: '123' }, loading: false });
     render(
       <MemoryRouter>
         <ProtectedRoute><div data-testid="protected">Protected</div></ProtectedRoute>

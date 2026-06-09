@@ -1,37 +1,29 @@
 const fs = require('fs');
-const glob = require('fs').readdirSync;
+const path = require('path');
 
-function walk(dir) {
-  let results = [];
-  const list = glob(dir);
-  list.forEach(function(file) {
-    file = dir + '/' + file;
-    const stat = fs.statSync(file);
-    if (stat && stat.isDirectory()) { 
-      results = results.concat(walk(file));
-    } else { 
-      if(file.endsWith('.ts') || file.endsWith('.tsx')) results.push(file);
-    }
+function walkDir(dir, callback) {
+  fs.readdirSync(dir).forEach(f => {
+    let dirPath = path.join(dir, f);
+    let isDirectory = fs.statSync(dirPath).isDirectory();
+    isDirectory ? walkDir(dirPath, callback) : callback(path.join(dir, f));
   });
-  return results;
 }
 
-const testFiles = walk('e:/carbon-footprint/src/test');
+const srcPath = path.join(__dirname, 'src');
+walkDir(srcPath, f => {
+  if (f.endsWith('.ts') || f.endsWith('.tsx')) {
+    let content = fs.readFileSync(f, 'utf8');
+    
+    // Fix arrow functions in mock factories and other callbacks
+    // e.g. vi.mock('...', () => {
+    content = content.replace(/vi\.mock\((['"`].*?['"`]),\s*\(\)\s*=>\s*(\{.*?\})\s*\)/gs, 'vi.mock($1, (): Record<string, unknown> => $2)');
+    content = content.replace(/vi\.mock\((['"`].*?['"`]),\s*\(\)\s*=>\s*\(\{/g, 'vi.mock($1, (): Record<string, unknown> => ({');
 
-testFiles.forEach(file => {
-  let content = fs.readFileSync(file, 'utf8');
-  
-  content = content.replace(/as any\b/g, "as import('vitest').Mock");
-  content = content.replace(/error: any\b/g, 'error: unknown');
-  content = content.replace(/it\('([^']+)',\s*(async\s*)?\(\)\s*=>\s*\{/g, (match, p1, p2) => {
-    return p2 ? `it('${p1}', async (): Promise<void> => {` : `it('${p1}', (): void => {`;
-  });
-  
-  content = content.replace(/describe\('([^']+)',\s*\(\)\s*=>\s*\{/g, "describe('$1', (): void => {");
-  content = content.replace(/beforeEach\(\(\)\s*=>\s*\{/g, 'beforeEach((): void => {');
-  content = content.replace(/afterEach\(\(\)\s*=>\s*\{/g, 'afterEach((): void => {');
-  
-  fs.writeFileSync(file, content);
+    // Fix implicit any to import('vitest').Mock
+    content = content.replace(/as any/g, "as import('vitest').Mock");
+    content = content.replace(/:( )?any/g, ": unknown");
+
+    fs.writeFileSync(f, content);
+  }
 });
-
-console.log('Test files patched');
+console.log('Fixed more test return types and any types.');

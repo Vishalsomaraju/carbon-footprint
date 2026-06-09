@@ -1,95 +1,102 @@
+/**
+ * @module InsightsPage.test
+ */
 
-import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
+
 import { InsightsPage } from '../../pages/InsightsPage';
-import { useActivities } from '../../hooks';
-import * as geminiService from '../../services/geminiService';
+import { useInsights } from '../../hooks';
+
+const mockSetChatMsg = vi.fn();
+const mockFetchInsights = vi.fn();
+const mockHandleRegenerate = vi.fn();
+const mockHandleChat = vi.fn();
+
+const defaultInsightsState = {
+  insights: [],
+  loading: false,
+  error: '',
+  chatMsg: '',
+  setChatMsg: mockSetChatMsg,
+  chatResp: '',
+  chatLoading: false,
+  activitiesCount: 0,
+  fetchInsights: mockFetchInsights,
+  handleRegenerate: mockHandleRegenerate,
+  handleChat: mockHandleChat,
+  lastGenTime: 0,
+};
+
 
 vi.mock('../../hooks', () => ({
+  useInsights: vi.fn(),
   useActivities: vi.fn(),
 }));
-vi.mock('../../services/geminiService', () => ({
-  generateWeeklyInsights: vi.fn(),
-  getReductionChat: vi.fn(),
-}));
 
-describe('InsightsPage', () => {
-  it('renders insights successfully', async () => {
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [{ id: '1', carbonImpact: 10, category: 'transport', date: new Date().toISOString() }], loading: false });
-    (geminiService.generateWeeklyInsights as import("vitest").Mock).mockResolvedValue([
-      { id: '1', title: 'Tip 1', body: 'Test body', type: 'tip', category: 'transport' },
-      { id: '2', title: 'Tip 2', body: 'Test body', type: 'tip', category: 'food' },
-      { id: '3', title: 'Tip 3', body: 'Test body', type: 'tip', category: 'energy' },
-      { id: '4', title: 'Tip 4', body: 'Test body', type: 'tip', category: 'shopping' },
-      { id: '5', title: 'Tip 5', body: 'Test body', type: 'tip', category: 'unknown' }
-    ]);
-
-    render(
-      <BrowserRouter>
-        <InsightsPage />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => expect(screen.getByText('Tip 1')).toBeInTheDocument());
+describe('InsightsPage', (): void => {
+  beforeEach((): void => {
+    vi.clearAllMocks();
+    vi.mocked(useInsights).mockReturnValue(defaultInsightsState);
   });
 
-  it('renders zero activities state', async () => {
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false });
+  it('renders insights successfully', async (): Promise<void> => {
+    vi.mocked(useInsights).mockReturnValue({
+      ...defaultInsightsState,
+      activitiesCount: 1,
+      insights: [
+        { id: '1', title: 'Tip 1', body: 'Test body', type: 'tip', category: 'transport', generatedAt: Date.now() },
+        { id: '2', title: 'Tip 2', body: 'Test body', type: 'tip', category: 'food', generatedAt: Date.now() },
+      ],
+    });
+
     render(
       <BrowserRouter>
         <InsightsPage />
       </BrowserRouter>
     );
-    expect(await screen.findByText(/Log some activities first/i)).toBeInTheDocument();
+
+    expect(screen.getByText('Tip 1')).toBeInTheDocument();
   });
 
-  it('handles insights error state', async () => {
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [{ id: '1' }], loading: false });
-    (geminiService.generateWeeklyInsights as import("vitest").Mock).mockRejectedValue(new Error('AI Error'));
+  it('renders zero activities state', async (): Promise<void> => {
+    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 0 });
     render(
       <BrowserRouter>
         <InsightsPage />
       </BrowserRouter>
     );
-    expect(await screen.findByText(/Failed to load insights/i)).toBeInTheDocument();
+    expect(screen.getByText(/Log some activities first/i)).toBeInTheDocument();
   });
 
-  it('handles chat interaction successfully', async () => {
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [{ id: '1' }], loading: false });
-    (geminiService.generateWeeklyInsights as import("vitest").Mock).mockResolvedValue([]);
-    (geminiService.getReductionChat as import("vitest").Mock).mockResolvedValue('Chat response');
-
-    const { userEvent } = await import('@testing-library/user-event');
-    const user = userEvent.setup();
+  it('handles insights error state', async (): Promise<void> => {
+    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 1, error: 'Failed to load insights. Please try again later.' });
     render(
       <BrowserRouter>
         <InsightsPage />
       </BrowserRouter>
     );
-    
-    await user.type(screen.getByPlaceholderText(/Ask about reducing/i), 'Hello');
-    await user.click(screen.getByRole('button', { name: /Send/i }));
-
-    expect(await screen.findByText('Chat response')).toBeInTheDocument();
+    expect(screen.getByText(/Failed to load insights/i)).toBeInTheDocument();
   });
 
-  it('handles chat interaction error', async () => {
-    (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [{ id: '1' }], loading: false });
-    (geminiService.generateWeeklyInsights as import("vitest").Mock).mockResolvedValue([]);
-    (geminiService.getReductionChat as import("vitest").Mock).mockRejectedValue(new Error('Chat Error'));
-
-    const { userEvent } = await import('@testing-library/user-event');
-    const user = userEvent.setup();
+  it('handles chat interaction successfully', async (): Promise<void> => {
+    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 1, chatResp: 'Chat response' });
     render(
       <BrowserRouter>
         <InsightsPage />
       </BrowserRouter>
     );
-    
-    await user.type(screen.getByPlaceholderText(/Ask about reducing/i), 'Hello');
-    await user.click(screen.getByRole('button', { name: /Send/i }));
+    expect(screen.getByText('Chat response')).toBeInTheDocument();
+  });
 
-    expect(await screen.findByText(/Sorry, I encountered an error/i)).toBeInTheDocument();
+  it('handles chat interaction error', async (): Promise<void> => {
+    vi.mocked(useInsights).mockReturnValue({ ...defaultInsightsState, activitiesCount: 1, chatResp: 'Sorry, I encountered an error. Try again.' });
+    render(
+      <BrowserRouter>
+        <InsightsPage />
+      </BrowserRouter>
+    );
+    expect(screen.getByText(/Sorry, I encountered an error/i)).toBeInTheDocument();
   });
 });

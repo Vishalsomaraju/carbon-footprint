@@ -56,6 +56,8 @@ export const CATEGORY_COLORS = {
 export const GLOBAL_AVERAGE_KG_PER_DAY = 13.0;
 export const TARGET_KG_PER_DAY = 5.5; // Paris Agreement aligned
 export const STREAK_MILESTONE_DAYS = [3, 7, 14, 30, 60, 90];
+export const WEEKLY_GOAL_MIN = 20;
+export const WEEKLY_GOAL_MAX = 150;
 
 export const GEMINI_MODEL = 'gemini-1.5-flash';
 export const MAPS_LIBRARIES = ['places', 'geometry'] as const;

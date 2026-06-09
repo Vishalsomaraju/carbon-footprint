@@ -7,8 +7,10 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../hooks';
+import { trackError } from '../utils/errorTracker';
 import { Button } from '../components/ui/Button';
 import { GoogleIcon } from '../components/ui';
+import { FeatureCard } from '../components/landing/FeatureCard';
 
 export const LandingPage: React.FC = (): import('react').ReactElement => {
   const { login, user, loading } = useAuth();
@@ -21,8 +23,8 @@ export const LandingPage: React.FC = (): import('react').ReactElement => {
   const handleLogin = async (): Promise<void> => {
     try {
       await login();
-    } catch (err) {
-      // Error is handled and tracked in hook
+    } catch (err: unknown) {
+      trackError(err);
     }
   };
 
@@ -76,11 +78,4 @@ export const LandingPage: React.FC = (): import('react').ReactElement => {
   );
 };
 
-const FeatureCard: React.FC<{ title: string; icon: string }> = ({ title, icon }): import('react').ReactElement => (
-  <div className="bg-slate-900 rounded-2xl p-6 flex flex-col gap-4 border border-slate-800">
-    <div className="text-3xl text-green-500 bg-slate-950 w-12 h-12 flex items-center justify-center rounded-xl">
-      {icon}
-    </div>
-    <h3 className="text-xl font-bold">{title}</h3>
-  </div>
-);
+

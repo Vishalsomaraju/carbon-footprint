@@ -6,7 +6,7 @@ import React from 'react';
 import { useAuth } from '../hooks';
 import { GoalSlider } from '../components/profile/GoalSlider';
 import { StatsSection } from '../components/profile/StatsSection';
-import { trackEvent } from '../utils/errorTracker';
+import { trackEvent, trackError } from '../utils/errorTracker';
 
 export const ProfilePage: React.FC = (): React.ReactElement => {
   const { user, logout } = useAuth();
@@ -15,7 +15,7 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
     try {
       await logout();
     } catch (err: unknown) {
-      console.error(err);
+      trackError(err);
     }
   };
 

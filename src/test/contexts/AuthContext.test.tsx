@@ -1,12 +1,15 @@
-import React from 'react';
+/**
+ * @module AuthContext.test
+ */
+
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AuthProvider, useAuthContext } from '../../contexts/AuthContext';
-import { onAuthStateChanged } from 'firebase/auth';
 
-vi.mock('firebase/auth', () => ({
+import { AuthProvider, useAuthContext } from '../../contexts/AuthContext';
+
+vi.mock('firebase/auth', (): Record<string, unknown> => ({
   getAuth: vi.fn(() => ({})),
-  onAuthStateChanged: vi.fn((auth, cb) => {
+  onAuthStateChanged: vi.fn((_auth, cb) => {
     cb({ uid: '123' });
     return () => {};
   }),
@@ -14,25 +17,25 @@ vi.mock('firebase/auth', () => ({
   signOut: vi.fn(),
   GoogleAuthProvider: vi.fn()
 }));
-vi.mock('../../config', () => ({ auth: {}, googleProvider: {} }));
+vi.mock('../../config', (): Record<string, unknown> => ({ auth: {}, googleProvider: {} }));
 
-const TestComponent = () => {
+const TestComponent = (): import('react').ReactElement => {
   const { user } = useAuthContext();
   return <div data-testid="user">{user ? user.uid : 'null'}</div>;
 };
 
-const ThrowComponent = () => {
+const ThrowComponent = (): import('react').ReactElement => {
   useAuthContext();
   return <div>Should throw</div>;
 };
 
-describe('AuthContext', () => {
-  it('renders children when loaded', () => {
+describe('AuthContext', (): void => {
+  it('renders children when loaded', (): void => {
     render(<AuthProvider><TestComponent /></AuthProvider>);
     expect(screen.getByTestId('user')).toHaveTextContent('123');
   });
 
-  it('useAuth provides null user outside provider', () => {
+  it('useAuth provides null user outside provider', (): void => {
     render(<ThrowComponent />);
     expect(screen.getByText('Should throw')).toBeInTheDocument();
   });

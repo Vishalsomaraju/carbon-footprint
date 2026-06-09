@@ -2,70 +2,18 @@
  * @module pages/InsightsPage
  * @description Displays AI-generated weekly insights and provides a chat assistant.
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 
-import { generateWeeklyInsights, getReductionChat } from '../services/geminiService';
-import { useActivities } from '../hooks';
-import { InsightMessage } from '../types';
+import { useInsights } from '../hooks';
 import { CATEGORY_COLORS } from '../constants';
-import { trackError } from '../utils/errorTracker';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
+import { InsightChat } from '../components/insights/InsightChat';
 
 export const InsightsPage: React.FC = (): React.ReactElement => {
-  const { activities } = useActivities();
-  const [insights, setInsights] = useState<InsightMessage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [lastGenTime, setLastGenTime] = useState(0);
-
-  const [chatMsg, setChatMsg] = useState('');
-  const [chatResp, setChatResp] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-
-  const fetchInsights = useCallback(async (): Promise<void> => {
-    try {
-      setLoading(true);
-      setError('');
-      const result = await generateWeeklyInsights(activities);
-      setInsights(result);
-      setLastGenTime(Date.now());
-    } catch (err) {
-      setError('Failed to load insights. Please try again later.');
-      trackError(err, 'fetchInsights UI');
-    } finally {
-      setLoading(false);
-    }
-  }, [activities]);
-
-  useEffect(() => {
-    if (activities.length > 0 && insights.length === 0) {
-      fetchInsights();
-    } else if (activities.length === 0) {
-      setLoading(false);
-    }
-  }, [activities.length, insights.length, fetchInsights]);
-
-  const handleRegenerate = (): void => {
-    if (Date.now() - lastGenTime < 60000) return;
-    fetchInsights();
-  };
-
-  const handleChat = async (): Promise<void> => {
-    if (!chatMsg.trim()) return;
-    try {
-      setChatLoading(true);
-      setChatResp('');
-      const context = `User has ${activities.length} activities logged.`;
-      const response = await getReductionChat(chatMsg, context);
-      setChatResp(response);
-      setChatMsg('');
-    } catch (err) {
-      setChatResp('Sorry, I encountered an error. Try again.');
-      trackError(err, 'handleChat UI');
-    } finally {
-      setChatLoading(false);
-    }
-  };
+  const {
+    insights, loading, error, chatMsg, setChatMsg, chatResp, chatLoading,
+    activitiesCount, fetchInsights, handleRegenerate, handleChat, lastGenTime
+  } = useInsights();
 
   const getIcon = (cat: string): string => {
     if (cat === 'transport') return '🚗';
@@ -98,7 +46,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
           <p>{error}</p>
           <button onClick={fetchInsights} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg">Retry</button>
         </div>
-      ) : activities.length === 0 ? (
+      ) : activitiesCount === 0 ? (
         <div className="p-6 bg-gray-50 text-gray-600 rounded-xl text-center border border-dashed border-gray-300">
           Log some activities first to get personalized insights!
         </div>
@@ -116,28 +64,11 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
         </div>
       )}
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mt-12">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Ask CarbonWise AI</h2>
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            value={chatMsg}
-            onChange={(e) => setChatMsg(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleChat()}
-            placeholder="Ask about reducing emissions..."
-            className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-carbon-500 outline-none"
-          />
-          <button onClick={handleChat} disabled={chatLoading} className="px-6 py-3 bg-carbon-600 text-white rounded-lg hover:bg-carbon-700 disabled:opacity-50 font-medium">
-            Send
-          </button>
-        </div>
-        {chatLoading && <div className="p-4"><LoadingSpinner size="sm" /></div>}
-        {chatResp && (
-          <div className="p-4 bg-carbon-50 rounded-lg border border-carbon-100 text-carbon-800 leading-relaxed">
-            {chatResp}
-          </div>
-        )}
-      </div>
+      <InsightChat
+        chatMsg={chatMsg} setChatMsg={setChatMsg}
+        handleChat={handleChat} chatLoading={chatLoading}
+        chatResp={chatResp}
+      />
     </div>
   );
 };

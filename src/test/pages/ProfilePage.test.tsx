@@ -1,16 +1,23 @@
+/**
+ * @module ProfilePage.test
+ */
+
 
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { BrowserRouter } from 'react-router-dom';
+
 import { ProfilePage } from '../../pages/ProfilePage';
 import { useAuth, useActivities } from '../../hooks';
+import { trackEvent } from '../../utils/errorTracker';
 
-vi.mock('../../hooks', () => ({
+vi.mock('../../hooks', (): Record<string, unknown> => ({
   useAuth: vi.fn(),
   useActivities: vi.fn(),
 }));
 
-vi.mock('firebase/firestore', () => ({
+vi.mock('firebase/firestore', (): Record<string, unknown> => ({
   getDoc: vi.fn().mockResolvedValue({ exists: () => true, data: () => ({ targetKgPerDay: 50 }) }),
   doc: vi.fn(),
   setDoc: vi.fn(),
@@ -18,20 +25,17 @@ vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(),
 }));
 
-import { getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { trackEvent } from '../../utils/errorTracker';
-
-vi.mock('../../utils/errorTracker', () => ({
+vi.mock('../../utils/errorTracker', (): Record<string, unknown> => ({
   trackError: vi.fn(),
   trackEvent: vi.fn(),
 }));
 
-describe('ProfilePage', () => {
-  beforeEach(() => {
+describe('ProfilePage', (): void => {
+  beforeEach((): void => {
     vi.clearAllMocks();
   });
 
-  it('renders profile stats', () => {
+  it('renders profile stats', (): void => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John Doe', email: 'john@example.com', uid: 'user1' } });
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [{ co2Kg: 10, timestamp: new Date() }] });
 
@@ -43,7 +47,7 @@ describe('ProfilePage', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
-  it('signs out', async () => {
+  it('signs out', async (): Promise<void> => {
     const mockLogout = vi.fn();
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John Doe', uid: 'user1' }, logout: mockLogout });
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [] });
@@ -60,7 +64,7 @@ describe('ProfilePage', () => {
     expect(mockLogout).toHaveBeenCalled();
   });
 
-  it('handles delete account', async () => {
+  it('handles delete account', async (): Promise<void> => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John Doe', uid: 'user1' }, logout: vi.fn() });
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [] });
 
@@ -83,8 +87,8 @@ describe('ProfilePage', () => {
   });
 });
 
-describe('GoalSlider', () => {
-  it('loads goal from firestore', async () => {
+describe('GoalSlider', (): void => {
+  it('loads goal from firestore', async (): Promise<void> => {
     (getDoc as import("vitest").Mock).mockResolvedValueOnce({
       exists: () => true,
       data: () => ({ weeklyGoalKg: 80 })
@@ -97,7 +101,7 @@ describe('GoalSlider', () => {
     expect(await screen.findByText('80 kg')).toBeInTheDocument();
   });
 
-  it('updates existing doc on save', async () => {
+  it('updates existing doc on save', async (): Promise<void> => {
     (getDoc as import("vitest").Mock).mockResolvedValue({
       exists: () => true,
       data: () => ({ weeklyGoalKg: 80 })
@@ -118,7 +122,7 @@ describe('GoalSlider', () => {
     }));
   });
 
-  it('creates new doc if it does not exist', async () => {
+  it('creates new doc if it does not exist', async (): Promise<void> => {
     (getDoc as import("vitest").Mock).mockResolvedValue({
       exists: () => false,
       data: () => ({})

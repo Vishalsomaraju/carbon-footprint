@@ -1,16 +1,21 @@
+/**
+ * @module LogActivityPage.test
+ */
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
+
 import { LogActivityPage } from '../../pages/LogActivityPage';
 import { useAuth, useActivities } from '../../hooks';
 
-vi.mock('../../hooks', () => ({
+vi.mock('../../hooks', (): Record<string, unknown> => ({
   useAuth: vi.fn(),
   useActivities: vi.fn(),
 }));
 
-describe('LogActivityPage', () => {
-  it('renders and interacts with form steps', async () => {
+describe('LogActivityPage', (): void => {
+  it('renders and interacts with form steps', async (): Promise<void> => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
     const mockAddActivity = vi.fn().mockResolvedValue(true);
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false, addActivity: mockAddActivity });
@@ -43,7 +48,7 @@ describe('LogActivityPage', () => {
     }));
   });
 
-  it('handles submission errors', async () => {
+  it('handles submission errors', async (): Promise<void> => {
     (useAuth as unknown as import("vitest").Mock).mockReturnValue({ user: { displayName: 'John' } });
     const mockAddActivity = vi.fn().mockRejectedValue(new Error('Firebase error'));
     (useActivities as unknown as import("vitest").Mock).mockReturnValue({ activities: [], loading: false, addActivity: mockAddActivity });
