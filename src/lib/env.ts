@@ -18,7 +18,25 @@ const envSchema = z.object({
   VITE_MAPS_API_KEY: z.string().min(1, 'Maps API Key is required'),
 });
 
-function validateEnv() {
+interface Env {
+  FIREBASE_API_KEY: string;
+  FIREBASE_AUTH_DOMAIN: string;
+  FIREBASE_PROJECT_ID: string;
+  FIREBASE_STORAGE_BUCKET: string;
+  FIREBASE_MESSAGING_SENDER_ID: string;
+  FIREBASE_APP_ID: string;
+  FIREBASE_MEASUREMENT_ID: string;
+  GEMINI_API_KEY: string;
+  MAPS_API_KEY: string;
+}
+
+/**
+ * Validates process environment variables strictly at boot.
+ * Maps VITE_ prefixed variables to internal clean names.
+ * @throws {Error} If any required environment variable is missing or malformed.
+ * @returns {Env} The validated environment object.
+ */
+function validateEnv(): Env {
   if (import.meta.env.MODE === 'test') {
     // Return empty strings for testing environment to avoid failure when variables are not set
     return {

@@ -59,6 +59,7 @@ export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactEl
             min={WEEKLY_GOAL_MIN}
             max={WEEKLY_GOAL_MAX}
             value={goal}
+            aria-label="Weekly CO2 reduction target"
             onChange={(e): void => setGoal(Number(e.target.value))}
             onMouseUp={(): Promise<void> => handleSave(goal)}
             onTouchEnd={(): Promise<void> => handleSave(goal)}

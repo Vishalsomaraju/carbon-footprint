@@ -1,0 +1,152 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.8 [39m[90mE:/carbon-footprint[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m src/test/hooks/useInsights.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+ [32m✓[39m src/test/components/ConfirmationStep.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 223[2mms[22m[39m
+ [32m✓[39m src/test/hooks/useCommute.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m src/test/unit/App.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 422[2mms[22m[39m
+     [33m[2m✓[22m[39m renders dashboard when authenticated [33m 355[2mms[22m[39m
+ [32m✓[39m src/test/components/ErrorBoundary.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/test/layouts/AppLayout.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 144[2mms[22m[39m
+ [32m✓[39m src/test/components/Toast.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m src/test/pages/ProfilePage.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 658[2mms[22m[39m
+     [33m[2m✓[22m[39m signs out [33m 335[2mms[22m[39m
+ [32m✓[39m src/test/pages/InsightsPage.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+ [32m✓[39m src/test/ui/ui.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 235[2mms[22m[39m
+ [32m✓[39m src/test/components/ProtectedRoute.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m src/test/hooks/useActivities.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 131[2mms[22m[39m
+ [32m✓[39m src/test/pages/LandingPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/test/components/ActivityForm.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 873[2mms[22m[39m
+     [33m[2m✓[22m[39m shows error if submitted empty [33m 405[2mms[22m[39m
+     [33m[2m✓[22m[39m calls onNext with correct values [33m 301[2mms[22m[39m
+ [32m✓[39m src/test/pages/CommutePage.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m src/test/pages/DashboardPage.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 591[2mms[22m[39m
+ [32m✓[39m src/test/pages/LogActivityPage.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1440[2mms[22m[39m
+     [33m[2m✓[22m[39m renders and interacts with form steps [33m 963[2mms[22m[39m
+     [33m[2m✓[22m[39m handles submission errors [33m 469[2mms[22m[39m
+ [32m✓[39m src/test/hooks/useAuth.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+[90mstdout[2m | src/test/contexts/AuthContext.test.tsx[2m > [22m[2mAuthContext[2m > [22m[2mrenders children when loaded
+[22m[39m[AuthContext] onAuthStateChanged fired. User: null
+
+ [32m✓[39m src/test/contexts/AuthContext.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+[90mstdout[2m | src/test/services/geminiService.test.ts[2m > [22m[2mgeminiService[2m > [22m[2mgenerateWeeklyInsights returns 3 insights
+[22m[39m[Analytics] gemini_insights_generated { activity_count: [33m0[39m }
+
+[90mstdout[2m | src/test/services/geminiService.test.ts[2m > [22m[2mgeminiService[2m > [22m[2mgetReductionChat returns text
+[22m[39m[Analytics] gemini_chat_message [90mundefined[39m
+
+ [32m✓[39m src/test/services/geminiService.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/test/services/analyticsService.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/utils/validation.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/test/unit/co2Calculator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+[90mstdout[2m | src/test/services/firestoreService.test.ts[2m > [22m[2mfirestoreService (activityService)[2m > [22m[2mgetUserActivities calls getDocs and maps results
+[22m[39mFetching activities for user: user1
+
+[90mstdout[2m | src/test/services/firestoreService.test.ts[2m > [22m[2mfirestoreService (activityService)[2m > [22m[2mgetUserActivities calls getDocs and maps results
+[22m[39mFetched activities successfully, count: [33m1[39m
+
+[90mstdout[2m | src/test/services/activityService.test.ts[2m > [22m[2mactivityService[2m > [22m[2mgetUserActivities[2m > [22m[2mshould return a list of activities for a user
+[22m[39mFetching activities for user: user-123
+
+[90mstdout[2m | src/test/services/activityService.test.ts[2m > [22m[2mactivityService[2m > [22m[2mgetUserActivities[2m > [22m[2mshould return a list of activities for a user
+[22m[39mFetched activities successfully, count: [33m2[39m
+
+ [32m✓[39m src/test/services/firestoreService.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/services/activityService.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+[90mstdout[2m | src/test/services/mapsService.test.ts[2m > [22m[2mmapsService[2m > [22m[2mcalculateCommuteEmissions returns correct values
+[22m[39m[Analytics] commute_calculated { transport_mode: [32m'car_petrol_per_km'[39m, distance_km: [33m15[39m }
+
+ [32m✓[39m src/test/services/mapsService.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/services/authService.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m27 passed[39m[22m[90m (27)[39m
+[2m      Tests [22m [1m[32m104 passed[39m[22m[90m (104)[39m
+[2m   Start at [22m 00:29:28
+[2m   Duration [22m 8.20s[2m (transform 2.43s, setup 12.53s, import 16.73s, tests 6.09s, environment 61.74s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   86.54 |    75.82 |   82.71 |   87.75 |                   
+ src               |   52.94 |      100 |   27.27 |     100 |                   
+  App.tsx          |   52.94 |      100 |   27.27 |     100 |                   
+ ...omponents/auth |     100 |      100 |     100 |     100 |                   
+  ...ctedRoute.tsx |     100 |      100 |     100 |     100 |                   
+ ...onents/commute |   92.85 |     60.6 |    87.5 |    92.3 |                   
+  CommuteForm.tsx  |     100 |    54.16 |     100 |     100 | 46-113,131        
+  ...teResults.tsx |      90 |    77.77 |   83.33 |   88.88 | 107               
+ ...ents/dashboard |   97.56 |    78.57 |   93.33 |   97.14 |                   
+  ...Breakdown.tsx |     100 |    66.66 |     100 |     100 | 22-46             
+  ...mmaryCard.tsx |     100 |      100 |     100 |     100 |                   
+  StreakBadge.tsx  |     100 |      100 |     100 |     100 |                   
+  WeeklyChart.tsx  |    92.3 |       75 |   83.33 |    90.9 | 87                
+ ...nents/features |       0 |      100 |       0 |       0 |                   
+  ...teSummary.tsx |       0 |      100 |       0 |       0 | 15-16             
+  index.ts         |       0 |        0 |       0 |       0 |                   
+ ...nents/insights |      50 |       50 |   33.33 |      50 |                   
+  InsightChat.tsx  |      50 |       50 |   33.33 |      50 | 29-30             
+ ...onents/landing |     100 |      100 |     100 |     100 |                   
+  FeatureCard.tsx  |     100 |      100 |     100 |     100 |                   
+ ...ponents/layout |     100 |      100 |     100 |     100 |                   
+  BottomNav.tsx    |     100 |      100 |     100 |     100 |                   
+  Sidebar.tsx      |     100 |      100 |     100 |     100 |                   
+ ...components/log |     100 |       95 |     100 |     100 |                   
+  ActivityForm.tsx |     100 |    92.85 |     100 |     100 | 30                
+  ...ySelector.tsx |     100 |      100 |     100 |     100 |                   
+  ...ationStep.tsx |     100 |      100 |     100 |     100 |                   
+ ...onents/profile |   94.28 |      100 |     100 |   93.54 |                   
+  GoalSlider.tsx   |      92 |      100 |     100 |    91.3 | 25,41             
+  StatsSection.tsx |     100 |      100 |     100 |     100 |                   
+ src/components/ui |   97.67 |    96.55 |   94.11 |   97.56 |                   
+  Button.tsx       |     100 |      100 |     100 |     100 |                   
+  Card.tsx         |     100 |      100 |     100 |     100 |                   
+  ...rBoundary.tsx |   88.88 |    83.33 |      75 |   88.88 | 61                
+  FormField.tsx    |     100 |      100 |     100 |     100 |                   
+  Input.tsx        |     100 |      100 |     100 |     100 |                   
+  ...ngSpinner.tsx |     100 |      100 |     100 |     100 |                   
+  Toast.tsx        |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+ ...nents/ui/icons |     100 |      100 |     100 |     100 |                   
+  GoogleIcon.tsx   |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+ src/constants     |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  navigation.tsx   |     100 |      100 |     100 |     100 |                   
+ src/contexts      |     100 |      100 |     100 |     100 |                   
+  AuthContext.tsx  |     100 |      100 |     100 |     100 |                   
+ src/hooks         |   88.05 |     86.2 |   88.88 |   88.23 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  useActivities.ts |   92.85 |    84.61 |     100 |   94.87 | 36-37             
+  useAsync.ts      |       0 |      100 |       0 |       0 | 20-43             
+  useAuth.ts       |     100 |       75 |     100 |     100 | 27                
+  useCommute.ts    |     100 |      100 |     100 |     100 |                   
+  useInsights.ts   |   97.61 |       90 |     100 |    97.5 | 60                
+ src/layouts       |     100 |      100 |     100 |     100 |                   
+  AppLayout.tsx    |     100 |      100 |     100 |     100 |                   
+ src/lib           |   70.58 |    54.54 |     100 |   70.58 |                   
+  env.ts           |   55.55 |       50 |     100 |   55.55 | 55,58-63          
+  firebase.ts      |    87.5 |    57.14 |     100 |    87.5 | 30                
+ src/pages         |      71 |    66.15 |      70 |   74.19 |                   
+  CommutePage.tsx  |      75 |      100 |      50 |      75 | 52                
+  ...boardPage.tsx |   93.75 |    69.23 |    87.5 |   93.75 | 68                
+  InsightsPage.tsx |   64.28 |    61.11 |     100 |      70 | 30-32             
+  LandingPage.tsx  |   63.63 |       40 |   66.66 |      70 | 24-27             
+  ...ivityPage.tsx |   84.61 |      100 |   55.55 |      88 | 71,81-87          
+  ProfilePage.tsx  |   51.72 |       50 |      60 |   53.57 | 18,34-41,45-50    
+ src/services      |   82.22 |     61.9 |      80 |   81.81 |                   
+  ...ityService.ts |   83.33 |      100 |     100 |   83.33 | 44-47             
+  ...icsService.ts |      75 |      100 |      50 |      75 | 18-23             
+  authService.ts   |      80 |      100 |     100 |      80 | 32-34             
+  geminiService.ts |   81.48 |       75 |   66.66 |      80 | 40-41,52,94-95    
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  mapsService.ts   |   86.36 |       40 |     100 |   86.36 | 64,87-88          
+ src/types         |       0 |        0 |       0 |       0 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+ src/utils         |     100 |    82.75 |     100 |     100 |                   
+  co2.ts           |     100 |      100 |     100 |     100 |                   
+  co2Calculator.ts |     100 |    76.47 |     100 |     100 | 14-27             
+  errorTracker.ts  |     100 |       75 |     100 |     100 | 6                 
+  validation.ts    |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

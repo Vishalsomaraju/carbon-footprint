@@ -12,6 +12,13 @@ import { Button } from '../components/ui/Button';
 import { GoogleIcon } from '../components/ui';
 import { FeatureCard } from '../components/landing/FeatureCard';
 
+/**
+ * LandingPage component
+ * Displays the marketing copy, feature cards, and Google Sign-in button.
+ * Automatically redirects authenticated users to the dashboard.
+ * @returns {import('react').ReactElement} The landing page UI
+ */
+
 export const LandingPage: React.FC = (): import('react').ReactElement => {
   const { login, user, loading, error } = useAuth();
   const navigate = useNavigate();

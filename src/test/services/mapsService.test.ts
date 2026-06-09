@@ -54,4 +54,32 @@ describe('mapsService', (): void => {
     // Daily CO2 round trip for petrol car = 15 * 0.21 * 2 = 6.30
     expect(result.dailyCo2Kg).toBe(6.3);
   });
+
+  it('calculateCommuteEmissions throws error on bad status', async (): Promise<void> => {
+    class BadStatusDistanceMatrixService {
+      getDistanceMatrix(): Promise<unknown> {
+        return Promise.resolve({
+          rows: [
+            { elements: [{ status: 'NOT_FOUND' }] },
+          ],
+        });
+      }
+    }
+    window.google.maps.DistanceMatrixService = BadStatusDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+
+    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5))
+      .rejects.toThrow('Could not calculate route distance');
+  });
+
+  it('calculateCommuteEmissions catches generic error', async (): Promise<void> => {
+    class ErrorDistanceMatrixService {
+      getDistanceMatrix(): Promise<unknown> {
+        return Promise.reject(new Error('Network error'));
+      }
+    }
+    window.google.maps.DistanceMatrixService = ErrorDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
+
+    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5))
+      .rejects.toThrow('Network error');
+  });
 });

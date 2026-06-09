@@ -85,5 +85,11 @@ describe('activityService', (): void => {
       expect(activities).toHaveLength(2);
       expect(activities[0]).toEqual({ id: 'doc-1', userId: 'user-123', value: 10 });
     });
+
+    it('should handle errors and return empty array', async (): Promise<void> => {
+      vi.mocked(getDocs).mockRejectedValueOnce(new Error('Network error'));
+      const activities = await activityService.getUserActivities('user-123');
+      expect(activities).toEqual([]);
+    });
   });
 });

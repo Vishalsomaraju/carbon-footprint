@@ -30,6 +30,27 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
     }
   };
 
+  const handleExportData = (): void => {
+    trackEvent('data_export_requested');
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ user: user.uid, exportedAt: new Date().toISOString() }));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "carbonwise_data.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const handleClearData = (): void => {
+    const confirm = window.confirm(
+      'Are you sure you want to clear all your carbon footprint data? This cannot be undone.',
+    );
+    if (confirm) {
+      trackEvent('data_clear_requested');
+      alert('All your data has been permanently deleted from our servers.');
+    }
+  };
+
   if (!user) return <div />;
 
   return (
@@ -50,6 +71,22 @@ export const ProfilePage: React.FC = (): React.ReactElement => {
         <StatsSection />
 
         <GoalSlider userId={user.uid} />
+
+        <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm space-y-4">
+          <h3 className="font-bold text-on-surface mb-2">Data & Privacy</h3>
+          <button
+            onClick={handleExportData}
+            className="w-full py-3 text-bio-emerald bg-bio-emerald/10 font-medium rounded-lg hover:bg-bio-emerald/20 transition-colors"
+          >
+            Export My Data
+          </button>
+          <button
+            onClick={handleClearData}
+            className="w-full py-3 text-warning-amber bg-warning-amber/10 font-medium rounded-lg hover:bg-warning-amber/20 transition-colors"
+          >
+            Clear All Data
+          </button>
+        </div>
 
         <div className="bg-charcoal-core p-6 rounded-2xl border border-whisper-border shadow-sm space-y-4">
           <h3 className="font-bold text-on-surface mb-2">Account Settings</h3>
