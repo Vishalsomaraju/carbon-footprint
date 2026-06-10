@@ -57,7 +57,10 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
         </div>
       </div>
 
-      <div className="flex-1 relative chart-grid rounded-lg border border-whisper-border overflow-hidden mt-4" aria-hidden="true">
+      <div
+        className="flex-1 relative chart-grid rounded-lg border border-whisper-border overflow-hidden mt-4"
+        aria-hidden="true"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 20, right: 20, left: -20, bottom: 0 }}>
             <defs>
@@ -90,7 +93,11 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
                 color: '#4edea3',
               }}
               itemStyle={{ color: '#4edea3' }}
-              formatter={(value: number) => [`${value.toFixed(1)} kg`, 'CO2e']}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              formatter={(value: any) => [
+                `${typeof value === 'number' ? value.toFixed(1) : value} kg`,
+                'CO2e',
+              ]}
             />
             <ReferenceLine y={TARGET_KG_PER_DAY} stroke="#F59E0B" strokeDasharray="4 4" />
             <Area
@@ -117,7 +124,9 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
           <tbody>
             {data.map((row) => (
               <tr key={row.date}>
-                <td>{row.date} ({row.label})</td>
+                <td>
+                  {row.date} ({row.label})
+                </td>
                 <td>{row.total.toFixed(1)}</td>
               </tr>
             ))}

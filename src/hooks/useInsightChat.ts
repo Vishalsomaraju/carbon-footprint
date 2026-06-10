@@ -33,7 +33,7 @@ export const useInsightChat = (activitiesCount: number): {
   const handleChat = async (): Promise<void> => {
     try {
       await doChat();
-    } catch (err) {
+    } catch (_err) {
       setChatResp('Sorry, I encountered an error. Try again.');
     }
   };

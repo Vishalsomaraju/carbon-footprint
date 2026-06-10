@@ -52,7 +52,7 @@ export const useCommute = (): {
   const handleCalculate = async (data: CommuteFormData): Promise<CommuteResult | void> => {
     try {
       return await calculate(data);
-    } catch (err) {
+    } catch (_err) {
       // Error is handled by useAsync state
     }
   };
@@ -87,7 +87,7 @@ export const useCommute = (): {
   }): Promise<void> => {
     try {
       await logCommute(params);
-    } catch (err) {
+    } catch (_err) {
       setToast({ msg: 'Failed to log commute.', type: 'error' });
     }
   };
