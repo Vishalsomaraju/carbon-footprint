@@ -70,4 +70,14 @@ export default {
     },
   },
   plugins: [],
+  safelist: [
+    'text-alert-amber',
+    'text-primary',
+    'text-secondary',
+    'text-critical-crimson',
+    'bg-alert-amber',
+    'bg-primary',
+    'bg-secondary',
+    'bg-critical-crimson',
+  ],
 };

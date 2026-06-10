@@ -1,7 +1,7 @@
 /**
  * @module hooks/useInsights
  */
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { generateWeeklyInsights } from '../services/geminiService';
 import { generateDeterministicTips, trackError } from '../utils';
@@ -44,13 +44,17 @@ export const useInsights = (): {
     }, [activities]),
   );
 
+  const hasFetchedRef = React.useRef(false);
+
   useEffect(() => {
-    if (activities.length > 0 && insights.length === 0) {
+    if (activities.length > 0 && !hasFetchedRef.current) {
+      hasFetchedRef.current = true;
       fetchInsights().catch((err: unknown) => {
+        hasFetchedRef.current = false; // allow retry on failure
         trackError(err as Error);
       });
     }
-  }, [activities.length, insights.length, fetchInsights]);
+  }, [activities.length, fetchInsights]);
 
   const handleRegenerate = (): void => {
     if (Date.now() - lastGenTime < INSIGHT_GENERATION_COOLDOWN_MS) return;

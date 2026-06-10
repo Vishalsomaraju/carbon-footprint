@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 
 import { formatCo2 } from '../../utils/co2';
-import { EMISSION_FACTORS } from '../../constants';
+import { calculateCo2 } from '../../utils/co2Calculator';
 
 interface Props {
   readonly data: { category: string; subCategory: string; value: number };
@@ -23,16 +23,10 @@ export const ConfirmationStep: React.FC<Props> = ({
 }): React.ReactElement => {
   const [notes, setNotes] = useState('');
 
-  // Calculate mock value based on constants
-  let factor = 0;
-  try {
-    const cats = EMISSION_FACTORS as Record<string, Record<string, number>>;
-    const key = Object.keys(cats[data.category]).find((k) => k.startsWith(data.subCategory));
-    if (key) factor = cats[data.category][key];
-  } catch (_e) {
-    /* ignored */
-  }
-  const estimatedCo2 = factor * data.value || data.value * 0.5;
+  // Use the same calculation engine as the save path so preview always matches stored value.
+  const estimatedCo2 = data.category && data.subCategory
+    ? calculateCo2(data.category, data.subCategory, data.value) || data.value * 0.5
+    : data.value * 0.5;
 
   return (
     <div className="bg-charcoal-core p-6 rounded-2xl shadow-sm border border-whisper-border space-y-6">

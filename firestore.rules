@@ -13,8 +13,16 @@ service cloud.firestore {
       allow read: if isOwner(userId);
       allow create: if isOwner(userId) 
         && request.resource.data.keys().hasAll(['email'])
-        && request.resource.data.targetFootprint is number;
-      allow update: if isOwner(userId);
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 0
+        && request.resource.data.targetFootprint is number
+        && request.resource.data.targetFootprint >= 0;
+      allow update: if isOwner(userId)
+        && (!request.resource.data.keys().hasAny(['targetFootprint'])
+          || request.resource.data.targetFootprint is number)
+        && (!request.resource.data.keys().hasAny(['email'])
+          || (request.resource.data.email is string
+            && request.resource.data.email.size() > 0));
     }
     
     match /activities/{activityId} {

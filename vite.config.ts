@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/',
   plugins: [
     react(),
     VitePWA({
@@ -27,6 +28,21 @@ export default defineConfig({
             src: 'vite.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
+          },
+        ],
+      },
+      workbox: {
+        // Use NetworkFirst for HTML navigation so stale shells are not served
+        // after a SW update. Assets/fonts/APIs use the default CacheFirst.
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }: { request: Request }): boolean =>
+              request.mode === 'navigate',
+            handler: 'NetworkFirst' as const,
+            options: {
+              cacheName: 'html-cache',
+              networkTimeoutSeconds: 3,
+            },
           },
         ],
       },

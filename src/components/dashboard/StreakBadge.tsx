@@ -14,9 +14,22 @@ interface Props {
 export const StreakBadge: React.FC<Props> = ({ activities }): React.ReactElement | null => {
   const streak = useMemo(() => {
     if (!activities.length) return 0;
-    // Simple mock logic for demonstration
     const uniqueDays = new Set(activities.map((a) => a.date.split('T')[0]));
-    return uniqueDays.size;
+    const today = new Date().toISOString().split('T')[0];
+    const cursor = new Date();
+    // If today has no log yet, allow the streak to carry over from yesterday
+    // so users don't see their streak reset every morning before their first log.
+    if (!uniqueDays.has(today)) {
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    let count = 0;
+    while (true) {
+      const dateStr = cursor.toISOString().split('T')[0];
+      if (!uniqueDays.has(dateStr)) break;
+      count++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return count;
   }, [activities]);
 
   if (streak < 2) return null;

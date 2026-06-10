@@ -21,7 +21,11 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
+  const isSubmitting = React.useRef(false);
+
   const handleSubmit = async (notes: string): Promise<void> => {
+    if (isSubmitting.current) return;
+    isSubmitting.current = true;
     try {
       setLoading(true);
       await addActivity({
@@ -39,6 +43,7 @@ export const LogActivityPage: React.FC = (): React.ReactElement => {
       setToast({ msg: 'Failed to save activity.', type: 'error' });
     } finally {
       setLoading(false);
+      isSubmitting.current = false;
     }
   };
 

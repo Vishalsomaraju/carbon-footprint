@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ActivityRecord } from '../types';
 import { activityService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
-import { calculateCo2, activitySchema, ActivityFormData, trackError } from '../utils';
+import { calculateCo2, ActivityFormData, trackError } from '../utils';
 import { useAsync } from './useAsync';
 
 export interface UseActivitiesReturn {
@@ -65,18 +65,18 @@ export const useActivities = (): UseActivitiesReturn => {
       async (activityData: ActivityFormData): Promise<string> => {
         if (!user) throw new Error('User not authenticated');
 
-        const parsedData = activitySchema.parse(activityData);
+        // Form already validates via zodResolver before calling this hook.
+        // No need to re-parse here — doing so can reject valid submissions.
+        const { category, subCategory, value } = activityData;
 
-        let carbonImpact = parsedData.value * 0.2; // Fallback
-        const { category, subCategory, value } = parsedData;
-
+        let carbonImpact = value * 0.2; // Fallback
         if (category && subCategory) {
-          carbonImpact = calculateCo2(category, subCategory, value);
-          if (carbonImpact === 0) carbonImpact = parsedData.value * 0.2; // Fallback if no matching factor
+          const calculated = calculateCo2(category, subCategory, value);
+          if (calculated > 0) carbonImpact = calculated;
         }
 
         const newActivity: Omit<ActivityRecord, 'id'> = {
-          ...parsedData,
+          ...activityData,
           carbonImpact,
           userId: user.uid,
         };
