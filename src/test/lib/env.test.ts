@@ -39,18 +39,10 @@ describe('env validation', () => {
     vi.stubEnv('MODE', 'production');
     vi.stubEnv('VITE_FIREBASE_API_KEY', ''); // Invalid
 
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
     await expect(import('../../lib/env')).rejects.toThrow(
       'Invalid environment variables. Check console for details.',
     );
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      '❌ Invalid environment variables:',
-      expect.any(Object),
-    );
-
-    consoleErrorSpy.mockRestore();
     vi.unstubAllEnvs();
   });
 });

@@ -55,7 +55,6 @@ function validateEnv(): Env {
   const parsed = envSchema.safeParse(import.meta.env);
 
   if (!parsed.success) {
-    console.error('❌ Invalid environment variables:', parsed.error.format());
     throw new Error('Invalid environment variables. Check console for details.');
   }
 

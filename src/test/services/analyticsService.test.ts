@@ -30,26 +30,18 @@ describe('analyticsService', (): void => {
     });
   });
 
-  it('should log to console if analytics is null', (): void => {
-    // Override the mock for this specific test
-    // To do this we can redefine the property
+  it('should not call firebaseLogEvent if analytics is null', (): void => {
     const originalAnalytics = config.analytics;
     Object.defineProperty(config, 'analytics', { value: null, writable: true });
 
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
     analyticsService.logEvent('test_event', { param: 'value' });
 
-    expect(consoleSpy).toHaveBeenCalledWith('[Analytics Mock] test_event', { param: 'value' });
-    expect(firebaseLogEvent).not.toHaveBeenCalledTimes(2); // Since we called it once in the previous test
+    expect(firebaseLogEvent).not.toHaveBeenCalledTimes(2);
 
-    consoleSpy.mockRestore();
-    // Restore
     Object.defineProperty(config, 'analytics', { value: originalAnalytics, writable: true });
   });
 
-  it('should call trackError and log to console.error', (): void => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  it('should call trackError', (): void => {
     const error = new Error('Test error');
 
     analyticsService.trackError(error, { extra: 'data' });
@@ -59,8 +51,5 @@ describe('analyticsService', (): void => {
       name: 'Error',
       extra: 'data',
     });
-    expect(consoleSpy).toHaveBeenCalledWith('[ErrorTracker]', error, { extra: 'data' });
-
-    consoleSpy.mockRestore();
   });
 });

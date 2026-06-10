@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+
 import { REGIONAL_AVERAGES_KG_PER_DAY, TARGET_KG_PER_DAY } from '../../constants';
 import { Card, CardBody } from '../ui/Card';
 

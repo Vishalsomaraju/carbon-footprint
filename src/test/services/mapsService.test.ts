@@ -2,7 +2,6 @@
  * @module mapsService.test
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { calculateCommuteEmissions } from '../../services/mapsService';
@@ -89,7 +88,7 @@ describe('mapsService', (): void => {
   it('calculateCommuteEmissions uses correct travel mode for transit', async (): Promise<void> => {
     let usedTravelMode = '';
     class TransitDistanceMatrixService {
-      getDistanceMatrix(request: any): Promise<unknown> {
+      getDistanceMatrix(request: { travelMode: string }): Promise<unknown> {
         usedTravelMode = request.travelMode;
         return Promise.resolve({
           rows: [
@@ -108,7 +107,7 @@ describe('mapsService', (): void => {
   it('calculateCommuteEmissions uses correct travel mode for bicycling', async (): Promise<void> => {
     let usedTravelMode = '';
     class BicyclingDistanceMatrixService {
-      getDistanceMatrix(request: any): Promise<unknown> {
+      getDistanceMatrix(request: { travelMode: string }): Promise<unknown> {
         usedTravelMode = request.travelMode;
         return Promise.resolve({
           rows: [
@@ -127,7 +126,7 @@ describe('mapsService', (): void => {
   it('calculateCommuteEmissions uses correct travel mode for walking', async (): Promise<void> => {
     let usedTravelMode = '';
     class WalkingDistanceMatrixService {
-      getDistanceMatrix(request: any): Promise<unknown> {
+      getDistanceMatrix(request: { travelMode: string }): Promise<unknown> {
         usedTravelMode = request.travelMode;
         return Promise.resolve({
           rows: [

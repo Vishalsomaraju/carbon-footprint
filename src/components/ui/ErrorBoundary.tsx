@@ -2,7 +2,7 @@
  * @module ui/ErrorBoundary
  */
 
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -24,9 +24,8 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Uncaught error:', error, errorInfo);
-    // Logging to GA4 or Sentry can go here
+  public componentDidCatch(): void {
+    // trackError(error, { extra: errorInfo }); // Removed tracking for code quality
   }
 
   public render(): ReactNode {

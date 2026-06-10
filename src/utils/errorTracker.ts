@@ -4,9 +4,13 @@
  */
 export const trackError = (error: unknown, context?: string): void => {
   const msg = error instanceof Error ? error.message : String(error);
-  console.error(`[ErrorTracker] ${context ? `(${context}) ` : ''}${msg}`, error);
+  if (process.env.NODE_ENV === 'development') {
+    console.error(`[ErrorTracker] ${context ? `(${context}) ` : ''}${msg}`, error);
+  }
 };
 
 export const trackEvent = (eventName: string, properties?: Record<string, unknown>): void => {
-  console.log(`[Analytics] ${eventName}`, properties);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[Analytics] ${eventName}`, properties);
+  }
 };

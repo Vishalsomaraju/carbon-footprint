@@ -72,12 +72,7 @@ describe('authService', (): void => {
       const mockError = new Error('Sign out failed');
       vi.mocked(signOut).mockRejectedValueOnce(mockError);
 
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
       await expect(authService.logout()).rejects.toThrow('Sign out failed');
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error signing out', mockError);
-      consoleErrorSpy.mockRestore();
     });
   });
 });

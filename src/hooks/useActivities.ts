@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ActivityRecord } from '../types';
 import { activityService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
-import { EMISSION_FACTORS } from '../constants';
+import { calculateCo2 } from '../utils/co2Calculator';
 import { trackError } from '../utils/errorTracker';
 import { activitySchema, ActivityFormData } from '../utils/validation';
 
@@ -58,10 +58,9 @@ export const useActivities = (): UseActivitiesReturn => {
       let carbonImpact = parsedData.value * 0.2; // Fallback
       const { category, subCategory, value } = parsedData;
 
-      if (category && subCategory && category in EMISSION_FACTORS) {
-        const factors = EMISSION_FACTORS[category as keyof typeof EMISSION_FACTORS];
-        if (subCategory in factors)
-          carbonImpact = value * (factors[subCategory as keyof typeof factors] as number);
+      if (category && subCategory) {
+        carbonImpact = calculateCo2(category, subCategory, value);
+        if (carbonImpact === 0) carbonImpact = parsedData.value * 0.2; // Fallback if no matching factor
       }
 
       const newActivity: Omit<ActivityRecord, 'id'> = {

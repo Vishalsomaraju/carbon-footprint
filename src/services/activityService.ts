@@ -20,7 +20,6 @@ export const activityService = {
       return docRef.id;
     } catch (error: unknown) {
       trackError(error);
-      console.error('Error logging activity: ', error);
       throw error;
     }
   },
@@ -32,15 +31,11 @@ export const activityService = {
         where('userId', '==', userId),
         orderBy('date', 'desc'),
       );
-      console.log('Fetching activities for user:', userId);
-
       const result = await getDocs(q);
 
-      console.log('Fetched activities successfully, count:', result.docs.length);
       return result.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as ActivityRecord);
     } catch (error: unknown) {
       trackError(error);
-      console.error('Error getting user activities: ', error);
       // Return empty array on error so the UI can still render
       return [];
     }

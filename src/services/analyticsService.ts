@@ -10,7 +10,7 @@ export const trackEvent = (eventName: string, eventParams?: Record<string, unkno
   if (analytics) {
     firebaseLogEvent(analytics, eventName, eventParams);
   } else {
-    console.log(`[Analytics Mock] ${eventName}`, eventParams);
+    // Analytics mock handled here
   }
 };
 
@@ -20,7 +20,6 @@ export const trackError = (error: Error, context?: Record<string, unknown>): voi
     name: error.name,
     ...context,
   });
-  console.error('[ErrorTracker]', error, context);
 };
 
 export const analyticsService = {

@@ -22,7 +22,6 @@ export const authService = {
         return null;
       }
       trackError(error);
-      console.error('Error signing in with Google', error);
       throw error;
     }
   },
@@ -32,7 +31,6 @@ export const authService = {
       await signOut(auth);
     } catch (error: unknown) {
       trackError(error);
-      console.error('Error signing out', error);
       throw error;
     }
   },

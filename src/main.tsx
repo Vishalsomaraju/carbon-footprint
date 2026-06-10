@@ -10,8 +10,7 @@ import './index.css';
 
 if (import.meta.env.MODE === 'development') {
   import('@axe-core/react').then((axe) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    axe.default(React, createRoot as any, 1000);
+    axe.default(React, createRoot as unknown as typeof createRoot, 1000);
   });
 }
 

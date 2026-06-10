@@ -79,5 +79,5 @@ export const generateDeterministicTips = (activities: ActivityRecord[]): Insight
   tips.sort((a, b) => b.savings - a.savings);
 
   // Return top 3 tips, stripping out the internal 'savings' property to match the InsightMessage interface
-  return tips.slice(0, 3).map(({ savings, ...rest }) => rest);
+  return tips.slice(0, 3).map(({ savings: _savings, ...rest }) => rest);
 };
