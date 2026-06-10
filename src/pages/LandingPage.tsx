@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../hooks';
-import { trackError } from '../utils/errorTracker';
+import { trackError } from '../utils';
 import { Button } from '../components/ui/Button';
 import { GoogleIcon } from '../components/ui';
 import { FeatureCard } from '../components/landing/FeatureCard';

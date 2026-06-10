@@ -6,7 +6,7 @@
 import { Loader } from '@googlemaps/js-api-loader';
 
 import { env } from '../lib/env';
-import { trackError, trackEvent } from '../utils/errorTracker';
+import { trackError, trackEvent } from '../utils';
 import { EMISSION_FACTORS, MAPS_LIBRARIES } from '../constants';
 
 let loaderInstance: Loader | null = null;
@@ -32,12 +32,23 @@ export interface CommuteResult {
   readonly transportMode: string;
 }
 
-export async function calculateCommuteEmissions(
-  origin: string,
-  destination: string,
-  transportMode: keyof typeof EMISSION_FACTORS.transport,
-  workDaysPerWeek: number,
-): Promise<CommuteResult> {
+/**
+ * Calculates commute emissions using the Google Maps Distance Matrix API.
+ * 
+ * @param params Object containing the commute details.
+ * @param params.origin The starting address.
+ * @param params.destination The destination address.
+ * @param params.transportMode The mode of transport matching an emission factor key.
+ * @param params.workDaysPerWeek Number of days per week the commute occurs.
+ * @returns {Promise<CommuteResult>} The estimated distance, duration, and carbon emissions.
+ */
+export async function calculateCommuteEmissions(params: {
+  origin: string;
+  destination: string;
+  transportMode: keyof typeof EMISSION_FACTORS.transport;
+  workDaysPerWeek: number;
+}): Promise<CommuteResult> {
+  const { origin, destination, transportMode, workDaysPerWeek } = params;
   try {
     const loader = getMapsLoader();
     await loader.load();

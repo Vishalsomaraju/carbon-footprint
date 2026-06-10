@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-import { useInsights } from '../hooks';
+import { useInsights, useInsightChat } from '../hooks';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { InsightChat } from '../components/insights/InsightChat';
 
@@ -13,16 +13,19 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
     insights,
     loading,
     error,
+    activitiesCount,
+    fetchInsights,
+    handleRegenerate,
+    lastGenTime,
+  } = useInsights();
+
+  const {
     chatMsg,
     setChatMsg,
     chatResp,
     chatLoading,
-    activitiesCount,
-    fetchInsights,
-    handleRegenerate,
     handleChat,
-    lastGenTime,
-  } = useInsights();
+  } = useInsightChat(activitiesCount);
 
   const getCategoryIcon = (cat: string): string => {
     if (cat === 'transport') return 'electric_car';

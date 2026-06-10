@@ -2,7 +2,7 @@
  * @module utils/tipsEngine
  * @description Deterministic rule-based insights generator based on Ecotrace methodology.
  */
-import { EMISSION_FACTORS } from '../constants';
+import { EMISSION_FACTORS, TRANSIT_SHIFT_PERCENTAGE } from '../constants';
 import { ActivityRecord, InsightMessage } from '../types';
 
 /**
@@ -45,14 +45,14 @@ export const generateDeterministicTips = (activities: ActivityRecord[]): Insight
       savings: estimatedSavings,
     });
 
-    // 2. Shift 25% to transit
-    const transitSavings = (totals.car_petrol * 0.25) * (EMISSION_FACTORS.transport.car_petrol_per_km - EMISSION_FACTORS.transport.train_per_km);
+    // 2. Shift to transit
+    const transitSavings = (totals.car_petrol * TRANSIT_SHIFT_PERCENTAGE) * (EMISSION_FACTORS.transport.car_petrol_per_km - EMISSION_FACTORS.transport.train_per_km);
     if (transitSavings > 0) {
       tips.push({
         id: `tip-transit-${Date.now()}`,
         type: 'tip',
         category: 'transport',
-        title: 'Shift 25% of drives to public transit',
+        title: `Shift ${TRANSIT_SHIFT_PERCENTAGE * 100}% of drives to public transit`,
         body: `Swapping a quarter of your car journeys for the train or bus would save ${transitSavings.toFixed(1)} kg of CO₂.`,
         generatedAt: Date.now(),
         savings: transitSavings,

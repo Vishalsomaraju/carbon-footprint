@@ -10,23 +10,11 @@ import { CommutePage } from '../../pages/CommutePage';
 import { useCommute } from '../../hooks';
 
 // Default mock return values for useCommute
-const mockSetOrigin = vi.fn();
-const mockSetDestination = vi.fn();
-const mockSetMode = vi.fn();
-const mockSetDays = vi.fn();
 const mockSetToast = vi.fn();
 const mockHandleCalculate = vi.fn();
 const mockHandleLog = vi.fn();
 
 const defaultCommuteState = {
-  origin: '',
-  setOrigin: mockSetOrigin,
-  destination: '',
-  setDestination: mockSetDestination,
-  mode: 'car_petrol_per_km' as const,
-  setMode: mockSetMode,
-  days: 5,
-  setDays: mockSetDays,
   loading: false,
   result: null,
   error: '',

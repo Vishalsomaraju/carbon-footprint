@@ -4,12 +4,12 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ProfilePage } from '../../pages/ProfilePage';
 import { useAuth, useActivities } from '../../hooks';
 import { trackEvent, trackError } from '../../utils/errorTracker';
+import { getUserWeeklyGoal, updateUserWeeklyGoal } from '../../services/userService';
 
 vi.mock(
   '../../hooks',
@@ -20,13 +20,10 @@ vi.mock(
 );
 
 vi.mock(
-  'firebase/firestore',
+  '../../services/userService',
   (): Record<string, unknown> => ({
-    getDoc: vi.fn().mockResolvedValue({ exists: () => true, data: () => ({ targetKgPerDay: 50 }) }),
-    doc: vi.fn(),
-    setDoc: vi.fn(),
-    updateDoc: vi.fn(),
-    getFirestore: vi.fn(),
+    getUserWeeklyGoal: vi.fn().mockResolvedValue(50),
+    updateUserWeeklyGoal: vi.fn(),
   }),
 );
 
@@ -202,10 +199,7 @@ describe('ProfilePage', (): void => {
 
 describe('GoalSlider', (): void => {
   it('loads goal from firestore', async (): Promise<void> => {
-    (getDoc as import('vitest').Mock).mockResolvedValueOnce({
-      exists: () => true,
-      data: () => ({ weeklyGoalKg: 80 }),
-    });
+    (getUserWeeklyGoal as import('vitest').Mock).mockResolvedValueOnce(80);
 
     // We import here just for this test, but CommutePage test style is easier
     const { GoalSlider } = await import('../../components/profile/GoalSlider');
@@ -215,10 +209,7 @@ describe('GoalSlider', (): void => {
   });
 
   it('updates existing doc on save', async (): Promise<void> => {
-    (getDoc as import('vitest').Mock).mockResolvedValue({
-      exists: () => true,
-      data: () => ({ weeklyGoalKg: 80 }),
-    });
+    (getUserWeeklyGoal as import('vitest').Mock).mockResolvedValue(80);
 
     const { GoalSlider } = await import('../../components/profile/GoalSlider');
     const { fireEvent } = await import('@testing-library/react');
@@ -227,21 +218,21 @@ describe('GoalSlider', (): void => {
     await screen.findByText('80 kg');
 
     const slider = screen.getByRole('slider');
-    fireEvent.change(slider, { target: { value: '100' } });
-    fireEvent.mouseUp(slider);
+    const { act } = await import('@testing-library/react');
+    act(() => {
+      fireEvent.change(slider, { target: { value: '100' } });
+      fireEvent.mouseUp(slider);
+    });
 
     await import('@testing-library/react').then(({ waitFor }) =>
       waitFor(() => {
-        expect(updateDoc).toHaveBeenCalledWith(undefined, { weeklyGoalKg: 100 });
+        expect(updateUserWeeklyGoal).toHaveBeenCalledWith('user1', 100);
       }),
     );
   });
 
   it('creates new doc if it does not exist', async (): Promise<void> => {
-    (getDoc as import('vitest').Mock).mockResolvedValue({
-      exists: () => false,
-      data: () => ({}),
-    });
+    (getUserWeeklyGoal as import('vitest').Mock).mockResolvedValue(null);
 
     const { GoalSlider } = await import('../../components/profile/GoalSlider');
     const { fireEvent } = await import('@testing-library/react');
@@ -250,15 +241,15 @@ describe('GoalSlider', (): void => {
     await screen.findByText('50 kg');
 
     const slider = screen.getByRole('slider');
-    fireEvent.change(slider, { target: { value: '40' } });
-    fireEvent.touchEnd(slider); // Test touch end too
+    const { act } = await import('@testing-library/react');
+    act(() => {
+      fireEvent.change(slider, { target: { value: '40' } });
+      fireEvent.touchEnd(slider); // Test touch end too
+    });
 
     await import('@testing-library/react').then(({ waitFor }) =>
       waitFor(() => {
-        expect(setDoc).toHaveBeenCalledWith(
-          undefined,
-          expect.objectContaining({ weeklyGoalKg: 40 }),
-        );
+        expect(updateUserWeeklyGoal).toHaveBeenCalledWith('user1', 40);
       }),
     );
   });

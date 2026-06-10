@@ -7,3 +7,4 @@ export * from './useAuth';
 export * from './useActivities';
 export * from './useCommute';
 export * from './useInsights';
+export * from './useInsightChat';

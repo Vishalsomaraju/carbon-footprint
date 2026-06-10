@@ -1,12 +1,12 @@
 /**
  * @module hooks/useAuth
  */
+import { useCallback } from 'react';
 import type { User } from 'firebase/auth';
-import { useState } from 'react';
 
-import { trackError } from '../utils/errorTracker';
 import { authService, analyticsService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
+import { useAsync } from './useAsync';
 
 export const useAuth = (): {
   user: User | null;
@@ -16,44 +16,35 @@ export const useAuth = (): {
   logout: () => Promise<void>;
 } => {
   const { user, loading } = useAuthContext();
-  const [error, setError] = useState<Error | null>(null);
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const login = async (): Promise<void> => {
-    setIsAuthenticating(true);
-    setError(null);
-    try {
+  const {
+    execute: login,
+    loading: loginLoading,
+    error: loginError,
+  } = useAsync(
+    useCallback(async (): Promise<void> => {
       const loggedInUser = await authService.signInWithGoogle();
       if (loggedInUser) {
         analyticsService.logEvent('login', { method: 'google' });
       }
-    } catch (err: unknown) {
-      trackError(err as Error);
-      setError(err as Error);
-      throw err;
-    } finally {
-      setIsAuthenticating(false);
-    }
-  };
+    }, [])
+  );
 
-  const logout = async (): Promise<void> => {
-    setIsAuthenticating(true);
-    try {
+  const {
+    execute: logout,
+    loading: logoutLoading,
+    error: logoutError,
+  } = useAsync(
+    useCallback(async (): Promise<void> => {
       await authService.logout();
       analyticsService.logEvent('logout');
-    } catch (err: unknown) {
-      trackError(err);
-      setError(err as Error);
-      throw err;
-    } finally {
-      setIsAuthenticating(false);
-    }
-  };
+    }, [])
+  );
 
   return {
     user,
-    loading: loading || isAuthenticating,
-    error,
+    loading: loading || loginLoading || logoutLoading,
+    error: loginError || logoutError,
     login,
     logout,
   };

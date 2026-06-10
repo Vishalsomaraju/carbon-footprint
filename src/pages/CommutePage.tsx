@@ -2,19 +2,22 @@
  * @module pages/CommutePage
  * @description Commute emissions calculator using Maps API.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Toast } from '../components/ui/Toast';
 import { CommuteForm } from '../components/commute/CommuteForm';
 import { CommuteResults } from '../components/commute/CommuteResults';
 import { useCommute } from '../hooks';
+import { EMISSION_FACTORS } from '../constants';
+import { CommuteFormData } from '../utils';
 
 export const CommutePage: React.FC = (): React.ReactElement => {
+  const [origin, setOrigin] = useState('');
+  const [destination, setDestination] = useState('');
+  const [mode, setMode] = useState<keyof typeof EMISSION_FACTORS.transport>('car_petrol_per_km');
+  const [days, setDays] = useState(5);
+
   const {
-    origin,
-    destination,
-    mode,
-    days,
     loading,
     result,
     error,
@@ -24,6 +27,14 @@ export const CommutePage: React.FC = (): React.ReactElement => {
     handleCalculate,
     handleLog,
   } = useCommute();
+
+  const onCalculate = async (data: CommuteFormData): Promise<void> => {
+    setOrigin(data.origin);
+    setDestination(data.destination);
+    setMode(data.mode as keyof typeof EMISSION_FACTORS.transport);
+    setDays(data.days);
+    await handleCalculate(data);
+  };
 
   return (
     <div className="flex-1 overflow-y-auto p-gutter-md lg:p-8">
@@ -41,7 +52,7 @@ export const CommutePage: React.FC = (): React.ReactElement => {
             defaultValues={{ origin, destination, mode, days }}
             loading={loading}
             error={error}
-            onCalculate={handleCalculate}
+            onCalculate={onCalculate}
           />
           {result && (
             <CommuteResults
@@ -49,7 +60,7 @@ export const CommutePage: React.FC = (): React.ReactElement => {
               mode={mode}
               days={days}
               logLoading={logLoading}
-              onLog={handleLog}
+              onLog={() => handleLog({ result, mode, origin, destination })}
             />
           )}
         </div>

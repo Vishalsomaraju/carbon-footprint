@@ -7,7 +7,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 
 import { InsightsPage } from '../../pages/InsightsPage';
-import { useInsights } from '../../hooks';
+import { useInsights, useInsightChat } from '../../hooks';
 
 const mockSetChatMsg = vi.fn();
 const mockFetchInsights = vi.fn();
@@ -18,26 +18,31 @@ const defaultInsightsState = {
   insights: [],
   loading: false,
   error: '',
+  activitiesCount: 0,
+  fetchInsights: mockFetchInsights,
+  handleRegenerate: mockHandleRegenerate,
+  lastGenTime: 0,
+};
+
+const defaultChatState = {
   chatMsg: '',
   setChatMsg: mockSetChatMsg,
   chatResp: '',
   chatLoading: false,
-  activitiesCount: 0,
-  fetchInsights: mockFetchInsights,
-  handleRegenerate: mockHandleRegenerate,
   handleChat: mockHandleChat,
-  lastGenTime: 0,
 };
 
 vi.mock('../../hooks', () => ({
   useInsights: vi.fn(),
   useActivities: vi.fn(),
+  useInsightChat: vi.fn(),
 }));
 
 describe('InsightsPage', (): void => {
   beforeEach((): void => {
     vi.clearAllMocks();
     vi.mocked(useInsights).mockReturnValue(defaultInsightsState);
+    vi.mocked(useInsightChat).mockReturnValue(defaultChatState);
   });
 
   it('renders insights successfully', async (): Promise<void> => {
@@ -125,6 +130,9 @@ describe('InsightsPage', (): void => {
     vi.mocked(useInsights).mockReturnValue({
       ...defaultInsightsState,
       activitiesCount: 1,
+    });
+    vi.mocked(useInsightChat).mockReturnValue({
+      ...defaultChatState,
       chatResp: 'Chat response',
     });
     render(
@@ -139,6 +147,9 @@ describe('InsightsPage', (): void => {
     vi.mocked(useInsights).mockReturnValue({
       ...defaultInsightsState,
       activitiesCount: 1,
+    });
+    vi.mocked(useInsightChat).mockReturnValue({
+      ...defaultChatState,
       chatResp: 'Sorry, I encountered an error. Try again.',
     });
     render(

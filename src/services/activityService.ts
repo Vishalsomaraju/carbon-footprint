@@ -6,10 +6,13 @@ import { collection, addDoc, query, where, getDocs, orderBy, Timestamp } from 'f
 
 import { db } from '../lib/firebase';
 import { ActivityRecord } from '../types';
-import { trackError } from '../utils/errorTracker';
+import { trackError } from '../utils';
 
 const COLLECTION_NAME = 'activities';
 
+/**
+ * Service to handle logging and retrieving user activities from Firestore.
+ */
 export const activityService = {
   logActivity: async (activity: Omit<ActivityRecord, 'id'>): Promise<string> => {
     try {

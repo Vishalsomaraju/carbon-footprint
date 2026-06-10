@@ -1,11 +1,11 @@
 /**
  * @module components/profile/GoalSlider
  */
-import React, { useState, useEffect } from 'react';
-import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import { db } from '../../lib/firebase';
-import { trackError, trackEvent } from '../../utils/errorTracker';
+import { useAsync } from '../../hooks/useAsync';
+import { getUserWeeklyGoal, updateUserWeeklyGoal } from '../../services/userService';
+import { trackEvent } from '../../utils/errorTracker';
 import { WEEKLY_GOAL_MIN, WEEKLY_GOAL_MAX } from '../../constants';
 
 interface GoalSliderProps {
@@ -14,32 +14,27 @@ interface GoalSliderProps {
 
 export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactElement => {
   const [goal, setGoal] = useState<number>(50);
-  const [loading, setLoading] = useState(true);
+
+  const { loading, execute: fetchGoal } = useAsync(
+    useCallback(async () => {
+      const fetchedGoal = await getUserWeeklyGoal(userId);
+      if (fetchedGoal !== null) setGoal(fetchedGoal);
+    }, [userId])
+  );
+
+  const { execute: saveGoal } = useAsync(
+    useCallback(async (newGoal: number) => {
+      await updateUserWeeklyGoal(userId, newGoal);
+      trackEvent('goal_updated', { newGoal });
+    }, [userId])
+  );
 
   useEffect((): void => {
-    const fetchGoal = async (): Promise<void> => {
-      try {
-        const d = await getDoc(doc(db, 'users', userId));
-        if (d.exists() && d.data().weeklyGoalKg) setGoal(d.data().weeklyGoalKg);
-      } catch (err: unknown) {
-        trackError(err, 'GoalSlider.fetchGoal');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchGoal();
-  }, [userId]);
+  }, [userId, fetchGoal]);
 
-  const handleSave = async (newGoal: number): Promise<void> => {
-    try {
-      const ref = doc(db, 'users', userId);
-      const d = await getDoc(ref);
-      if (d.exists()) await updateDoc(ref, { weeklyGoalKg: newGoal });
-      else await setDoc(ref, { id: userId, weeklyGoalKg: newGoal, createdAt: Date.now() });
-      trackEvent('goal_updated', { newGoal });
-    } catch (err: unknown) {
-      trackError(err, 'GoalSlider.handleSave');
-    }
+  const handleSave = (newGoal: number): void => {
+    saveGoal(newGoal);
   };
 
   return (
@@ -67,8 +62,8 @@ export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactEl
             value={goal}
             aria-label="Weekly CO2 reduction target"
             onChange={(e): void => setGoal(Number(e.target.value))}
-            onMouseUp={(): Promise<void> => handleSave(goal)}
-            onTouchEnd={(): Promise<void> => handleSave(goal)}
+            onMouseUp={(): void => handleSave(goal)}
+            onTouchEnd={(): void => handleSave(goal)}
             className="w-full accent-bio-emerald cursor-pointer"
           />
         </>

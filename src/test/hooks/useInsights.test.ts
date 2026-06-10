@@ -2,13 +2,12 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { useInsights } from '../../hooks/useInsights';
-import { generateWeeklyInsights, getReductionChat } from '../../services/geminiService';
+import { generateWeeklyInsights } from '../../services/geminiService';
 import { useActivities } from '../../hooks/useActivities';
 import { trackError } from '../../utils/errorTracker';
 
 vi.mock('../../services/geminiService', () => ({
   generateWeeklyInsights: vi.fn(),
-  getReductionChat: vi.fn(),
 }));
 
 vi.mock('../../hooks/useActivities', () => ({
@@ -79,7 +78,7 @@ describe('useInsights', () => {
     expect(result.current.loading).toBe(false);
     expect(result.current.insights).toEqual([]);
     expect(result.current.error).toBe('Failed to load insights. Please try again later.');
-    expect(trackError).toHaveBeenCalledWith(expect.any(Error), 'fetchInsights UI');
+    expect(trackError).toHaveBeenCalledWith(expect.any(Error));
   });
 
   it('should not regenerate if less than 60s since last gen', async () => {
@@ -137,54 +136,4 @@ describe('useInsights', () => {
     }
   });
 
-  it('should handle chat', async () => {
-    (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ activities: [] });
-    (getReductionChat as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('Chat response');
-
-    const { result } = renderHook(() => useInsights());
-
-    act(() => {
-      result.current.setChatMsg('Hello');
-    });
-
-    await act(async () => {
-      await result.current.handleChat();
-    });
-
-    expect(result.current.chatResp).toBe('Chat response');
-    expect(result.current.chatMsg).toBe('');
-    expect(getReductionChat).toHaveBeenCalledWith('Hello', 'User has 0 activities logged.');
-  });
-
-  it('should not chat if msg is empty', async () => {
-    (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ activities: [] });
-
-    const { result } = renderHook(() => useInsights());
-
-    await act(async () => {
-      await result.current.handleChat();
-    });
-
-    expect(getReductionChat).not.toHaveBeenCalled();
-  });
-
-  it('should handle chat error', async () => {
-    (useActivities as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ activities: [] });
-    (getReductionChat as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(
-      new Error('Chat error'),
-    );
-
-    const { result } = renderHook(() => useInsights());
-
-    act(() => {
-      result.current.setChatMsg('Hello');
-    });
-
-    await act(async () => {
-      await result.current.handleChat();
-    });
-
-    expect(result.current.chatResp).toBe('Sorry, I encountered an error. Try again.');
-    expect(trackError).toHaveBeenCalledWith(expect.any(Error), 'handleChat UI');
-  });
 });

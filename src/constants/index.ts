@@ -71,6 +71,8 @@ export const WEEKLY_GOAL_MAX = 150;
 
 export const GEMINI_MODEL = 'gemini-1.5-flash';
 export const MAPS_LIBRARIES = ['places', 'geometry'] as const;
+export const INSIGHT_GENERATION_COOLDOWN_MS = 60000;
+export const TRANSIT_SHIFT_PERCENTAGE = 0.25;
 
 export const ROUTES = {
   HOME: '/',

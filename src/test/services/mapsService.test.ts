@@ -48,7 +48,12 @@ describe('mapsService', (): void => {
   });
 
   it('calculateCommuteEmissions returns correct values', async (): Promise<void> => {
-    const result = await calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5);
+    const result = await calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'car_petrol_per_km',
+      workDaysPerWeek: 5,
+    });
     expect(result.distanceKm).toBe(15);
     // 15000 meters = 15km. duration 1800 sec = 30 min.
     // Daily CO2 round trip for petrol car = 15 * 0.21 * 2 = 6.30
@@ -66,7 +71,12 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       BadStatusDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5)).rejects.toThrow(
+    await expect(calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'car_petrol_per_km',
+      workDaysPerWeek: 5,
+    })).rejects.toThrow(
       'Could not calculate route distance',
     );
   });
@@ -80,7 +90,12 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       ErrorDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await expect(calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5)).rejects.toThrow(
+    await expect(calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'car_petrol_per_km',
+      workDaysPerWeek: 5,
+    })).rejects.toThrow(
       'Network error',
     );
   });
@@ -100,7 +115,12 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       TransitDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await calculateCommuteEmissions('A', 'B', 'train_per_km', 5);
+    await calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'train_per_km',
+      workDaysPerWeek: 5,
+    });
     expect(usedTravelMode).toBe('TRANSIT');
   });
 
@@ -119,7 +139,12 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       BicyclingDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await calculateCommuteEmissions('A', 'B', 'cycling_per_km', 5);
+    await calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'cycling_per_km',
+      workDaysPerWeek: 5,
+    });
     expect(usedTravelMode).toBe('BICYCLING');
   });
 
@@ -138,7 +163,12 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       WalkingDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await calculateCommuteEmissions('A', 'B', 'walking_per_km', 5);
+    await calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'walking_per_km',
+      workDaysPerWeek: 5,
+    });
     expect(usedTravelMode).toBe('WALKING');
   });
 
@@ -153,7 +183,12 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       EmptyDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    const result = await calculateCommuteEmissions('A', 'B', 'car_petrol_per_km', 5);
+    const result = await calculateCommuteEmissions({
+      origin: 'A',
+      destination: 'B',
+      transportMode: 'car_petrol_per_km',
+      workDaysPerWeek: 5,
+    });
     expect(result.distanceKm).toBe(0);
     expect(result.durationMinutes).toBe(0);
   });

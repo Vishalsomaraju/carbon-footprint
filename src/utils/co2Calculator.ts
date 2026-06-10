@@ -31,6 +31,15 @@ export const calculateShoppingCo2 = (subCategory: string, value: number): number
   return value * factor;
 };
 
+/**
+ * Central router for calculating CO2 emissions based on category, sub-category, and logged value.
+ * Uses the static EMISSION_FACTORS defined in constants.
+ *
+ * @param {string} category The primary category (e.g., 'transport', 'food').
+ * @param {string} subCategory The specific activity type.
+ * @param {number} value The numerical value associated with the activity (e.g., km driven, meals eaten).
+ * @returns {number} The calculated CO2 impact in kg.
+ */
 export const calculateCo2 = (category: string, subCategory: string, value: number): number => {
   if (category === 'transport') return calculateTransportCo2(subCategory, value);
   if (category === 'food') return calculateFoodCo2(subCategory, value);

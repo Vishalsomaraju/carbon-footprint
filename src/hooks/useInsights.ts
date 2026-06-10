@@ -3,98 +3,69 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 
-import { generateWeeklyInsights, getReductionChat } from '../services/geminiService';
-import { generateDeterministicTips } from '../utils/tipsEngine';
+import { generateWeeklyInsights } from '../services/geminiService';
+import { generateDeterministicTips, trackError } from '../utils';
 import { useActivities } from './useActivities';
 import { InsightMessage } from '../types';
-import { trackError } from '../utils/errorTracker';
+import { useAsync } from './useAsync';
+import { INSIGHT_GENERATION_COOLDOWN_MS } from '../constants';
 
+/**
+ * Hook to manage the retrieval and generation of carbon footprint insights.
+ * Combines deterministic rule-based tips with AI-generated insights based on recent activities.
+ * Enforces a cooldown period to prevent excessive API calls.
+ *
+ * @returns Object containing insights array, loading/error states, activity counts, and generation handlers.
+ */
 export const useInsights = (): {
   insights: InsightMessage[];
   loading: boolean;
   error: string;
-  chatMsg: string;
-  setChatMsg: (v: string) => void;
-  chatResp: string;
-  chatLoading: boolean;
   activitiesCount: number;
   fetchInsights: () => Promise<void>;
   handleRegenerate: () => void;
-  handleChat: () => Promise<void>;
   lastGenTime: number;
 } => {
   const { activities } = useActivities();
   const [insights, setInsights] = useState<InsightMessage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [lastGenTime, setLastGenTime] = useState(0);
 
-  const [chatMsg, setChatMsg] = useState('');
-  const [chatResp, setChatResp] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-
-  const fetchInsights = useCallback(async (): Promise<void> => {
-    try {
-      setLoading(true);
-      setError('');
-      // Generate deterministic tips first
+  const {
+    execute: fetchInsights,
+    loading,
+    error,
+  } = useAsync(
+    useCallback(async (): Promise<void> => {
       const deterministicTips = generateDeterministicTips(activities);
-      // Fetch AI insights
       const aiInsights = await generateWeeklyInsights(activities);
       
-      // Combine them, putting deterministic highly actionable tips first
       setInsights([...deterministicTips, ...aiInsights]);
       setLastGenTime(Date.now());
-    } catch (err) {
-      setError('Failed to load insights. Please try again later.');
-      trackError(err, 'fetchInsights UI');
-    } finally {
-      setLoading(false);
-    }
-  }, [activities]);
+    }, [activities])
+  );
 
   useEffect(() => {
     if (activities.length > 0 && insights.length === 0) {
-      fetchInsights();
-    } else if (activities.length === 0) {
-      setLoading(false);
+      fetchInsights().catch((err: unknown) => {
+        trackError(err as Error);
+      });
     }
   }, [activities.length, insights.length, fetchInsights]);
 
   const handleRegenerate = (): void => {
-    if (Date.now() - lastGenTime < 60000) return;
-    fetchInsights();
-  };
-
-  const handleChat = async (): Promise<void> => {
-    if (!chatMsg.trim()) return;
-    try {
-      setChatLoading(true);
-      setChatResp('');
-      const context = `User has ${activities.length} activities logged.`;
-      const response = await getReductionChat(chatMsg, context);
-      setChatResp(response);
-      setChatMsg('');
-    } catch (err) {
-      setChatResp('Sorry, I encountered an error. Try again.');
-      trackError(err, 'handleChat UI');
-    } finally {
-      setChatLoading(false);
-    }
+    if (Date.now() - lastGenTime < INSIGHT_GENERATION_COOLDOWN_MS) return;
+    fetchInsights().catch((err: unknown) => {
+      trackError(err as Error);
+    });
   };
 
   return {
     insights,
-    loading,
-    error,
-    chatMsg,
-    setChatMsg,
-    chatResp,
-    chatLoading,
+    loading: loading || false,
+    error: error ? 'Failed to load insights. Please try again later.' : '',
     activitiesCount: activities.length,
     fetchInsights,
     handleRegenerate,
-    handleChat,
     lastGenTime,
   };
 };

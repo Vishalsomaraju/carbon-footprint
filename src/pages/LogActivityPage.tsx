@@ -11,7 +11,7 @@ import { ActivityForm } from '../components/log/ActivityForm';
 import { ConfirmationStep } from '../components/log/ConfirmationStep';
 import { Toast } from '../components/ui/Toast';
 import { useActivities } from '../hooks';
-import { trackError } from '../utils/errorTracker';
+import { trackError } from '../utils';
 
 export const LogActivityPage: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();

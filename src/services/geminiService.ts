@@ -4,7 +4,7 @@
  * Uses the Gemini REST API directly (no SDK dependency).
  */
 import { env } from '../lib/env';
-import { trackError, trackEvent } from '../utils/errorTracker';
+import { trackError, trackEvent } from '../utils';
 import { GEMINI_MODEL } from '../constants';
 import type { ActivityRecord, InsightMessage } from '../types';
 
@@ -31,6 +31,12 @@ async function callGemini(prompt: string): Promise<string> {
   return data.candidates[0]?.content.parts[0]?.text ?? '';
 }
 
+/**
+ * Generates AI-driven insights and tips based on the user's logged activities.
+ *
+ * @param {ActivityRecord[]} activities The user's logged carbon activities.
+ * @returns {Promise<InsightMessage[]>} An array of generated insights.
+ */
 export async function generateWeeklyInsights(
   activities: ActivityRecord[],
 ): Promise<InsightMessage[]> {
@@ -81,6 +87,13 @@ Return ONLY the JSON array, no other text.`;
   }
 }
 
+/**
+ * Initiates a chat conversation with the AI assistant for personalized carbon reduction advice.
+ *
+ * @param {string} userMessage The question or prompt from the user.
+ * @param {string} context Summary of the user's footprint to provide context.
+ * @returns {Promise<string>} The AI's response text.
+ */
 export async function getReductionChat(userMessage: string, context: string): Promise<string> {
   try {
     const prompt = `You are CarbonWise AI, a friendly carbon footprint reduction assistant. 

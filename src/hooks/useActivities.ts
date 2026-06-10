@@ -7,9 +7,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { ActivityRecord } from '../types';
 import { activityService } from '../services';
 import { useAuthContext } from '../contexts/AuthContext';
-import { calculateCo2 } from '../utils/co2Calculator';
-import { trackError } from '../utils/errorTracker';
-import { activitySchema, ActivityFormData } from '../utils/validation';
+import { calculateCo2, activitySchema, ActivityFormData, trackError } from '../utils';
+import { useAsync } from './useAsync';
 
 export interface UseActivitiesReturn {
   activities: ActivityRecord[];
@@ -19,38 +18,50 @@ export interface UseActivitiesReturn {
   refresh: () => Promise<void>;
 }
 
+/**
+ * Hook to manage user activities.
+ * Provides functions to add new activities and refresh the activity list from the database.
+ * Requires the user to be authenticated.
+ *
+ * @returns {UseActivitiesReturn} Object containing activities, loading state, error state, and mutator functions.
+ */
 export const useActivities = (): UseActivitiesReturn => {
   const { user } = useAuthContext();
   const [activities, setActivities] = useState<ActivityRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const fetchActivities = useCallback(async (): Promise<void> => {
-    if (!user) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await activityService.getUserActivities(user.uid);
-      setActivities(data);
-    } catch (err: unknown) {
-      trackError(err, 'fetchActivities');
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
+  const {
+    execute: fetchActivities,
+    loading: fetchLoading,
+    error: fetchError,
+    data: fetchedActivities,
+  } = useAsync(
+    useCallback(async (): Promise<ActivityRecord[]> => {
+      if (!user) return [];
+      return activityService.getUserActivities(user.uid);
+    }, [user])
+  );
 
   useEffect(() => {
     if (user) {
-      fetchActivities();
+      fetchActivities().catch((err: unknown) => {
+        trackError(err as Error);
+      });
     } else {
       setActivities([]);
-      setLoading(false);
     }
   }, [user, fetchActivities]);
 
-  const addActivity = useCallback(
-    async (activityData: ActivityFormData): Promise<string> => {
+  useEffect(() => {
+    if (fetchedActivities) {
+      setActivities(fetchedActivities);
+    }
+  }, [fetchedActivities]);
+
+  const {
+    execute: addActivity,
+    loading: addLoading,
+    error: addError,
+  } = useAsync(
+    useCallback(async (activityData: ActivityFormData): Promise<string> => {
       if (!user) throw new Error('User not authenticated');
 
       const parsedData = activitySchema.parse(activityData);
@@ -69,25 +80,18 @@ export const useActivities = (): UseActivitiesReturn => {
         userId: user.uid,
       };
 
-      try {
-        const id = await activityService.logActivity(newActivity);
-        const activityWithId: ActivityRecord = { ...newActivity, id };
-        setActivities((prev) => [activityWithId, ...prev]);
-        return id;
-      } catch (err: unknown) {
-        trackError(err, 'addActivity');
-        setError(err as Error);
-        throw err;
-      }
-    },
-    [user],
+      const id = await activityService.logActivity(newActivity);
+      const activityWithId: ActivityRecord = { ...newActivity, id };
+      setActivities((prev) => [activityWithId, ...prev]);
+      return id;
+    }, [user])
   );
 
   return {
     activities,
-    loading,
-    error,
+    loading: fetchLoading || addLoading,
+    error: fetchError || addError,
     addActivity,
-    refresh: fetchActivities,
+    refresh: async (): Promise<void> => { await fetchActivities(); },
   };
 };

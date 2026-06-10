@@ -5,7 +5,7 @@
 import { signInWithPopup, signOut, User, AuthError } from 'firebase/auth';
 
 import { auth, googleProvider } from '../lib/firebase';
-import { trackError } from '../utils/errorTracker';
+import { trackError } from '../utils';
 
 export const authService = {
   signInWithGoogle: async (): Promise<User | null> => {
