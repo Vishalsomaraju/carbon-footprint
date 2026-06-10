@@ -43,6 +43,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
             </p>
           </div>
           <button
+            type="button"
             onClick={handleRegenerate}
             disabled={loading || Date.now() - lastGenTime < 60000}
             className="px-4 py-2 bg-surface-container-high text-on-surface font-medium rounded-lg hover:bg-surface-variant disabled:opacity-50 border border-whisper-border"
@@ -59,6 +60,7 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
           <div className="p-6 bg-charcoal-core text-critical-crimson rounded-2xl border border-critical-crimson/40 text-center">
             <p>{error}</p>
             <button
+              type="button"
               onClick={fetchInsights}
               className="mt-4 px-4 py-2 bg-critical-crimson text-white rounded-lg hover:bg-critical-crimson/90"
             >

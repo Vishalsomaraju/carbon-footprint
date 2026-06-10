@@ -158,7 +158,7 @@ describe('LogActivityPage', (): void => {
     expect(await screen.findByText('Activity saved successfully!')).toBeInTheDocument();
 
     // Wait for toast and click dismiss
-    await user.click(screen.getByRole('button', { name: '×' }));
+    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     await waitFor(() => {
       expect(screen.queryByText('Activity saved successfully!')).not.toBeInTheDocument();

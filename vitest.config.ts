@@ -17,6 +17,7 @@ export default defineConfig({
         'src/vite-env.d.ts',
         'src/config/firebase.ts',
         'src/config/env.ts',
+        'src/**/index.ts',
       ],
       reporter: ['text', 'lcov'],
       thresholds: { lines: 70, functions: 70, branches: 70, statements: 70 },

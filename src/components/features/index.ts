@@ -1,3 +1,0 @@
-/**
- * @module features/index
- */

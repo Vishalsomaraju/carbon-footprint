@@ -16,6 +16,7 @@ export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'md',
   isLoading,
+  type = 'button',
   className,
   disabled,
   ...props
@@ -38,6 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={type}
       className={clsx(
         baseStyles,
         variants[variant],

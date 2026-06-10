@@ -11,7 +11,7 @@ export const BottomNav: React.FC = (): import('react').ReactElement => {
   const isActive = (path: string): boolean => location.pathname === path;
 
   return (
-    <nav className="md:hidden fixed bottom-0 w-full bg-surface-container-low border-t border-whisper-border flex justify-around p-2 z-40">
+    <nav aria-label="Mobile Navigation" className="md:hidden fixed bottom-0 w-full bg-surface-container-low border-t border-whisper-border flex justify-around p-2 z-40">
       {NAV_ITEMS.map((item) => (
         <Link
           key={item.path}

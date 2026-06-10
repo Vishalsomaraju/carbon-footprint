@@ -49,7 +49,7 @@ export const Sidebar: React.FC = (): import('react').ReactElement => {
       </div>
 
       <div className="px-4 mt-auto space-y-4">
-        <button className="w-full bg-surface-variant hover:bg-surface-container-high text-primary border border-whisper-border rounded-lg py-3 px-4 flex items-center justify-center gap-2 transition-colors duration-200">
+        <button type="button" className="w-full bg-surface-variant hover:bg-surface-container-high text-primary border border-whisper-border rounded-lg py-3 px-4 flex items-center justify-center gap-2 transition-colors duration-200">
           <span className="material-symbols-outlined">add</span>
           <span className="font-label-sm text-label-sm">Generate Report</span>
         </button>

@@ -37,7 +37,7 @@ export const CategoryBreakdown: React.FC<Props> = ({ activities }): React.ReactE
     <div className="bg-charcoal-core border border-whisper-border rounded-2xl p-6 relative h-full">
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-headline-md text-headline-md text-on-surface">Stream Analysis</h3>
-        <button className="text-primary hover:text-primary-fixed transition-colors">
+        <button type="button" aria-label="More options" className="text-primary hover:text-primary-fixed transition-colors">
           <span className="material-symbols-outlined">more_horiz</span>
         </button>
       </div>

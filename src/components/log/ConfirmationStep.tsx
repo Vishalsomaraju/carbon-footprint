@@ -24,9 +24,10 @@ export const ConfirmationStep: React.FC<Props> = ({
   const [notes, setNotes] = useState('');
 
   // Use the same calculation engine as the save path so preview always matches stored value.
-  const estimatedCo2 = data.category && data.subCategory
-    ? calculateCo2(data.category, data.subCategory, data.value) || data.value * 0.5
-    : data.value * 0.5;
+  const estimatedCo2 =
+    data.category && data.subCategory
+      ? calculateCo2(data.category, data.subCategory, data.value) || data.value * 0.5
+      : data.value * 0.5;
 
   return (
     <div className="bg-charcoal-core p-6 rounded-2xl shadow-sm border border-whisper-border space-y-6">

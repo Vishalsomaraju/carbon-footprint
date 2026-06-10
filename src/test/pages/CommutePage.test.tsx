@@ -30,6 +30,39 @@ vi.mock('../../hooks', () => ({
   useActivities: vi.fn(),
 }));
 
+vi.mock('../../components/commute/CommuteForm', () => ({
+  CommuteForm: ({
+    error,
+    onCalculate,
+  }: {
+    error: string;
+    onCalculate: (data: import('../../utils').CommuteFormData) => Promise<void>;
+  }): import('react').ReactElement => (
+    <div>
+      {error && <div>{error}</div>}
+      <button
+        data-testid="mock-calculate"
+        onClick={(): Promise<void> =>
+          onCalculate({ origin: 'Home', destination: 'Work', mode: 'car_petrol_per_km', days: 5 })
+        }
+      >
+        Calculate
+      </button>
+    </div>
+  ),
+}));
+
+vi.mock('../../components/commute/CommuteResults', () => ({
+  CommuteResults: ({ onLog }: { onLog: () => void }): import('react').ReactElement => (
+    <div>
+      <div>Annual Emissions by Mode</div>
+      <button data-testid="mock-log" onClick={onLog}>
+        Log
+      </button>
+    </div>
+  ),
+}));
+
 describe('CommutePage', (): void => {
   beforeEach((): void => {
     vi.clearAllMocks();
@@ -133,5 +166,56 @@ describe('CommutePage', (): void => {
 
     expect(mockSetToast).toHaveBeenCalledWith(null);
     vi.useRealTimers();
+  });
+
+  it('calls handleCalculate when onCalculate is triggered', async (): Promise<void> => {
+    render(
+      <BrowserRouter>
+        <CommutePage />
+      </BrowserRouter>,
+    );
+    const btn = screen.getByTestId('mock-calculate');
+    await act(async () => {
+      btn.click();
+    });
+    expect(mockHandleCalculate).toHaveBeenCalledWith({
+      origin: 'Home',
+      destination: 'Work',
+      mode: 'car_petrol_per_km',
+      days: 5,
+    });
+  });
+
+  it('calls handleLog when onLog is triggered', async (): Promise<void> => {
+    const mockResult = {
+      distanceKm: 15,
+      durationMinutes: 30,
+      dailyCo2Kg: 5,
+      annualCo2Kg: 1000,
+      origin: 'Home',
+      destination: 'Work',
+      transportMode: 'car_petrol_per_km',
+    };
+    vi.mocked(useCommute).mockReturnValue({
+      ...defaultCommuteState,
+      result: mockResult,
+    });
+    render(
+      <BrowserRouter>
+        <CommutePage />
+      </BrowserRouter>,
+    );
+    const calcBtn = screen.getByTestId('mock-calculate');
+    await act(async () => {
+      calcBtn.click();
+    });
+    const btn = screen.getByTestId('mock-log');
+    btn.click();
+    expect(mockHandleLog).toHaveBeenCalledWith({
+      result: mockResult,
+      mode: 'car_petrol_per_km',
+      origin: 'Home',
+      destination: 'Work',
+    });
   });
 });
