@@ -41,7 +41,16 @@ export function useAsync<T, Args extends unknown[]>(
       } catch (err: unknown) {
         trackError(err);
         setError(err as Error);
-        throw err;
+        // Suppress re-throw for expected offline/network errors so they don't
+        // surface as uncaught promise rejections in the browser console.
+        const isOffline =
+          (err instanceof Error &&
+            (err.message.toLowerCase().includes('offline') ||
+              err.message.toLowerCase().includes('failed to get document') ||
+              (err as Error & { code?: string }).code === 'unavailable')) ||
+          !navigator.onLine;
+        if (!isOffline) throw err;
+        return null as T;
       } finally {
         setLoading(false);
       }

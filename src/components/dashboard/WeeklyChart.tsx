@@ -59,6 +59,7 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
 
       <div
         className="flex-1 relative chart-grid rounded-lg border border-whisper-border overflow-hidden mt-4"
+        style={{ minHeight: '220px' }}
         aria-hidden="true"
       >
         <ResponsiveContainer width="100%" height="100%">
