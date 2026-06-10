@@ -219,7 +219,7 @@ describe('GoalSlider', (): void => {
 
     const slider = screen.getByRole('slider');
     const { act } = await import('@testing-library/react');
-    act(() => {
+    await act(async () => {
       fireEvent.change(slider, { target: { value: '100' } });
       fireEvent.mouseUp(slider);
     });
@@ -242,7 +242,7 @@ describe('GoalSlider', (): void => {
 
     const slider = screen.getByRole('slider');
     const { act } = await import('@testing-library/react');
-    act(() => {
+    await act(async () => {
       fireEvent.change(slider, { target: { value: '40' } });
       fireEvent.touchEnd(slider); // Test touch end too
     });

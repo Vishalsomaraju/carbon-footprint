@@ -11,6 +11,27 @@ global.ResizeObserver = class ResizeObserver {
   disconnect(): void {}
 };
 
+import * as React from 'react';
+vi.mock('recharts', async () => {
+  const OriginalRecharts = await vi.importActual<typeof import('recharts')>('recharts');
+  return {
+    ...OriginalRecharts,
+    ResponsiveContainer: ({ children }: { children: React.ReactNode }): React.ReactElement =>
+      React.createElement('div', { style: { width: 800, height: 400 } }, children),
+  };
+});
+
+const originalWarn = console.warn;
+console.warn = (...args: unknown[]): void => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) return;
+  originalWarn(...args);
+};
+const originalError = console.error;
+console.error = (...args: unknown[]): void => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router Future Flag Warning')) return;
+  originalError(...args);
+};
+
 vi.mock(
   'firebase/app',
   (): Record<string, unknown> => ({
