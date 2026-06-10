@@ -4,6 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { generateWeeklyInsights, getReductionChat } from '../services/geminiService';
+import { generateDeterministicTips } from '../utils/tipsEngine';
 import { useActivities } from './useActivities';
 import { InsightMessage } from '../types';
 import { trackError } from '../utils/errorTracker';
@@ -36,8 +37,13 @@ export const useInsights = (): {
     try {
       setLoading(true);
       setError('');
-      const result = await generateWeeklyInsights(activities);
-      setInsights(result);
+      // Generate deterministic tips first
+      const deterministicTips = generateDeterministicTips(activities);
+      // Fetch AI insights
+      const aiInsights = await generateWeeklyInsights(activities);
+      
+      // Combine them, putting deterministic highly actionable tips first
+      setInsights([...deterministicTips, ...aiInsights]);
       setLastGenTime(Date.now());
     } catch (err) {
       setError('Failed to load insights. Please try again later.');

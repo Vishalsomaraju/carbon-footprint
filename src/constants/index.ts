@@ -53,8 +53,18 @@ export const CATEGORY_COLORS = {
   shopping: '#a855f7',
 } as const;
 
-export const GLOBAL_AVERAGE_KG_PER_DAY = 13.0;
-export const TARGET_KG_PER_DAY = 5.5; // Paris Agreement aligned
+export const REGIONAL_AVERAGES_KG_PER_DAY = {
+  US: 38.3, // ~14.0 tonnes/year
+  UK: 13.7, // ~5.0 tonnes/year
+  EU: 17.8, // ~6.5 tonnes/year
+  IN: 5.2,  // ~1.9 tonnes/year
+  Global: 13.0, // ~4.7 tonnes/year
+} as const;
+
+export type Region = keyof typeof REGIONAL_AVERAGES_KG_PER_DAY;
+
+export const GLOBAL_AVERAGE_KG_PER_DAY = REGIONAL_AVERAGES_KG_PER_DAY.Global;
+export const TARGET_KG_PER_DAY = 6.3; // ~2.3 tonnes/year, 1.5C aligned
 export const STREAK_MILESTONE_DAYS = [3, 7, 14, 30, 60, 90];
 export const WEEKLY_GOAL_MIN = 20;
 export const WEEKLY_GOAL_MAX = 150;

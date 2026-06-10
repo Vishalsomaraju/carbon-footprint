@@ -57,7 +57,7 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
         </div>
       </div>
 
-      <div className="flex-1 relative chart-grid rounded-lg border border-whisper-border overflow-hidden mt-4">
+      <div className="flex-1 relative chart-grid rounded-lg border border-whisper-border overflow-hidden mt-4" aria-hidden="true">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 20, right: 20, left: -20, bottom: 0 }}>
             <defs>
@@ -103,6 +103,26 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
             />
           </AreaChart>
         </ResponsiveContainer>
+      </div>
+
+      {/* Accessible data table for screen readers */}
+      <div className="sr-only">
+        <table aria-label="7-Day Trajectory Data">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>CO2e (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row) => (
+              <tr key={row.date}>
+                <td>{row.date} ({row.label})</td>
+                <td>{row.total.toFixed(1)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

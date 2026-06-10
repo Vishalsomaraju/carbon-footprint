@@ -11,6 +11,7 @@ import { DailySummaryCard } from '../components/dashboard/DailySummaryCard';
 import { WeeklyChart } from '../components/dashboard/WeeklyChart';
 import { CategoryBreakdown } from '../components/dashboard/CategoryBreakdown';
 import { StreakBadge } from '../components/dashboard/StreakBadge';
+import { ComparisonCard } from '../components/dashboard/ComparisonCard';
 
 const DashboardSkeleton: React.FC = () => (
   <div
@@ -35,6 +36,14 @@ export const DashboardPage: React.FC = (): React.ReactElement => {
     return activities
       .filter((a) => a.date.startsWith(today))
       .reduce((sum, a) => sum + (a.carbonImpact || 0), 0);
+  }, [activities]);
+
+  const dailyAverageAllTime = useMemo(() => {
+    if (!activities.length) return 0;
+    const total = activities.reduce((sum, a) => sum + (a.carbonImpact || 0), 0);
+    // Simple average based on unique days logged
+    const uniqueDays = new Set(activities.map((a) => a.date.split('T')[0])).size;
+    return total / (uniqueDays || 1);
   }, [activities]);
 
   return (
@@ -116,8 +125,11 @@ export const DashboardPage: React.FC = (): React.ReactElement => {
           <div className="lg:col-span-8 flex flex-col h-full">
             <CategoryBreakdown activities={activities} />
           </div>
-          <div className="lg:col-span-12 flex flex-col h-full">
+          <div className="lg:col-span-8 flex flex-col h-full">
             <WeeklyChart activities={activities} />
+          </div>
+          <div className="lg:col-span-4 flex flex-col h-full">
+            <ComparisonCard dailyAverageKg={dailyAverageAllTime} userRegion="Global" />
           </div>
         </div>
       )}
