@@ -19,13 +19,8 @@ export const InsightsPage: React.FC = (): React.ReactElement => {
     lastGenTime,
   } = useInsights();
 
-  const {
-    chatMsg,
-    setChatMsg,
-    chatResp,
-    chatLoading,
-    handleChat,
-  } = useInsightChat(activitiesCount);
+  const { chatMsg, setChatMsg, chatResp, chatLoading, handleChat } =
+    useInsightChat(activitiesCount);
 
   const getCategoryIcon = (cat: string): string => {
     if (cat === 'transport') return 'electric_car';

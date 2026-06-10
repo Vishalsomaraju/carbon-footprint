@@ -27,7 +27,7 @@ export const useAuth = (): {
       if (loggedInUser) {
         analyticsService.logEvent('login', { method: 'google' });
       }
-    }, [])
+    }, []),
   );
 
   const {
@@ -38,7 +38,7 @@ export const useAuth = (): {
     useCallback(async (): Promise<void> => {
       await authService.logout();
       analyticsService.logEvent('logout');
-    }, [])
+    }, []),
   );
 
   return {

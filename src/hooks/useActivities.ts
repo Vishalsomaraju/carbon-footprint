@@ -37,7 +37,7 @@ export const useActivities = (): UseActivitiesReturn => {
     useCallback(async (): Promise<ActivityRecord[]> => {
       if (!user) return [];
       return activityService.getUserActivities(user.uid);
-    }, [user])
+    }, [user]),
   );
 
   useEffect(() => {
@@ -61,30 +61,33 @@ export const useActivities = (): UseActivitiesReturn => {
     loading: addLoading,
     error: addError,
   } = useAsync(
-    useCallback(async (activityData: ActivityFormData): Promise<string> => {
-      if (!user) throw new Error('User not authenticated');
+    useCallback(
+      async (activityData: ActivityFormData): Promise<string> => {
+        if (!user) throw new Error('User not authenticated');
 
-      const parsedData = activitySchema.parse(activityData);
+        const parsedData = activitySchema.parse(activityData);
 
-      let carbonImpact = parsedData.value * 0.2; // Fallback
-      const { category, subCategory, value } = parsedData;
+        let carbonImpact = parsedData.value * 0.2; // Fallback
+        const { category, subCategory, value } = parsedData;
 
-      if (category && subCategory) {
-        carbonImpact = calculateCo2(category, subCategory, value);
-        if (carbonImpact === 0) carbonImpact = parsedData.value * 0.2; // Fallback if no matching factor
-      }
+        if (category && subCategory) {
+          carbonImpact = calculateCo2(category, subCategory, value);
+          if (carbonImpact === 0) carbonImpact = parsedData.value * 0.2; // Fallback if no matching factor
+        }
 
-      const newActivity: Omit<ActivityRecord, 'id'> = {
-        ...parsedData,
-        carbonImpact,
-        userId: user.uid,
-      };
+        const newActivity: Omit<ActivityRecord, 'id'> = {
+          ...parsedData,
+          carbonImpact,
+          userId: user.uid,
+        };
 
-      const id = await activityService.logActivity(newActivity);
-      const activityWithId: ActivityRecord = { ...newActivity, id };
-      setActivities((prev) => [activityWithId, ...prev]);
-      return id;
-    }, [user])
+        const id = await activityService.logActivity(newActivity);
+        const activityWithId: ActivityRecord = { ...newActivity, id };
+        setActivities((prev) => [activityWithId, ...prev]);
+        return id;
+      },
+      [user],
+    ),
   );
 
   return {
@@ -92,6 +95,8 @@ export const useActivities = (): UseActivitiesReturn => {
     loading: fetchLoading || addLoading,
     error: fetchError || addError,
     addActivity,
-    refresh: async (): Promise<void> => { await fetchActivities(); },
+    refresh: async (): Promise<void> => {
+      await fetchActivities();
+    },
   };
 };

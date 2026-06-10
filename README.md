@@ -1,6 +1,6 @@
 # CarbonWise – Personal Carbon Footprint Platform
 
-**CarbonWise** is an intelligent, AI-driven platform designed to tackle one of the most pressing global challenges: individual carbon tracking and reduction. While broad climate goals exist, individuals often lack actionable visibility into how their daily activities impact the environment. 
+**CarbonWise** is an intelligent, AI-driven platform designed to tackle one of the most pressing global challenges: individual carbon tracking and reduction. While broad climate goals exist, individuals often lack actionable visibility into how their daily activities impact the environment.
 
 CarbonWise solves this by allowing users to log their daily transport, food, and energy activities, instantly converting them into precise CO2 equivalence (using DESNZ and IPCC data). By leveraging Gemini AI, the platform provides tailored, conversational insights and reduction strategies, empowering users to actively lower their footprint and achieve net-zero goals.
 

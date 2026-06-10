@@ -71,14 +71,14 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       BadStatusDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await expect(calculateCommuteEmissions({
-      origin: 'A',
-      destination: 'B',
-      transportMode: 'car_petrol_per_km',
-      workDaysPerWeek: 5,
-    })).rejects.toThrow(
-      'Could not calculate route distance',
-    );
+    await expect(
+      calculateCommuteEmissions({
+        origin: 'A',
+        destination: 'B',
+        transportMode: 'car_petrol_per_km',
+        workDaysPerWeek: 5,
+      }),
+    ).rejects.toThrow('Could not calculate route distance');
   });
 
   it('calculateCommuteEmissions catches generic error', async (): Promise<void> => {
@@ -90,14 +90,14 @@ describe('mapsService', (): void => {
     window.google.maps.DistanceMatrixService =
       ErrorDistanceMatrixService as unknown as typeof window.google.maps.DistanceMatrixService;
 
-    await expect(calculateCommuteEmissions({
-      origin: 'A',
-      destination: 'B',
-      transportMode: 'car_petrol_per_km',
-      workDaysPerWeek: 5,
-    })).rejects.toThrow(
-      'Network error',
-    );
+    await expect(
+      calculateCommuteEmissions({
+        origin: 'A',
+        destination: 'B',
+        transportMode: 'car_petrol_per_km',
+        workDaysPerWeek: 5,
+      }),
+    ).rejects.toThrow('Network error');
   });
 
   it('calculateCommuteEmissions uses correct travel mode for transit', async (): Promise<void> => {

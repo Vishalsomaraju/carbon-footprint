@@ -22,21 +22,21 @@ export const ComparisonCard: React.FC<Props> = ({ dailyAverageKg, userRegion = '
     <Card className="h-full bg-charcoal-core border-whisper-border border rounded-2xl">
       <CardBody className="flex flex-col justify-center space-y-6">
         <h3 className="font-headline-sm text-headline-sm text-on-surface">Regional Benchmark</h3>
-        
+
         <div>
           <div className="flex justify-between text-sm mb-2">
             <span className="text-muted-steel">Your Average</span>
             <span className="text-on-surface font-bold">{dailyAverageKg.toFixed(1)} kg</span>
           </div>
           <div className="w-full bg-surface-container-high rounded-full h-2">
-            <div 
-              className="bg-primary h-2 rounded-full" 
-              style={{ width: `${Math.min(100, percentOfRegion)}%` }} 
+            <div
+              className="bg-primary h-2 rounded-full"
+              style={{ width: `${Math.min(100, percentOfRegion)}%` }}
             />
           </div>
           <p className="text-xs text-muted-steel mt-2">
-            {percentOfRegion < 100 
-              ? `${(100 - percentOfRegion).toFixed(0)}% below the ${userRegion} average (${regionalAverage} kg/day)` 
+            {percentOfRegion < 100
+              ? `${(100 - percentOfRegion).toFixed(0)}% below the ${userRegion} average (${regionalAverage} kg/day)`
               : `${(percentOfRegion - 100).toFixed(0)}% above the ${userRegion} average (${regionalAverage} kg/day)`}
           </p>
         </div>
@@ -47,14 +47,14 @@ export const ComparisonCard: React.FC<Props> = ({ dailyAverageKg, userRegion = '
             <span className="text-on-surface font-bold">{TARGET_KG_PER_DAY.toFixed(1)} kg</span>
           </div>
           <div className="w-full bg-surface-container-high rounded-full h-2">
-            <div 
-              className="bg-bio-emerald h-2 rounded-full" 
-              style={{ width: `${Math.min(100, percentOfTarget)}%` }} 
+            <div
+              className="bg-bio-emerald h-2 rounded-full"
+              style={{ width: `${Math.min(100, percentOfTarget)}%` }}
             />
           </div>
           <p className="text-xs text-muted-steel mt-2">
-            {percentOfTarget <= 100 
-              ? `On track for Paris Agreement goals!` 
+            {percentOfTarget <= 100
+              ? `On track for Paris Agreement goals!`
               : `Needs ${(dailyAverageKg - TARGET_KG_PER_DAY).toFixed(1)} kg/day reduction to hit target.`}
           </p>
         </div>

@@ -57,7 +57,7 @@ export const REGIONAL_AVERAGES_KG_PER_DAY = {
   US: 38.3, // ~14.0 tonnes/year
   UK: 13.7, // ~5.0 tonnes/year
   EU: 17.8, // ~6.5 tonnes/year
-  IN: 5.2,  // ~1.9 tonnes/year
+  IN: 5.2, // ~1.9 tonnes/year
   Global: 13.0, // ~4.7 tonnes/year
 } as const;
 

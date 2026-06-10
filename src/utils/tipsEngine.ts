@@ -11,7 +11,7 @@ import { ActivityRecord, InsightMessage } from '../types';
  */
 export const generateDeterministicTips = (activities: ActivityRecord[]): InsightMessage[] => {
   const tips: (InsightMessage & { savings: number })[] = [];
-  
+
   // Aggregate data by category and subcategory
   const totals = {
     transport: 0,
@@ -20,7 +20,7 @@ export const generateDeterministicTips = (activities: ActivityRecord[]): Insight
     beef: 0,
   };
 
-  activities.forEach(a => {
+  activities.forEach((a) => {
     if (a.category === 'transport') {
       totals.transport += a.value;
       if (a.subCategory === 'car_petrol') totals.car_petrol += a.value;
@@ -33,7 +33,8 @@ export const generateDeterministicTips = (activities: ActivityRecord[]): Insight
 
   // 1. Shift from petrol car to electric
   if (totals.car_petrol > 0) {
-    const savingsPerKm = EMISSION_FACTORS.transport.car_petrol_per_km - EMISSION_FACTORS.transport.car_electric_per_km;
+    const savingsPerKm =
+      EMISSION_FACTORS.transport.car_petrol_per_km - EMISSION_FACTORS.transport.car_electric_per_km;
     const estimatedSavings = totals.car_petrol * savingsPerKm;
     tips.push({
       id: `tip-ev-${Date.now()}`,
@@ -46,7 +47,10 @@ export const generateDeterministicTips = (activities: ActivityRecord[]): Insight
     });
 
     // 2. Shift to transit
-    const transitSavings = (totals.car_petrol * TRANSIT_SHIFT_PERCENTAGE) * (EMISSION_FACTORS.transport.car_petrol_per_km - EMISSION_FACTORS.transport.train_per_km);
+    const transitSavings =
+      totals.car_petrol *
+      TRANSIT_SHIFT_PERCENTAGE *
+      (EMISSION_FACTORS.transport.car_petrol_per_km - EMISSION_FACTORS.transport.train_per_km);
     if (transitSavings > 0) {
       tips.push({
         id: `tip-transit-${Date.now()}`,
@@ -62,7 +66,8 @@ export const generateDeterministicTips = (activities: ActivityRecord[]): Insight
 
   // 3. Shift diet from beef to chicken
   if (totals.beef > 0) {
-    const savingsPerMeal = EMISSION_FACTORS.food.beef_per_meal - EMISSION_FACTORS.food.chicken_per_meal;
+    const savingsPerMeal =
+      EMISSION_FACTORS.food.beef_per_meal - EMISSION_FACTORS.food.chicken_per_meal;
     const estimatedSavings = totals.beef * savingsPerMeal;
     tips.push({
       id: `tip-diet-${Date.now()}`,

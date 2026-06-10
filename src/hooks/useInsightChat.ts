@@ -6,7 +6,9 @@ import { useState, useCallback } from 'react';
 import { getReductionChat } from '../services/geminiService';
 import { useAsync } from './useAsync';
 
-export const useInsightChat = (activitiesCount: number): {
+export const useInsightChat = (
+  activitiesCount: number,
+): {
   chatMsg: string;
   setChatMsg: (v: string) => void;
   chatResp: string;
@@ -16,10 +18,7 @@ export const useInsightChat = (activitiesCount: number): {
   const [chatMsg, setChatMsg] = useState('');
   const [chatResp, setChatResp] = useState('');
 
-  const {
-    execute: doChat,
-    loading: chatLoading,
-  } = useAsync(
+  const { execute: doChat, loading: chatLoading } = useAsync(
     useCallback(async (): Promise<void> => {
       if (!chatMsg.trim()) return;
       setChatResp('');
@@ -27,7 +26,7 @@ export const useInsightChat = (activitiesCount: number): {
       const response = await getReductionChat(chatMsg, context);
       setChatResp(response);
       setChatMsg('');
-    }, [activitiesCount, chatMsg])
+    }, [activitiesCount, chatMsg]),
   );
 
   const handleChat = async (): Promise<void> => {

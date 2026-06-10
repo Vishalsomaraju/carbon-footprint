@@ -34,7 +34,7 @@ export interface CommuteResult {
 
 /**
  * Calculates commute emissions using the Google Maps Distance Matrix API.
- * 
+ *
  * @param params Object containing the commute details.
  * @param params.origin The starting address.
  * @param params.destination The destination address.

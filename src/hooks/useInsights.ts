@@ -38,10 +38,10 @@ export const useInsights = (): {
     useCallback(async (): Promise<void> => {
       const deterministicTips = generateDeterministicTips(activities);
       const aiInsights = await generateWeeklyInsights(activities);
-      
+
       setInsights([...deterministicTips, ...aiInsights]);
       setLastGenTime(Date.now());
-    }, [activities])
+    }, [activities]),
   );
 
   useEffect(() => {

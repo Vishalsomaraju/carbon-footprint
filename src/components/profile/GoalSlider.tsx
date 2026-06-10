@@ -19,14 +19,17 @@ export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactEl
     useCallback(async () => {
       const fetchedGoal = await getUserWeeklyGoal(userId);
       if (fetchedGoal !== null) setGoal(fetchedGoal);
-    }, [userId])
+    }, [userId]),
   );
 
   const { execute: saveGoal } = useAsync(
-    useCallback(async (newGoal: number) => {
-      await updateUserWeeklyGoal(userId, newGoal);
-      trackEvent('goal_updated', { newGoal });
-    }, [userId])
+    useCallback(
+      async (newGoal: number) => {
+        await updateUserWeeklyGoal(userId, newGoal);
+        trackEvent('goal_updated', { newGoal });
+      },
+      [userId],
+    ),
   );
 
   useEffect((): void => {

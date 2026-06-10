@@ -11,7 +11,7 @@ type AsyncFunction<T, Args extends unknown[]> = (...args: Args) => Promise<T>;
 /**
  * A custom hook to handle asynchronous operations.
  * Manages loading, data, and error states automatically, and integrates with the error tracking system.
- * 
+ *
  * @template T The expected return type of the asynchronous function.
  * @template Args The types of the arguments expected by the asynchronous function.
  * @param {AsyncFunction<T, Args>} asyncFunction The asynchronous function to execute.

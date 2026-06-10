@@ -135,5 +135,4 @@ describe('useInsights', () => {
       vi.useRealTimers();
     }
   });
-
 });

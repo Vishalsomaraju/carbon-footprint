@@ -17,16 +17,8 @@ export const CommutePage: React.FC = (): React.ReactElement => {
   const [mode, setMode] = useState<keyof typeof EMISSION_FACTORS.transport>('car_petrol_per_km');
   const [days, setDays] = useState(5);
 
-  const {
-    loading,
-    result,
-    error,
-    toast,
-    setToast,
-    logLoading,
-    handleCalculate,
-    handleLog,
-  } = useCommute();
+  const { loading, result, error, toast, setToast, logLoading, handleCalculate, handleLog } =
+    useCommute();
 
   const onCalculate = async (data: CommuteFormData): Promise<void> => {
     setOrigin(data.origin);

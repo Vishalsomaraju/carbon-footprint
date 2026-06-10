@@ -46,7 +46,7 @@ export const useCommute = (): {
         transportMode: data.mode as keyof typeof EMISSION_FACTORS.transport,
         workDaysPerWeek: data.days,
       });
-    }, [])
+    }, []),
   );
 
   const handleCalculate = async (data: CommuteFormData): Promise<CommuteResult | void> => {
@@ -75,8 +75,8 @@ export const useCommute = (): {
         } as ActivityFormData);
         setToast({ msg: 'Commute logged successfully!', type: 'success' });
       },
-      [addActivity]
-    )
+      [addActivity],
+    ),
   );
 
   const handleLog = async (params: {

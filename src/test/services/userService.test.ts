@@ -90,7 +90,11 @@ describe('userService', () => {
 
       await updateUserWeeklyGoal('user123', 60);
 
-      expect(setDoc).toHaveBeenCalledWith(mockDocRef, { id: 'user123', weeklyGoalKg: 60, createdAt: 1000 });
+      expect(setDoc).toHaveBeenCalledWith(mockDocRef, {
+        id: 'user123',
+        weeklyGoalKg: 60,
+        createdAt: 1000,
+      });
       expect(updateDoc).not.toHaveBeenCalled();
     });
   });

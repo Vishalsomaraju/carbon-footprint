@@ -109,7 +109,10 @@ export const CommuteResults: React.FC<CommuteResultsProps> = ({
                   fontSize: '12px',
                   color: '#4edea3',
                 }}
-                formatter={(val: unknown) => [typeof val === 'number' ? val.toFixed(0) + ' kg' : String(val) + ' kg', 'Annual CO2']}
+                formatter={(val: unknown) => [
+                  typeof val === 'number' ? val.toFixed(0) + ' kg' : String(val) + ' kg',
+                  'Annual CO2',
+                ]}
               />
               <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
                 {chartData.map((entry, index) => (

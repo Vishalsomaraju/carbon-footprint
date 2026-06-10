@@ -26,7 +26,7 @@ export default {
         'bio-emerald': '#10B981',
         'alert-amber': '#F59E0B',
         'critical-crimson': '#EF4444',
-        'surface': '#0c1324',
+        surface: '#0c1324',
         'on-surface': '#dce1fb',
         'surface-container-high': '#23293c',
         'surface-container-highest': '#2e3447',
