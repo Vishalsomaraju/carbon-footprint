@@ -93,10 +93,9 @@ export const WeeklyChart: React.FC<Props> = ({ activities }): React.ReactElement
                 color: '#4edea3',
               }}
               itemStyle={{ color: '#4edea3' }}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter={(value: any) => [
-                `${typeof value === 'number' ? value.toFixed(1) : value} kg`,
-                'CO2e',
+              formatter={(value: unknown) => [
+                typeof value === 'number' ? value.toFixed(1) + ' kg' : String(value) + ' kg',
+                'CO2',
               ]}
             />
             <ReferenceLine y={TARGET_KG_PER_DAY} stroke="#F59E0B" strokeDasharray="4 4" />
