@@ -26,6 +26,8 @@ export const InsightChat: React.FC<InsightChatProps> = ({
     </h2>
     <div className="flex gap-2 mb-4">
       <input
+        id="chatMsg"
+        name="chatMsg"
         type="text"
         value={chatMsg}
         onChange={(e) => setChatMsg(e.target.value)}

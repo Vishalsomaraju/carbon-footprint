@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { useAsync } from '../../hooks/useAsync';
 import { getUserWeeklyGoal, updateUserWeeklyGoal } from '../../services/userService';
-import { trackEvent } from '../../utils/errorTracker';
+import { trackEvent, trackError } from '../../utils/errorTracker';
 import { WEEKLY_GOAL_MIN, WEEKLY_GOAL_MAX } from '../../constants';
 
 interface GoalSliderProps {
@@ -30,11 +30,15 @@ export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactEl
   );
 
   useEffect((): void => {
-    fetchGoal();
+    fetchGoal().catch((err: unknown) => {
+      trackError(err instanceof Error ? err : new Error(String(err)));
+    });
   }, [userId, fetchGoal]);
 
   const handleSave = (newGoal: number): void => {
-    saveGoal(newGoal);
+    saveGoal(newGoal).catch((err: unknown) => {
+      trackError(err instanceof Error ? err : new Error(String(err)));
+    });
   };
 
   return (
@@ -56,6 +60,8 @@ export const GoalSlider: React.FC<GoalSliderProps> = ({ userId }): React.ReactEl
             </span>
           </div>
           <input
+            id="goal-slider"
+            name="goal"
             type="range"
             min={WEEKLY_GOAL_MIN}
             max={WEEKLY_GOAL_MAX}
